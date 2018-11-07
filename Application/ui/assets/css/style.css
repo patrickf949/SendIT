@@ -1,3 +1,54 @@
+html { 
+  background:url("assets/images/ba.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.nav{
+	width: 100%
+}
 .content{
-	background-color: darkblue
+	background-color: rgba(0,0,255,1);
+	width: 90%;
+	margin: auto;
+	text-align: center;
+	border-radius: 20px;
+
+}
+.alldivs{
+	width: 102%;
+	margin-left: -1%;
+	margin-top: -2%;
+	padding: 0;
+	color: white;
+	
+	
+	
+	text-align: center;
+}
+.alldivs div{
+	margin-top: 2%
+
+}
+
+content div input{
+	width: 100%
+}
+
+.logindiv{
+	width: 40%;
+	margin: auto;
+	background-color: rgba(0,0,255,1);
+	text-align: center;
+	border-radius: 20px;
+}
+body{
+	background: no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+	
+
 }
