@@ -52,3 +52,15 @@ body{
 	
 
 }
+#lists{
+	width: 200px;
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+}
+@media only screen and (max-width: 480px){
+
+	.logindiv{
+		width: 80%
+	}
+}
