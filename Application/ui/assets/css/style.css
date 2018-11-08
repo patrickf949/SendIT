@@ -131,7 +131,15 @@ input{
 }
 
 thead{
-	color: gold
+	color: gold;
+
+
+}
+.light{
+	background-color: rgb(0,0,160);
+}
+.dark{
+	
 }
 hr{
 	width: 80%;
