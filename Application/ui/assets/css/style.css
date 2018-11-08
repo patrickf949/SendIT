@@ -57,10 +57,7 @@ html {
 	color: white;
 	text-align: center;
 }
-.searchi{
-	border-style: none;
 
-}
 button{
 	background: white;
 	color: rgb(0,0,139);
@@ -100,9 +97,7 @@ table{
 .buttons{
 	text-align: center;
 }
-.logo{
-	src: url(assets/images/sendIt.png);
-}
+
 .logindiv{
 	width: 40%;
 	margin: auto;
@@ -135,6 +130,11 @@ thead{
 
 
 }
+tr{
+	border-style: solid;
+	border-width: thin;
+
+}
 .light{
 	background-color: rgb(0,0,255);
 }
@@ -143,6 +143,16 @@ thead{
 }
 hr{
 	width: 80%;
+}
+.btn{
+	background: white;
+	color: rgb(0,0,139);
+	border-style: none;
+	border-radius: 30px;
+	margin:10px;
+	height: 30px;
+	width: 150px;
+
 }
 @media only screen and (max-width: 480px){
 
@@ -159,6 +169,9 @@ hr{
 	.right div{
 		width: 100px
 	}
+	.not{
+		width: 0px;
+	}
 
 }
 @media only screen and (max-width: 700px){
@@ -173,6 +186,25 @@ hr{
 		width: 70%;
 	}
 
+	.right div{
+		width: 100px
+	}
+}
+
+@media only screen and (max-width: 600px){
+
+	.logindiv{
+		width: 80%
+	}
+	.left{
+		width: 100px
+	}
+	.right{
+		width: 70%;
+	}
+	.not{
+		width: 0px;
+	}
 	.right div{
 		width: 100px
 	}
