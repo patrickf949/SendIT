@@ -136,10 +136,10 @@ thead{
 
 }
 .light{
-	background-color: rgb(0,0,160);
+	background-color: rgb(0,0,255);
 }
 .dark{
-	
+
 }
 hr{
 	width: 80%;
@@ -161,7 +161,7 @@ hr{
 	}
 
 }
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 700px){
 
 	.logindiv{
 		width: 80%
