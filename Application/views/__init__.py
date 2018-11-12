@@ -6,7 +6,7 @@ parcels =[
     {
         'parcelId':1,
         'parcelDescription':'Pumped Up Kicks & pinnata',
-        'client': 'BUcky',
+        'client': 'B cky',
         'recipient':'Mart',
         'pickUpLocation':'Quality Shopping Village',
         'destination':'Andela Uganda,Kira Road',
@@ -130,7 +130,7 @@ def updateParcel(parcelId):
     
     i=0
     for existing_parcel in parcels:
-        
+        i+=1
         if existing_parcel['parcelId']==parcelId:
             status =parcels[i]['status']
             parcel =dict(
@@ -148,7 +148,7 @@ def updateParcel(parcelId):
                 'parcel': parcel
             }),200
 
-        i+=1
+        
     return jsonify({
         'Message':'Parcel order does not exist'
     }),405
