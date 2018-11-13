@@ -8,9 +8,10 @@ SendIT is a courier service that helps users deliver parcels to different destin
 [Landing Page](https://patrickf949.github.io/SendIT/Application/ui/) - describes web application
 
 [Login Page](https://patrickf949.github.io/SendIT/Application/ui/login.html) - allows user to login or
+* Be sure to enter a valid email 
 
 [Sign Up](https://patrickf949.github.io/SendIT/Application/ui/signup.html) - sign up if they do not have an account
-
+* Be sure to fill all fields and provide a valid email address
 [Dashboard](https://patrickf949.github.io/SendIT/Application/ui/dashboard.html) - Logged in client User's dashboard
 
 [Admin Dashboard](https://patrickf949.github.io/SendIT/Application/ui/admin_dashboard.html) - Admin Dashboard
@@ -20,4 +21,4 @@ SendIT is a courier service that helps users deliver parcels to different destin
 Html & Css - [w3schools](https://www.w3schools.com/)
 
 ## Backend
-### Stay tuned
+### 
