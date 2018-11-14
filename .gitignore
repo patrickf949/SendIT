@@ -1,8 +1,6 @@
 .vscode/
-Application/__pycache__
-Application/models/__pycache__
-Application/views/__pycache__
-Application/tests/__pycache__
-.pytest_cache
+*/.pytest_cache/*
 */__pycache__/*
 */.vscode/*
+*/__init__.pyc
+*/?.pyc
