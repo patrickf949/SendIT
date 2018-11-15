@@ -21,7 +21,7 @@ class Parcels:
         params:n/a
         return: n/a
         """
-        parcels.append
+        Parcels.parcels.append()
     
     @staticmethod
     def cancel_parcel():
