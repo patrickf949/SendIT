@@ -1,0 +1,81 @@
+import unittest
+import json
+import pytest
+from Application import app,create_app
+from .testdata import TestData
+
+class TestSendIT(unittest.TestCase):
+    """
+    This class tests our api endpoints
+    """
+    def setUp(self):
+        self.app = create_app()
+        self.test_client = self.app.test_client()
+        self.testdata = TestData()
+    
+    
+    def test_istestdata_instance(self):
+        assert isinstance(self.testdata, TestData)
+
+    
+    
+    def test_user_signup_valid_params(self):
+        user = {
+            'username':'Mabledaty',
+            'contact':'023324242',
+            'email':'mabledat@gmail.com',
+            'password':'asdfiwkadskl'
+        }
+        response = self.test_client.post('api/v1/')
+        
+    
+    def test_valid_parcel_addition(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel)
+        )
+        message = json.loads(response.data.decode())
+        assert message['message']=='hello! Wademu Your Parcel Delivery order has been placed'
+
+    
+    def test_invalid_parcel_addition(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_parcel_less_params)
+        )
+        # message = json.loads(response.status_code())
+        self.assertEqual(response.status_code, 400)
+    
+    
+    @pytest.mark.skip(reason="A lot of issues")
+    def test_parcel_addition_invalid_recipient(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_recipient_parcel)
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    
+    @pytest.mark.skip(reason="no way of currently testing this")
+    def test_parcel_addition_invalid_contact(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_recipient_parcel)
+        )
+        self.assertEqual(response.status_code,400)
+    
+
+    def test_parcel_addition_lessparams(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_parcel_less_params)
+        )
+        self.assertEqual(response.status_code,400)
+    
+
+    
