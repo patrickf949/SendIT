@@ -1,3 +1,13 @@
-from Application import views
+from Application import create_app
 
-views.app.run(debug = True)
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
