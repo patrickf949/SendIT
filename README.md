@@ -4,6 +4,7 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 ## Badges
 
+[![Build Status](https://travis-ci.org/patrickf949/SendIT.svg?branch=ch-api)](https://travis-ci.org/patrickf949/SendIT)
 [![Coverage Status](https://coveralls.io/repos/github/patrickf949/SendIT/badge.svg)](https://coveralls.io/github/patrickf949/SendIT)[![Maintainability](https://api.codeclimate.com/v1/badges/f0cc2da5a5ff305119d5/maintainability)](https://codeclimate.com/github/patrickf949/SendIT/maintainability [![Test Coverage](https://api.codeclimate.com/v1/badges/f0cc2da5a5ff305119d5/test_coverage)](https://codeclimate.com/github/patrickf949/SendIT/test_coverage)
 
 ## Front End
