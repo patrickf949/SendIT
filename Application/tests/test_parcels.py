@@ -19,16 +19,41 @@ class TestSendIT(unittest.TestCase):
 
     
     
-    def test_user_signup_valid_params(self):
-        user = {
-            'username':'Mabledaty',
-            'contact':'023324242',
-            'email':'mabledat@gmail.com',
-            'password':'asdfiwkadskl'
-        }
-        response = self.test_client.post('api/v1/')
+    def test_admin_signup_valid_params(self):
         
+        response = self.test_client.post(
+            '/api/v1/admin/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_admin_signup)
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_admin_login_valid_params(self):
+        
+        response = self.test_client.post(
+            '/api/v1/admin/login',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_admin_login)
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_signup_valid_params(self):
+        
+        response = self.test_client.post(
+            '/api/v1/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_user_signup)
+        )
+        self.assertEqual(response.status_code, 200)
     
+    def test_user_login(self):
+        response = self.test_client.post(
+            '/api/v1/login',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_user_login)
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_valid_parcel_addition(self):
         response = self.test_client.post(
             '/api/v1/parcels',
@@ -76,6 +101,7 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.invalid_parcel_less_params)
         )
         self.assertEqual(response.status_code,400)
+    
     
 
     

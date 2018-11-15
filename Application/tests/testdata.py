@@ -36,3 +36,29 @@ class TestData():
         "destination":"Aweber Clicks international"
 
     }
+    valid_admin_signup={
+        "username":"Andrew",
+        "email":"andrew@gmail.com",
+        "password":"andyfofofo"
+    }
+    valid_admin_login={
+        "email":"andrew@gmail.com",
+        "password":"andyfofofo"
+    }
+    invalid_admin_login={
+        "email":"andrew@gmail.com",
+        "password":"andyfofofo"
+    }
+    valid_user_signup={
+        "username":"Kwage",
+        "email":"andrdddew@gmail.com",
+        "password":"andyfofofo"
+    }
+    valid_user_login={
+        "email":"andrdddew@gmail.com",
+        "password":"andyfofofo"
+    }
+    invalid_user_login={
+        "email":"kwage@gmail.com",
+        "password":"andyfofofo"
+    }
