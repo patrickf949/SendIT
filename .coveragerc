@@ -1,3 +1,8 @@
 [report]
 omit =
     Application/ui/*
+    */__pycache__/*
+    */.vscode
+    */python?.?/*
+    Application/models/*
+    
