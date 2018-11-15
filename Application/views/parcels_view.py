@@ -18,7 +18,17 @@ parcels =[
         'status':'Pending'
     }
 ]
+admin=[]
+users=[]
+current_user =[]#store current user id
+current_admin =[]#store current admin id
 
+
+@blue_print.route('/api/v1/admin/signup',methods = ['POST'])
+def admin_signup():
+    data = request.get_json()
+
+    
 
 @blue_print.route('/api/v1/parcels')
 def getParcels():
@@ -173,7 +183,7 @@ def cancel_delivery_order(parcel_id):
     returns: cancelled delivery order
     """
     parcels[parcel_id-1]['status']='canceled'
-    
+
 
 
 @blue_print.route('/api/v1/users/<int:userId>/parcels')
