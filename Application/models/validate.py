@@ -127,13 +127,9 @@ class Validation():
         
     
         parcel_description = data.get('parcel_description')
-    
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
-        destination =data.get('destination')
-        
-        
-        
+        destination =data.get('destination')        
 
         if not parcel_description or parcel_description.isspace():
             return jsonify({
@@ -220,16 +216,9 @@ class Validation():
 
 
     def validate_get_parcel_by_id(self,parcel_id):
-        if len(Parcels.parcels)==0:
-            return jsonify({
-                'message':'No Parcel delivery orders yet'
-            }),400
-
-        if not parcel_id or parcel_id < 1 or type(parcel_id)!=int:
-            return jsonify({
-                'message': 'sorry! parcel ID is required and can not be less than 1'
-            }), 400
-
+        if self.check_if_parcel_id_exists(parcel_id)!=True:
+            return self.check_if_parcel_id_exists(parcel_id)
+            
         for parcel in Parcels.parcels:
             if parcel['parcel_id'] == parcel_id:
                 return jsonify({
@@ -268,7 +257,20 @@ class Validation():
             return jsonify({
                 'Users':Users.user_accounts
             }),200
-            
+
         return jsonify({
             'message':'No users in the system'
         }),400
+    
+    def check_if_parcel_id_exists(self,parcel_id):
+        if len(Parcels.parcels)==0:
+            return jsonify({
+                'message':'No parcel delivery orders'
+            }),400
+        
+        if parcel_id>len(Parcels.parcels) or parcel_id==0:
+            return jsonify({
+                'message':'invalid parcel id'
+            }),400
+
+        return True
