@@ -127,10 +127,11 @@ class Validation():
         
     
         parcel_description = data.get('parcel_description')
-        
+    
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
+        
         
         
 
@@ -170,11 +171,14 @@ class Validation():
         parcel_id=len(Parcels.parcels)+1
         parcel_description = data.get('parcel_description')
         client = data.get('client')
+        user_id=self.get_user_id(client)
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
         status='pending'
         temp_parcel = [parcel_description,client,recipient,pickup_location,destination]
+
+
         for element in temp_parcel:
             if type(element)!=str:
                 return jsonify({
@@ -195,12 +199,14 @@ class Validation():
             parcel_id=parcel_id,
             parcel_description = parcel_description,
             client = client,
+            user_id=user_id,
             recipient = recipient,
             pickup_location = pickup_location,
             destination =destination,
             status = status
         )
         
+
         Parcels.parcels.append(parcel)
 
         return jsonify({
@@ -208,6 +214,7 @@ class Validation():
             'Parcel':Parcels.parcels[-1]
         }),200
     
+
 
     def validate_get_parcel_by_id(self,parcel_id):
         if len(Parcels.parcels)==0:
@@ -241,4 +248,12 @@ class Validation():
             'message':'No parcels added yet'
         }),400
 
+    
+    def get_user_id(self,client):
+        
+        for user in Users.user_accounts:
+            if user['username']==client:
+                user_id = user['user_id']
+                return user_id
 
+        return False
