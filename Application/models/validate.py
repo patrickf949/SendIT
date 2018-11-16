@@ -178,7 +178,10 @@ class Validation():
         status='pending'
         temp_parcel = [parcel_description,client,recipient,pickup_location,destination]
 
-
+        if user_id is False:
+            return jsonify({
+                    'message':'Create an account first'
+                }),400
         for element in temp_parcel:
             if type(element)!=str:
                 return jsonify({
