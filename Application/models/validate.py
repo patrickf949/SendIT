@@ -61,7 +61,7 @@ class Validation():
         Users.user_accounts.append(user)
 
         return jsonify({
-            'message': 'hello! '+user['username']+' You Account has been created and automatically logged in',
+            'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
         }),200
 
 
