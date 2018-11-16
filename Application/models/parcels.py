@@ -2,18 +2,13 @@
 This module handles all parcels in our application
 """
 
-class Parcels:
+class Parcels():
     """
     This class handles all parcel delivery order manipulation
     """
     parcels=[]
-    def __init__(self, parcel_description, recipient, 
-                contact, pickup_location,destination):
-        self.parcel_description = parcel_description
-        self.recipient = recipient
-        self.contact = contact
-        self.pickup_location = pickup_location
-        self.destination = destination
+    def __init__(self, parcel):
+        self.parcel=parcel
     
     def create_parcel(self):
         """
@@ -21,16 +16,16 @@ class Parcels:
         params:n/a
         return: n/a
         """
-        Parcels.parcels.append()
+        Parcels.parcels.append(self.parcel)
     
     @staticmethod
-    def cancel_parcel():
+    def cancel_parcel(parcel_id):
         """
         Cancels a parcel delivery order
         params: n/a
         returns: parcel created
         """
-        pass
+        Parcels.parcels[parcel_id]['status']='canceled'
 
     @staticmethod
     def time_details():
@@ -39,7 +34,7 @@ class Parcels:
         params: n/a
         returns:current time, parcel pick up time, parcel delivery time
         """
-        pass
+        
 
     @staticmethod
     def client_update_parcel():
