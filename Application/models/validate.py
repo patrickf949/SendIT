@@ -260,3 +260,14 @@ class Validation():
                 return user_id
 
         return False
+    
+
+    def validate_get_all_users(self):
+
+        if len(Users.user_accounts)>0:
+            return jsonify({
+                'Users':Users.user_accounts
+            })
+        return jsonify({
+            'message':'No users in the system'
+        })
