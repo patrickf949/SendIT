@@ -1,6 +1,7 @@
 """
 Handles all validation
 """
+
 from .parcels import Parcels
 from flask import jsonify
 from .users import Users
