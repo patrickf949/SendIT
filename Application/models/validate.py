@@ -124,8 +124,9 @@ class Validation():
 
 
     def validate_update_parcel_delivery_order(self,data,parcel_id):
-        
-    
+        parcel_exists =self.check_if_parcel_id_exists(parcel_id)
+        if parcel_exists!=True:
+            return parcel_exists
         parcel_description = data.get('parcel_description')
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
