@@ -1,5 +1,6 @@
 """Contains all data to be tested"""
 from ..models.parcels import Parcels
+from ..models.users import Users
 
 class TestData():  
     empty={}
@@ -11,7 +12,14 @@ class TestData():
             "pickup_location":"Kawempe, industrial area",
             "destination":"Jinja town council"
         }
-    
+    valid_parcel ={
+            "client":"me",
+            "parcel_description":"Yanga",
+            "recipient":"Carol",
+            "contact":"0756372818",
+            "pickup_location":"Kawempe, industrial area",
+            "destination":"Jinja town council"
+        }
     invalid_recipient_parcel ={
             "client":"Wademu",
             "parcel_description":"Yanga",
@@ -69,5 +77,23 @@ class TestData():
         "email":"kwage@gmail.com",
         "password":"andyfofofo"
     }
-    def add_parcel_delivery_order(self):
-        Parcels.parcels.append(TestData.valid_parcel)
+    def add_parcel_delivery_order(self,parcel_to_add):
+        """Adds parcel to list for testing purposes"""
+        parcel_to_add['status']='pending'
+        parcel_to_add['parcel_id']=len(Parcels.parcels)+1
+        parcel_to_add['user_id']=len(Users.user_accounts)+1
+        Users.user_accounts.append(dict(
+            username = parcel_to_add['client'],
+            user_id= parcel_to_add['user_id'],
+            email ='random@gmail.com'
+        ))
+        print(parcel_to_add)
+    
+        Parcels.parcels.append(parcel_to_add)
+        print(Parcels.parcels)
+        
+    
+
+    def empty_all_lists(self):
+        del Parcels.parcels[:]
+        del Users.user_accounts[:]

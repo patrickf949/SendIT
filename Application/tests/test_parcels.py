@@ -19,6 +19,22 @@ class TestSendIT(unittest.TestCase):
         assert isinstance(self.testdata, TestData)
 
     
+    def test_get_all_parcels(self):    
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        response = self.test_client.get(
+            '/api/v1/parcels',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code,200)
+    
+    def test_get_all_parcels_when_empty(self):
+        self.testdata.empty_all_lists()
+        response = self.test_client.get(
+            '/api/v1/parcels',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code,400)
+
     
     def test_admin_signup_valid_params(self):
         
@@ -165,7 +181,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,400)
     
     def test_parcel_update_valid(self):
-        self.testdata.add_parcel_delivery_order()
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
@@ -174,7 +190,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,200)
 
     def test_parcel_update_lessparams(self):
-        self.testdata.add_parcel_delivery_order()
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
@@ -184,7 +200,7 @@ class TestSendIT(unittest.TestCase):
 
 
     def test_parcel_update_passuserdetails(self):
-        self.testdata.add_parcel_delivery_order()
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
@@ -192,7 +208,45 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,400)
 
+    def test_cancel_parcel_delivery_order(self):
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        response = self.test_client.get(
+            '/api/v1/parcels/1/cancel',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code,200)
+
+    def test_cancel_invalid_parcel_delivery_ordedr(self):
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        response = self.test_client.get(
+            '/api/v1/parcels/43/cancel',
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code,400)
     
+
+    def test_get_valid_parcel_by_id(self):
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        response = self.test_client.get(
+            '/api/v1/parcels/2',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code,200)
+
+
+    def test_get_invalid_parcel_by_id(self):
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        response = self.test_client.get(
+            '/api/v1/parcels/43',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code,400)
+    
+
+    def tesg_get_parcels_by_user_id(self):
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel2)
+        
 
     def tearDown(self):
         return super().tearDown()
