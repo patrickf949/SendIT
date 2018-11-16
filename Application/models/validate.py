@@ -1,5 +1,5 @@
 """
-Handles all validation
+Handles all validation as well as manipulation
 """
 
 from .parcels import Parcels
@@ -10,35 +10,15 @@ class Validation():
     #Handles all validation
     
     def validate_admin_signup(self,data):
-        
+        user_status = self.signup(data)
+        return user_status
     
-        admin_id=len(Users.admin_accounts)+1
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
         
-        temp_user=[username,email,password]
-        
-        valid_data =self.validate_userdata(temp_user)
-
-        if valid_data!=True:
-            return valid_data
-
-        admin =dict(
-            admin_id =admin_id,
-            username = username,
-            email = email,
-            password = password
-        )
-        
-        Users.admin_accounts.append(admin)
-
-        return jsonify({
-            'message': 'hello! '+admin['username']+' You Account has been created and automatically logged in',
-        }),200
-
     def validate_user_signup(self,data):
-        
+        user_status = self.signup(data,'client')
+        return user_status
+
+    def signup(self,data,usertype=''):
         user_id=len(Users.user_accounts)+1
         username = data.get('username')
         email = data.get('email')
@@ -57,12 +37,18 @@ class Validation():
             email = email,
             password = password
         )
-        
-        Users.user_accounts.append(user)
+        if usertype=='client':
+            Users.user_accounts.append(user)
 
-        return jsonify({
-            'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
-        }),200
+            return jsonify({
+                'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
+            }),200
+        else:
+            Users.admin_accounts.append(user)
+
+            return jsonify({
+                'message': 'hello! '+user['username']+' Your Admin Account has been created and automatically logged in',
+            }),200
 
 
     def validate_userdata(self,temp_list):
