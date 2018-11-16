@@ -83,7 +83,7 @@ def get_parcels_by_userId(user_id):
     return response.validate_parcels_by_user(user_id)
 
 @blue_print.route('/api/v1/users')
-def get_parcels_by_userId(user_id):
+def get_all_users(user_id):
     """
     gets all users in the system
     """
