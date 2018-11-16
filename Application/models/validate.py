@@ -19,16 +19,10 @@ class Validation():
         
         temp_user=[username,email,password]
         
-        for element in temp_user:
-            if type(element)!=str:
-                return jsonify({
-                'message':'sorry! All fields must be strings'
-            }),400
+        valid_data =self.validate_userdata(temp_user)
 
-            elif not element or element.isspace():
-                return jsonify({
-                'message':'sorry! your username is required and can not be an empty string'
-            }), 400
+        if valid_data!=True:
+            return valid_data
 
         admin =dict(
             admin_id =admin_id,
@@ -45,43 +39,47 @@ class Validation():
 
     def validate_user_signup(self,data):
         
-        user_id = len(Users.user_accounts)+1
+        user_id=len(Users.user_accounts)+1
         username = data.get('username')
         email = data.get('email')
-        password =data.get('password')
-
-        temp_account=[username,email,password]
-        for element in temp_account:
-            if type(element)!=str or not element:
-                return jsonify({
-                'message':'Username, email and password information should be a sequence of characters(String type)'
-            }),400
-            
-        for element in temp_account:
-            if element.isspace():
-                return jsonify({
-                'message':'make sure all fields have information. no field can be an empty space'
-            }),400
+        password = data.get('password')
         
-        for existing_account in Users.user_accounts:
-            if existing_account['email']==email:
-                return jsonify({
-                    'message':'Email already exists'
-                }),400
+        temp_user=[username,email,password]
+        
+        valid_data =self.validate_userdata(temp_user)
 
-        user = dict(
+        if valid_data!=True:
+            return valid_data
+        
+        user =dict(
             user_id =user_id,
-            username=username,
-            email=email,
-            password=password
+            username = username,
+            email = email,
+            password = password
         )
         
         Users.user_accounts.append(user)
+
         return jsonify({
-            'message':'user has been added and logged in'
+            'message': 'hello! '+user['username']+' You Account has been created and automatically logged in',
         }),200
 
-    
+
+    def validate_userdata(self,temp_list):
+        for element in temp_list:
+            if type(element)!=str:
+                return jsonify({
+                'message':'sorry! All fields must be strings'
+            }),400
+
+            elif not element or element.isspace():
+                return jsonify({
+                'message':'sorry! your username is required and can not be an empty string'
+            }), 400
+        
+        return True
+
+
     def validate_parcels_by_user(self,user_id):
         if len(Users.user_accounts)==0:
             return jsonify({
