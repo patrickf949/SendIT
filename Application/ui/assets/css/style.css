@@ -92,7 +92,7 @@ a{
 	text-align: left;
 	margin-top: 10px
 }
-table{
+.table{
 	width: 90%;
 	margin: auto;
 }
@@ -145,16 +145,28 @@ input{
 	text-align: center;
 }
 
-thead{
+.thead{
 	color: gold;
 
-
+	width: 100%;
 }
-tr{
-	border-style: solid;
+.tables div div{
+	text-align: center;
 	border-width: thin;
 	margin-top: 10px;
-}	
+	width: 100%;
+
+}
+
+.tables div div div{
+	width: auto;
+	float: left;
+	text-align: center;
+}
+admin div div div{
+	width: 12%
+}
+
 .light{
 	background-color: rgb(0,0,255);
 }
@@ -250,4 +262,28 @@ option{
 		width: 100px
 	}
 
+}
+
+@media (max-resolution: 1dppx) and (max-width: 500px) {
+		.logindiv{
+		width: 80%
+	}
+	.left{
+		width: 100px
+	}
+	.right{
+		width: 70%;
+	}
+	.not{
+		visibility:hidden;
+		display: none;
+	}
+	.status{
+		
+	}
+
+	.right div{
+		width: 100px
+	}
+	
 }
