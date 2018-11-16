@@ -1,5 +1,5 @@
 """Contains all data to be tested"""
-from Application.views.parcels_view import user_accounts,parcels
+from ..models.parcels import Parcels
 
 class TestData():  
     empty={}
@@ -69,3 +69,5 @@ class TestData():
         "email":"kwage@gmail.com",
         "password":"andyfofofo"
     }
+    def add_parcel_delivery_order(self):
+        Parcels.parcels.append(TestData.valid_parcel)

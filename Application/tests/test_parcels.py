@@ -138,6 +138,7 @@ class TestSendIT(unittest.TestCase):
     
 
     def test_parcel_addition_lessparams(self):
+
         response = self.test_client.post(
             '/api/v1/parcels',
             content_type='application/json',
@@ -147,6 +148,7 @@ class TestSendIT(unittest.TestCase):
     
     
     def test_parcel_addition_empty(self):
+        
         response = self.test_client.post(
             '/api/v1/parcels',
             content_type='application/json',
@@ -163,6 +165,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,400)
     
     def test_parcel_update_valid(self):
+        self.testdata.add_parcel_delivery_order()
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
@@ -171,6 +174,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,200)
 
     def test_parcel_update_lessparams(self):
+        self.testdata.add_parcel_delivery_order()
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
@@ -180,6 +184,7 @@ class TestSendIT(unittest.TestCase):
 
 
     def test_parcel_update_passuserdetails(self):
+        self.testdata.add_parcel_delivery_order()
         response = self.test_client.put(
             '/api/v1/parcels/1/update',
             content_type='application/json',
