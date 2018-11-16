@@ -103,7 +103,7 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.valid_parcel)
         )
-        message = json.loads(response.data.decode())
+        
         self.assertEqual(response.status_code,200)
 
     
@@ -154,6 +154,40 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,400)
 
+    def test_parcel_update_empty(self):
+        response = self.test_client.put(
+            '/api/v1/parcels/1/update',
+            content_type='application/json',
+            data=json.dumps(self.testdata.empty)
+        )
+        self.assertEqual(response.status_code,400)
+    
+    def test_parcel_update_valid(self):
+        response = self.test_client.put(
+            '/api/v1/parcels/1/update',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel)
+        )
+        self.assertEqual(response.status_code,200)
+
+    def test_parcel_update_lessparams(self):
+        response = self.test_client.put(
+            '/api/v1/parcels/1/update',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_parcel_less_params)
+        )
+        self.assertEqual(response.status_code,400)
+
+
+    def test_parcel_update_passuserdetails(self):
+        response = self.test_client.put(
+            '/api/v1/parcels/1/update',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_admin_login)
+        )
+        self.assertEqual(response.status_code,400)
+
+    
 
     def tearDown(self):
         return super().tearDown()

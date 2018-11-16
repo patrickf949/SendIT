@@ -1,7 +1,7 @@
 from flask import jsonify,Flask,request, Blueprint
 from datetime import datetime
-from Application.models import parcels
-from Application.models import validate
+from Application.models.parcels import Parcels
+from Application.models.validate import Validation
 
 blue_print = Blueprint("Parcels",__name__)
 
@@ -19,6 +19,7 @@ parcels =[
         'status':'Pending'
     }
 ]
+
 admin_accounts=[]
 user_accounts=[]
 current_user =[]#store current user id
@@ -72,18 +73,16 @@ def signup():
     email = data.get('email')
     password =data.get('password')
 
-    if type(username)!=str or type(email)!=str or type(password)!=str:
-        return jsonify({
+    temp_account=[username,email,password]
+    for element in temp_account:
+        if type(element)!=str or not element:
+            return jsonify({
             'message':'All information should be a sequence of characters(String type)'
         }),400
-    
-    if not username or not email or not password:
-        return jsonify({
-            'message':'Information missing, make sure username,email and password are passed'
-        }),400
-    
-    if username.isspace() or email.isspace() or password.isspace():
-        return jsonify({
+        
+    for element in temp_account:
+        if element.isspace():
+            return jsonify({
             'message':'make sure all fields have information. no field can be an empty space'
         }),400
     
@@ -105,6 +104,7 @@ def signup():
         'message':'user has been added and logged in'
     })
 
+
 @blue_print.route('/api/v1/parcels')
 def getParcels():
     if len(parcels)>0:
@@ -125,7 +125,7 @@ def getParcel(parcel_id):
     if len(parcels)==0:
         return jsonify({
             'message':'No Parcel delivery orders yet'
-        }),205
+        }),400
     if not parcel_id or parcel_id < 1 or type(parcel_id)!=int:
         return jsonify({
             'message': 'sorry! book ID is required and can not be less than 1'
@@ -137,7 +137,7 @@ def getParcel(parcel_id):
             }), 200
     return jsonify({
         'message':'the book was not found'
-    }), 205
+    }), 400
 
 @blue_print.route ('/api/v1/parcels', methods = ['POST'])
 def addParcel():

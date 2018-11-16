@@ -1,4 +1,5 @@
 """Contains all data to be tested"""
+from Application.views.parcels_view import user_accounts,parcels
 
 class TestData():  
     empty={}
