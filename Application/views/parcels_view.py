@@ -1,6 +1,7 @@
 from flask import jsonify,Flask,request, Blueprint
 from datetime import datetime
 from Application.models.parcels import Parcels
+from Application.models.users import Users
 from Application.models.validate import Validation
 
 blue_print = Blueprint("Parcels",__name__)
