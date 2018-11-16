@@ -267,7 +267,8 @@ class Validation():
         if len(Users.user_accounts)>0:
             return jsonify({
                 'Users':Users.user_accounts
-            })
+            }),200
+            
         return jsonify({
             'message':'No users in the system'
-        })
+        }),400
