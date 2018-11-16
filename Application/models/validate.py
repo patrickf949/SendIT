@@ -180,9 +180,8 @@ class Validation():
                 return jsonify({
                     'message':'All specifications should be a sequence of characters'
                 }),400
-        
-        for element in temp_parcel:
-            if not element or element.isspace:
+
+            elif not element or element.isspace():
                 return jsonify({
                     'message':'All your specifications should be available and should not be a space. Make sure you have the following',
                     '1. ':'parcel description',
@@ -190,7 +189,7 @@ class Validation():
                     '3. ':'recipients contact',
                     '4. ':'pickup location',
                     '5. ':'destination'
-                })
+                }),400
 
         parcel =dict(
             parcel_id=parcel_id,
