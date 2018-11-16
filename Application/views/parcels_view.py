@@ -24,10 +24,6 @@ user_accounts=[]
 current_user =[]#store current user id
 current_admin =[]#store current admin id
 
-def logout_active_users():
-    del current_admin[:]
-    del current_user[:]
-
 @blue_print.route('/api/v1/admin/signup',methods = ['POST'])
 def admin_signup():
     #logout_active_users()
@@ -37,24 +33,18 @@ def admin_signup():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
-    if type(username)!=str or type(email) !=str or type(password)!=str:
-        return jsonify({
+    
+    temp_user=[username,email,password]
+    
+    for element in temp_user:
+        if type(element)!=str:
+            return jsonify({
             'message':'sorry! All fields must be strings'
         }),400
 
-    if not username or username.isspace():
-        return jsonify({
+        elif not element or element.isspace():
+            return jsonify({
             'message':'sorry! your username is required and can not be an empty string'
-        }), 400
-
-    if not email or email.isspace():
-        return jsonify({
-            'message':'sorry! email is required and can not be an empty string'
-        }), 400
-
-    if not password or password.isspace():
-        return jsonify({
-            'message':'sorry! your password is required and can not be an empty string'
         }), 400
 
     admin =dict(
@@ -142,7 +132,7 @@ def signup():
     
 @blue_print.route('/api/v1/login',methods=['POST'])
 def login():
-    logout_active_users()
+    
     data = request.get_json()
     
     
