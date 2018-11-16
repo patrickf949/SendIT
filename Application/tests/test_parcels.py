@@ -97,7 +97,7 @@ class TestSendIT(unittest.TestCase):
     def test_user_signup_valid_params(self):
         
         response = self.test_client.post(
-            '/api/v1/signup',
+            '/api/v1/user/signup',
             content_type='application/json',
             data=json.dumps(self.testdata.valid_user_signup)
         )
@@ -106,7 +106,7 @@ class TestSendIT(unittest.TestCase):
     def test_user_signup_invalid_params(self):
         
         response = self.test_client.post(
-            '/api/v1/signup',
+            '/api/v1/user/signup',
             content_type='application/json',
             data=json.dumps(self.testdata.invalid_admin_signup)
         )
