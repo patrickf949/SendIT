@@ -54,7 +54,7 @@ class Validation():
         for element in temp_account:
             if type(element)!=str or not element:
                 return jsonify({
-                'message':'All information should be a sequence of characters(String type)'
+                'message':'Username, email and password information should be a sequence of characters(String type)'
             }),400
             
         for element in temp_account:
@@ -79,7 +79,7 @@ class Validation():
         Users.user_accounts.append(user)
         return jsonify({
             'message':'user has been added and logged in'
-        })
+        }),200
 
     
     def validate_parcels_by_user(self,user_id):
