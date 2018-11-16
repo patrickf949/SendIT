@@ -60,32 +60,7 @@ def admin_signup():
         'message': 'hello! '+admin['username']+' You Account has been created and automatically logged in',
     }),200
 
-@blue_print.route('/api/v1/admin/login', methods = ['POST'])
-def admin_login():
-    if len(admin_accounts)==0:
-        return jsonify({
-            'message':'No accounts available yet'
-        }),400
-    data = request.get_json()
-    
-    email = data.get('email')
-    password = data.get('password')
 
-    i=0#keeps track of admin index
-    for existing_account in admin_accounts:
-        if email==existing_account['email']:#if email exists
-            if password==existing_account['password']:#if password matches
-                current_admin.append(i)#store id of loggedin admin
-                return jsonify({
-                    'message':'Hello! '+existing_account['username']+' You are logged in'
-                }),200
-            return jsonify({
-                'message':'Invalid email or password'
-            }),400
-        i+=1 
-    return jsonify({
-        'message':'invalid email or password'
-    }),400
 
     
 @blue_print.route('/api/v1/signup', methods = ['POST'])
@@ -129,33 +104,6 @@ def signup():
     return jsonify({
         'message':'user has been added and logged in'
     })
-    
-@blue_print.route('/api/v1/login',methods=['POST'])
-def login():
-    
-    data = request.get_json()
-    
-    
-    email = data.get('email')
-    password =data.get('password')
-
-    i=0
-    for existing_account in user_accounts:
-        if existing_account['email']==email:
-            if existing_account['password']==password:
-                current_user.append(i)
-                return jsonify({
-                    'message':existing_account['username']+'you are logged in'
-                }),200
-            return jsonify({
-                'message':'invalid email or password'
-            }),400
-        i+=1
-
-    return jsonify({
-        'message':'Invalid email address or password'
-    }),400
-   
 
 @blue_print.route('/api/v1/parcels')
 def getParcels():
@@ -252,7 +200,7 @@ def updateParcel(parcel_id):
     data = request.get_json()
     
     parcel_description = data.get('parcel_description')
-    client = data.get('client')
+    client=data.get('client')
     recipient = data.get('recipient')
     pickup_location = data.get('pickup_location')
     destination =data.get('destination')
@@ -262,11 +210,6 @@ def updateParcel(parcel_id):
     if not parcel_description or parcel_description.isspace():
         return jsonify({
             'message':'sorry! the parcel_description is required and can not be an empty string'
-        }), 400
-
-    if not client or client.isspace():
-        return jsonify({
-            'message':'sorry! the client is required and can not be an empty string'
         }), 400
 
     if not recipient or recipient.isspace():
@@ -282,21 +225,16 @@ def updateParcel(parcel_id):
     
     parcel_index =parcel_id-1
     
-    status =parcels[parcel_index]['status']
-    parcel =dict(
-        parcel_id=parcel_id,
-        parcel_description = parcel_description,
-        client = client,
-        recipient = recipient,
-        pickup_location = pickup_location,
-        destination =destination,
-        status=status
-    )
-    del parcels[parcel_index]
-    parcels.insert(parcel_index,parcel)
+    parcels[parcel_index]['parcel_description'] = parcel_description
+    parcels[parcel_index]['recipient'] = recipient
+    parcels[parcel_index]['pickup_location'] = pickup_location
+    parcels[parcel_index]['destination'] =destination
+    
+    
+    
     return jsonify({
         'Message': 'Parcel has been Updated',
-        'parcel': parcel
+        'parcel': parcels[parcel_index]
     }),200
 
         
