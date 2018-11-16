@@ -245,8 +245,13 @@ class TestSendIT(unittest.TestCase):
 
     def tesg_get_parcels_by_user_id(self):
         self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
-        self.testdata.add_parcel_delivery_order(TestData.valid_parcel2)
+        self.testdata.add_parcel_delivery_order(TestData.valid_parcel1)
         
+        response = self.test_client.get(
+            '/api/v1/parcels/43',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code,400)
 
     def tearDown(self):
         return super().tearDown()

@@ -10,9 +10,7 @@ response= Validation()
 @blue_print.route('/api/v1/admin/signup',methods = ['POST'])
 def admin_signup():
     #logout_active_users()
-    data = request.get_json()
-    
-    
+    data = request.get_json()    
     return response.validate_admin_signup(data)
 
     
@@ -31,14 +29,14 @@ def getParcels():
 def getParcel(parcel_id):
     """
     Get parcel by id
-    params: parcel id
+    params: parcel id	
     returns: specified parcel
     """
-    response.validate_get_parcel_by_id(parcel_id)
+    return response.validate_get_parcel_by_id(parcel_id)
 
 @blue_print.route ('/api/v1/parcels', methods = ['POST'])
 def addParcel():
-    """
+    """	
     Create a parcel delivery order
     params: n/a
     returns: created parcel
@@ -61,7 +59,7 @@ def updateParcel(parcel_id):
         
     
 
-@blue_print.route('/api/v1/parcels/<int:parcelId>/cancel')
+@blue_print.route('/api/v1/parcels/<int:parcel_id>/cancel')
 def cancel_delivery_order(parcel_id):
     """
     Cancel a delivery order

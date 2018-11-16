@@ -12,10 +12,10 @@ class TestData():
             "pickup_location":"Kawempe, industrial area",
             "destination":"Jinja town council"
         }
-    valid_parcel ={
+    valid_parcel1 ={
             "client":"me",
             "parcel_description":"Yanga",
-            "recipient":"Carol",
+            "recipient":"Casrol",
             "contact":"0756372818",
             "pickup_location":"Kawempe, industrial area",
             "destination":"Jinja town council"

@@ -113,23 +113,24 @@ class Validation():
         elif parcel_id>len(Parcels.parcels):
             return jsonify({
                 'message':'Parcel does not exist'
-            })
+            }),400
         
         Parcels.parcels[parcel_id-1]['status']='canceled'
         return jsonify({
             'message':'Parcel status has been changed to canceled',
             'Parcel':Parcels.parcels[parcel_id-1]
-        })
+        }),200
+
 
     def validate_update_parcel_delivery_order(self,data,parcel_id):
         
     
         parcel_description = data.get('parcel_description')
-        client=data.get('client')
+        
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
-        status = 'pending'
+        
         
 
         if not parcel_description or parcel_description.isspace():
@@ -213,15 +214,18 @@ class Validation():
             return jsonify({
                 'message':'No Parcel delivery orders yet'
             }),400
+
         if not parcel_id or parcel_id < 1 or type(parcel_id)!=int:
             return jsonify({
                 'message': 'sorry! parcel ID is required and can not be less than 1'
             }), 400
+
         for parcel in Parcels.parcels:
             if parcel['parcel_id'] == parcel_id:
                 return jsonify({
                     'Specified parcel':parcel
                 }), 200
+
         return jsonify({
             'message':'the parcel was not found'
         }), 400
@@ -232,6 +236,9 @@ class Validation():
             return jsonify({
             'parcels':Parcels.parcels
             }),200
+
         return jsonify({
             'message':'No parcels added yet'
         }),400
+
+
