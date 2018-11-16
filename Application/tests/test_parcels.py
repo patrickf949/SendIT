@@ -37,6 +37,15 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.invalid_admin_signup)
         )
         self.assertEqual(response.status_code, 400)
+    
+
+    def test_admin_signup_empty(self):
+        response = self.test_client.post(
+            '/api/v1/admin/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.empty)
+        )
+        self.assertEqual(response.status_code, 400)
 
 
     @pytest.mark.skip(reason="no way of currently testing this")
@@ -67,6 +76,16 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
     
+
+    def test_user_signup_empty(self):
+        response = self.test_client.post(
+            '/api/v1/admin/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.empty)
+        )
+        self.assertEqual(response.status_code, 400)
+
+
     @pytest.mark.skip(reason="no way of currently testing this")
     def test_user_login(self):
         
