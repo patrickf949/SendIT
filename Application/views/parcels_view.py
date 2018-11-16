@@ -18,8 +18,6 @@ def admin_signup():
 @blue_print.route('/api/v1/signup', methods = ['POST'])
 def signup():
     data = request.get_json()
-    
-    
     return response.validate_user_signup(data)
 
 @blue_print.route('/api/v1/parcels')
