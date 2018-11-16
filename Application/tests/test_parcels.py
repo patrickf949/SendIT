@@ -42,6 +42,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(message['message'],'No parcels added yet' )
         self.assertEqual(response.status_code,400)
 
+
     
     def test_admin_signup_valid_params(self):
         
@@ -54,6 +55,7 @@ class TestSendIT(unittest.TestCase):
 
         self.assertEqual(message['message'],'hello! Andrew You Account has been created and automatically logged in')
         self.assertEqual(response.status_code, 200)
+    
     
     def test_admin_signup_invalid_params(self):
         
@@ -244,9 +246,10 @@ class TestSendIT(unittest.TestCase):
     
 
     def test_get_valid_parcel_by_id(self):
+        
         self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
         response = self.test_client.get(
-            '/api/v1/parcels/2',
+            '/api/v1/parcels/3',
             content_type='application/json'
         )
         self.assertEqual(response.status_code,200)
@@ -261,7 +264,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,400)
     
 
-    def tesg_get_parcels_by_user_id(self):
+    def test_get_parcels_by_user_id(self):
         self.testdata.add_parcel_delivery_order(TestData.valid_parcel)
         self.testdata.add_parcel_delivery_order(TestData.valid_parcel1)
         
@@ -270,6 +273,16 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code,400)
+    
+    def test_get_all_users(self):
+        self.testdata.empty_all_lists()
+        response = self.test_client.get(
+            '/api/v1/users',
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code,400)
+        
+        
 
     def tearDown(self):
         return super().tearDown()
