@@ -25,8 +25,8 @@ current_user =[]#store current user id
 current_admin =[]#store current admin id
 
 def logout_active_users():
-    current_admin.pop()
-    current_user.pop()
+    del current_admin[:]
+    del current_user[:]
 
 @blue_print.route('/api/v1/admin/signup',methods = ['POST'])
 def admin_signup():
@@ -93,6 +93,10 @@ def admin_login():
                 'message':'Invalid email or password'
             }),400
         i+=1 
+    return jsonify({
+        'message':'invalid email or password'
+    }),400
+
     
 @blue_print.route('/api/v1/signup', methods = ['POST'])
 def signup():
@@ -145,28 +149,13 @@ def login():
     email = data.get('email')
     password =data.get('password')
 
-    if type(email)!=str or type(password)!=str:
-        return jsonify({
-            'message':'All information should be a sequence of characters(String type)'
-        }),400
-    
-    if not email or not password:
-        return jsonify({
-            'message':'Information missing, make sure username,email and password are passed'
-        }),400
-    
-    if email.isspace() or password.isspace():
-        return jsonify({
-            'message':'make sure all fields have information. no field can be an empty space'
-        }),400
-    
     i=0
     for existing_account in user_accounts:
         if existing_account['email']==email:
             if existing_account['password']==password:
                 current_user.append(i)
                 return jsonify({
-                    'message':existing_account['user']+'you are logged in'
+                    'message':existing_account['username']+'you are logged in'
                 }),200
             return jsonify({
                 'message':'invalid email or password'
@@ -228,27 +217,23 @@ def addParcel():
     pickup_location = data.get('pickup_location')
     destination =data.get('destination')
     status='pending'
-    if not parcel_description or parcel_description.isspace():
-        return jsonify({
-            'message':'sorry! the parcel_description is required and can not be an empty string'
-        }), 400
-
-    if not client or client.isspace():
-        return jsonify({
-            'message':'sorry! the client is required and can not be an empty string'
-        }), 400
-
-    if not recipient or recipient.isspace():
-        return jsonify({
-            'message':'sorry! the recipient is required and can not be an empty string'
-        }), 400
-
-    if not pickup_location or pickup_location.isspace():
-        return jsonify({
-            'message':'sorry! the pickup_location is required and can not be an empty string'
-        }), 400
-
+    temp_parcel = [parcel_description,client,recipient,pickup_location,destination]
+    for element in temp_parcel:
+        if type(element)!=str:
+            return jsonify({
+                'message':'All specifications should be a sequence of characters'
+            }),400
     
+    for element in temp_parcel:
+        if not element or element.isspace:
+            return jsonify({
+                'message':'All your specifications should be available and should not be a space. Make sure you have the following',
+                '1. ':'parcel description',
+                '2. ':'recipient',
+                '3. ':'recipients contact',
+                '4. ':'pickup location',
+                '5. ':'destination'
+            })
 
     parcel =dict(
         parcel_id=parcel_id,
@@ -385,26 +370,5 @@ def get_parcels_by_userId(user_id):
         "parcels":user_parcels
     })
 
-
-# def validation(parcel_description,client, recipient, pickup_location,Destination):
-#     if not parcel_description or parcel_description.isspace():
-#         return jsonify({
-#             'message':'sorry! the parcel_description is required and can not be an empty string'
-#         }), 400
-
-#     if not client or client.isspace():
-#         return jsonify({
-#             'message':'sorry! the client is required and can not be an empty string'
-#         }), 400
-
-#     if not recipient or recipient.isspace():
-#         return jsonify({
-#             'message':'sorry! the recipient is required and can not be an empty string'
-#         }), 400
-
-#     if not pickup_location or pickup_location.isspace():
-#         return jsonify({
-#             'message':'sorry! the pickup_location is required and can not be an empty string'
-#         }), 400
 
     
