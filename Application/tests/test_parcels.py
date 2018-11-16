@@ -4,6 +4,8 @@ import pytest
 from Application import app,create_app
 from Application.views import *
 from .testdata import TestData
+from Application.models.parcels import Parcels
+from Application.models.users import Users
 
 class TestSendIT(unittest.TestCase):
     """
@@ -25,7 +27,10 @@ class TestSendIT(unittest.TestCase):
             '/api/v1/parcels',
             content_type='application/json',
         )
+        message = json.loads(response.data.decode())
+
         self.assertEqual(response.status_code,200)
+        self.assertEqual(message['parcels'], Parcels.parcels)
     
     def test_get_all_parcels_when_empty(self):
         self.testdata.empty_all_lists()
@@ -33,6 +38,8 @@ class TestSendIT(unittest.TestCase):
             '/api/v1/parcels',
             content_type='application/json',
         )
+        message = json.loads(response.data.decode())
+        self.assertEqual(message['message'],'No parcels added yet' )
         self.assertEqual(response.status_code,400)
 
     
@@ -43,6 +50,9 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.valid_admin_signup)
         )
+        message = json.loads(response.data.decode())
+
+        self.assertEqual(message['message'],'hello! Andrew You Account has been created and automatically logged in')
         self.assertEqual(response.status_code, 200)
     
     def test_admin_signup_invalid_params(self):
@@ -52,6 +62,8 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.invalid_admin_signup)
         )
+        message = json.loads(response.data.decode())
+        self.assertEqual(message['message'], 'sorry! All fields must be strings')
         self.assertEqual(response.status_code, 400)
     
 
@@ -61,7 +73,12 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.empty)
         )
+        self.temp_parcels = Parcels.parcels
+        message = json.loads(response.data.decode())
+        self.assertEqual(message['message'], 'sorry! All fields must be strings')
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(Parcels.parcels,self.temp_parcels)
+        
 
 
     @pytest.mark.skip(reason="no way of currently testing this")
@@ -72,6 +89,7 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.valid_admin_login)
         )
+        
         self.assertEqual(response.status_code, 200)
 
     def test_user_signup_valid_params(self):
