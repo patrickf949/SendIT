@@ -1,8 +1,8 @@
 """This module handles users"""
 
 class Users():
-    users=[]
-    admin=[]
+    user_accounts=[]
+    admin_accounts=[]
     def __init__(self, username,email,contact):
         self.username = username
         self.email = email
