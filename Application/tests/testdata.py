@@ -1,6 +1,7 @@
 """Contains all data to be tested"""
 
 class TestData():  
+    empty={}
     valid_parcel ={
             "client":"Wademu",
             "parcel_description":"Yanga",
@@ -41,12 +42,17 @@ class TestData():
         "email":"andrew@gmail.com",
         "password":"andyfofofo"
     }
+    invalid_admin_signup={
+        "email":"bumbelidaha",
+        "books":"na"
+
+    }
     valid_admin_login={
         "email":"andrew@gmail.com",
         "password":"andyfofofo"
     }
     invalid_admin_login={
-        "email":"andrew@gmail.com",
+        "email":"andrew@gmaidsdsl.com",
         "password":"andyfofofo"
     }
     valid_user_signup={

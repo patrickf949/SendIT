@@ -2,6 +2,7 @@ import unittest
 import json
 import pytest
 from Application import app,create_app
+from Application.views import *
 from .testdata import TestData
 
 class TestSendIT(unittest.TestCase):
@@ -27,7 +28,18 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.valid_admin_signup)
         )
         self.assertEqual(response.status_code, 200)
+    
+    def test_admin_signup_invalid_params(self):
+        
+        response = self.test_client.post(
+            '/api/v1/admin/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_admin_signup)
+        )
+        self.assertEqual(response.status_code, 400)
 
+
+    @pytest.mark.skip(reason="no way of currently testing this")
     def test_admin_login_valid_params(self):
         
         response = self.test_client.post(
@@ -46,12 +58,24 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
     
+    def test_user_signup_invalid_params(self):
+        
+        response = self.test_client.post(
+            '/api/v1/signup',
+            content_type='application/json',
+            data=json.dumps(self.testdata.invalid_admin_signup)
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    @pytest.mark.skip(reason="no way of currently testing this")
     def test_user_login(self):
+        
         response = self.test_client.post(
             '/api/v1/login',
             content_type='application/json',
             data=json.dumps(self.testdata.valid_user_login)
         )
+        
         self.assertEqual(response.status_code, 200)
 
     def test_valid_parcel_addition(self):
@@ -61,7 +85,7 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.valid_parcel)
         )
         message = json.loads(response.data.decode())
-        assert message['message']=='hello! Wademu Your Parcel Delivery order has been placed'
+        self.assertEqual(response.status_code,200)
 
     
     def test_invalid_parcel_addition(self):
@@ -74,7 +98,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
     
     
-    @pytest.mark.skip(reason="A lot of issues")
+    
     def test_parcel_addition_invalid_recipient(self):
         response = self.test_client.post(
             '/api/v1/parcels',
@@ -84,7 +108,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
     
     
-    @pytest.mark.skip(reason="no way of currently testing this")
+    
     def test_parcel_addition_invalid_contact(self):
         response = self.test_client.post(
             '/api/v1/parcels',
@@ -103,5 +127,16 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,400)
     
     
+    def test_parcel_addition_empty(self):
+        response = self.test_client.post(
+            '/api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(self.testdata.empty)
+        )
+        self.assertEqual(response.status_code,400)
+
+
+    def tearDown(self):
+        return super().tearDown()
 
     
