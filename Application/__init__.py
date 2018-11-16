@@ -10,7 +10,7 @@ def create_app():
     def kingslanding():
         return jsonify([
             "SendIT!"
-            ,"SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.",{
+            +"SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.",{
                 "/api/v1/parcels":"Create parcel"
                 ,"/api/v1/parcels": "Fetch all parcels"
                 ,"/api/v1/parcel/<int:parcelId>": "fetch parcel by id"                
