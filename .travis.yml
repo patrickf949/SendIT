@@ -7,5 +7,7 @@ install:
 script:
   - pytest -v
   - pytest --cov
+  - python3 -m pytest --cov Application.views --cov-report term-missing
+
 after_success:
   - coveralls
