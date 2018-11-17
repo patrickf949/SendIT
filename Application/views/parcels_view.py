@@ -70,7 +70,7 @@ def cancel_delivery_order(parcel_id):
 
 
 
-@blue_print.route('/api/v1/users/<int:userId>/parcels')
+@blue_print.route('/api/v1/users/<int:user_id>/parcels')
 def get_parcels_by_userId(user_id):
     """
     Gets all ids by a specified user id
