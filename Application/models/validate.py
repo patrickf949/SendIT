@@ -1,5 +1,5 @@
 """
-Handles all validation
+Handles all validation as well as manipulation
 """
 
 from .parcels import Parcels
@@ -10,16 +10,49 @@ class Validation():
     #Handles all validation
     
     def validate_admin_signup(self,data):
-        
+        user_status = self.signup(data)
+        return user_status
     
-        admin_id=len(Users.admin_accounts)+1
+        
+    def validate_user_signup(self,data):
+        user_status = self.signup(data,'client')
+        return user_status
+
+    def signup(self,data,usertype=''):
+        user_id=len(Users.user_accounts)+1
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
         
         temp_user=[username,email,password]
         
-        for element in temp_user:
+        valid_data =self.validate_userdata(temp_user)
+
+        if valid_data!=True:
+            return valid_data
+        
+        user =dict(
+            user_id =user_id,
+            username = username,
+            email = email,
+            password = password
+        )
+        if usertype=='client':
+            Users.user_accounts.append(user)
+
+            return jsonify({
+                'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
+            }),200
+        else:
+            Users.admin_accounts.append(user)
+
+            return jsonify({
+                'message': 'hello! '+user['username']+' Your Admin Account has been created and automatically logged in',
+            }),200
+
+
+    def validate_userdata(self,temp_list):
+        for element in temp_list:
             if type(element)!=str:
                 return jsonify({
                 'message':'sorry! All fields must be strings'
@@ -29,59 +62,10 @@ class Validation():
                 return jsonify({
                 'message':'sorry! your username is required and can not be an empty string'
             }), 400
-
-        admin =dict(
-            admin_id =admin_id,
-            username = username,
-            email = email,
-            password = password
-        )
         
-        Users.admin_accounts.append(admin)
+        return True
 
-        return jsonify({
-            'message': 'hello! '+admin['username']+' You Account has been created and automatically logged in',
-        }),200
 
-    def validate_user_signup(self,data):
-        
-        user_id = len(Users.user_accounts)+1
-        username = data.get('username')
-        email = data.get('email')
-        password =data.get('password')
-
-        temp_account=[username,email,password]
-        for element in temp_account:
-            if type(element)!=str or not element:
-                return jsonify({
-                'message':'All information should be a sequence of characters(String type)'
-            }),400
-            
-        for element in temp_account:
-            if element.isspace():
-                return jsonify({
-                'message':'make sure all fields have information. no field can be an empty space'
-            }),400
-        
-        for existing_account in Users.user_accounts:
-            if existing_account['email']==email:
-                return jsonify({
-                    'message':'Email already exists'
-                }),400
-
-        user = dict(
-            user_id =user_id,
-            username=username,
-            email=email,
-            password=password
-        )
-        
-        Users.user_accounts.append(user)
-        return jsonify({
-            'message':'user has been added and logged in'
-        })
-
-    
     def validate_parcels_by_user(self,user_id):
         if len(Users.user_accounts)==0:
             return jsonify({
@@ -124,15 +108,13 @@ class Validation():
 
 
     def validate_update_parcel_delivery_order(self,data,parcel_id):
-        
-    
+        parcel_exists =self.check_if_parcel_id_exists(parcel_id)
+        if parcel_exists!=True:
+            return parcel_exists
         parcel_description = data.get('parcel_description')
-        
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
-        destination =data.get('destination')
-        
-        
+        destination =data.get('destination')        
 
         if not parcel_description or parcel_description.isspace():
             return jsonify({
@@ -170,11 +152,17 @@ class Validation():
         parcel_id=len(Parcels.parcels)+1
         parcel_description = data.get('parcel_description')
         client = data.get('client')
+        user_id=self.get_user_id(client)
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
         status='pending'
         temp_parcel = [parcel_description,client,recipient,pickup_location,destination]
+
+        if user_id is False:
+            return jsonify({
+                    'message':'Create an account first'
+                }),400
         for element in temp_parcel:
             if type(element)!=str:
                 return jsonify({
@@ -195,12 +183,14 @@ class Validation():
             parcel_id=parcel_id,
             parcel_description = parcel_description,
             client = client,
+            user_id=user_id,
             recipient = recipient,
             pickup_location = pickup_location,
             destination =destination,
             status = status
         )
         
+
         Parcels.parcels.append(parcel)
 
         return jsonify({
@@ -209,17 +199,11 @@ class Validation():
         }),200
     
 
+
     def validate_get_parcel_by_id(self,parcel_id):
-        if len(Parcels.parcels)==0:
-            return jsonify({
-                'message':'No Parcel delivery orders yet'
-            }),400
-
-        if not parcel_id or parcel_id < 1 or type(parcel_id)!=int:
-            return jsonify({
-                'message': 'sorry! parcel ID is required and can not be less than 1'
-            }), 400
-
+        if self.check_if_parcel_id_exists(parcel_id)!=True:
+            return self.check_if_parcel_id_exists(parcel_id)
+            
         for parcel in Parcels.parcels:
             if parcel['parcel_id'] == parcel_id:
                 return jsonify({
@@ -241,4 +225,37 @@ class Validation():
             'message':'No parcels added yet'
         }),400
 
+    
+    def get_user_id(self,client):
+        
+        for user in Users.user_accounts:
+            if user['username']==client:
+                user_id = user['user_id']
+                return user_id
 
+        return False
+    
+
+    def validate_get_all_users(self):
+
+        if len(Users.user_accounts)>0:
+            return jsonify({
+                'Users':Users.user_accounts
+            }),200
+
+        return jsonify({
+            'message':'No users in the system'
+        }),400
+    
+    def check_if_parcel_id_exists(self,parcel_id):
+        if len(Parcels.parcels)==0:
+            return jsonify({
+                'message':'No parcel delivery orders'
+            }),400
+        
+        if parcel_id>len(Parcels.parcels) or parcel_id==0:
+            return jsonify({
+                'message':'invalid parcel id'
+            }),400
+
+        return True

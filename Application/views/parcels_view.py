@@ -15,11 +15,9 @@ def admin_signup():
     return response.validate_admin_signup(data)
 
     
-@blue_print.route('/api/v1/signup', methods = ['POST'])
+@blue_print.route('/api/v1/user/signup', methods = ['POST'])
 def signup():
     data = request.get_json()
-    
-    
     return response.validate_user_signup(data)
 
 @blue_print.route('/api/v1/parcels')
@@ -72,7 +70,7 @@ def cancel_delivery_order(parcel_id):
 
 
 
-@blue_print.route('/api/v1/users/<int:userId>/parcels')
+@blue_print.route('/api/v1/users/<int:user_id>/parcels')
 def get_parcels_by_userId(user_id):
     """
     Gets all ids by a specified user id
@@ -82,5 +80,10 @@ def get_parcels_by_userId(user_id):
     
     return response.validate_parcels_by_user(user_id)
 
+@blue_print.route('/api/v1/users')
+def get_all_users():
+    """
+    gets all users in the system
+    """
+    return response.validate_get_all_users()
 
-    

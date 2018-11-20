@@ -13,7 +13,7 @@ class TestData():
             "destination":"Jinja town council"
         }
     valid_parcel1 ={
-            "client":"me",
+            "client":"Kwage",
             "parcel_description":"Yanga",
             "recipient":"Casrol",
             "contact":"0756372818",
