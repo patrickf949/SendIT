@@ -4,3 +4,4 @@
 */.vscode/*
 */__init__.pyc
 */?.pyc
+coverage.xml

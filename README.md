@@ -10,22 +10,7 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 ## Front End
 
-[Landing Page](https://patrickf949.github.io/SendIT/Application/ui/) - describes web application
-
-[Login Page](https://patrickf949.github.io/SendIT/Application/ui/login.html) - allows user to login either as an admin or clien
-
-* Be sure to enter a valid email
-
-[Sign Up](https://patrickf949.github.io/SendIT/Application/ui/signup.html) - sign up for clients if they do not have an account
-
-* Be sure to fill all fields and provide a valid email address
-
-[Dashboard](https://patrickf949.github.io/SendIT/Application/ui/dashboard.html) - Logged in client User's dashboard
-The dashboard contains all parcels a user created and provides a link to allow a user to create a new parcel delivery order
-
-[Admin Dashboard](https://patrickf949.github.io/SendIT/Application/ui/admin_dashboard.html) - Admin Dashboard
-
-Admin dashboard contains all parcel delivery orders with buttons to enable him manipulate the orders.
+[Github pages link](https://patrickf949.github.io/SendIT/Application/ui/)
 
 ### Technologies used]
 
@@ -35,7 +20,7 @@ Html & Css - [w3schools](https://www.w3schools.com/)
 
 Our backend is a work-in-progress Application programming interface that emulates the functionality of the application.
 
-### Functionality of backend
+### Features of application
 
 * Client can add a parcel delivery order providing details, such a
   * parcel description
