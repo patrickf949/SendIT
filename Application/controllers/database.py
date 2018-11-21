@@ -12,14 +12,14 @@ class Database():
     Handle database connections
     """
     
-    def __init__(self,dbname):
+    def __init__(self, dbname):
         """
         initialise database connection
         """
         credentials = """
         user='senditdb'
         dbname={}
-        password='sendit123'
+        password='s3ndIt2m3'
         port=5432
         host='localhost'
         """.format(dbname)

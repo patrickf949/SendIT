@@ -1,6 +1,6 @@
 from flask import jsonify,Flask
 from Application.controllers.database import Database
-from Application.controllers.validators
+from Application.controllers.validate import Validation
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,jwt_refresh_token_required,
@@ -19,6 +19,7 @@ def create_app(config):
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/me-cookie/fresh'
     app.config['JWT_COOKIE_CRSF_PROTECT'] = True
     app.config['JWT_SECRET_KEY'] = 'Don-t-you-test-125'
+    Validation.dbname = config.dbname
 
 
     @app.route("/")

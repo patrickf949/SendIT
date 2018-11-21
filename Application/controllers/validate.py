@@ -17,8 +17,9 @@ class Validation():
     """
     All validation
     """
+    dbname=''
     def __init__(self):
-        self.database = Database()
+        self.database = Database(Validation.dbname)
 
 
     def validate_admin_signup(self,data):
