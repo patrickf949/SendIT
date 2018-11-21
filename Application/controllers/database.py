@@ -11,8 +11,8 @@ class Database():
     """
     Handle database connections
     """
-    dbname=''
-    def __init__(self):
+    
+    def __init__(self,dbname):
         """
         initialise database connection
         """
@@ -22,7 +22,7 @@ class Database():
         password='sendit123'
         port=5432
         host='localhost'
-        """.format(Database.dbname)
+        """.format(dbname)
 
         connection = psycopg2.connect(credentials)
         connection.autocommit = True

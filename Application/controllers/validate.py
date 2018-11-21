@@ -2,16 +2,25 @@
 Handles all validation as well as manipulation
 """
 from Application.models.parcels import Parcels
+from .database import Database
 from flask import jsonify
 from Application.models.users import Users
-from flask_jwt_extended import ()
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    jwt_refresh_token_required, create_refresh_token,
+    get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies
+)
 
 
 class Validation():
     """
     All validation
     """
-    
+    def __init__(self):
+        self.database = Database()
+
+
     def validate_admin_signup(self,data):
         user_status = self.signup(data)
         return user_status
@@ -21,8 +30,8 @@ class Validation():
         user_status = self.signup(data,'client')
         return user_status
 
-    def signup(self,data,usertype=''):
-        user_id=len(Users.user_accounts)+1
+    def signup(self, data, admin = False):
+
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
@@ -35,19 +44,16 @@ class Validation():
             return valid_data
         
         user =dict(
-            user_id =user_id,
             username = username,
             email = email,
-            password = password
+            password = password,
         )
-        if usertype=='client':
-            Users.user_accounts.append(user)
-
+        if admin==True:
+            
             return jsonify({
                 'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
             }),200
         else:
-            Users.admin_accounts.append(user)
 
             return jsonify({
                 'message': 'hello! '+user['username']+' Your Admin Account has been created and automatically logged in',
