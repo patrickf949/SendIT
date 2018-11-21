@@ -1,12 +1,19 @@
 from flask import jsonify,Flask
-from Application.models.database import Database
+from Application.controllers.database import Database
 
-app = Flask(__name__)
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,jwt_refresh_token_required,
+    create_refresh_token,get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies
+    )
+
+
 
 def create_app(config):
 
     app = Flask(__name__)
-    Database.dbname = config['dbname']
+    app
+    Database.dbname = config.dbname 
     @app.route("/")
     def kingslanding():
         return jsonify([
@@ -26,4 +33,4 @@ def create_app(config):
     from Application.views import parcels_view
     app.register_blueprint(parcels_view.blue_print)
     
-    return app 
+    return app
