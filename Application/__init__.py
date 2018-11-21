@@ -1,11 +1,12 @@
 from flask import jsonify,Flask
+from Application.models.database import Database
 
 app = Flask(__name__)
 
-def create_app():
+def create_app(config):
 
     app = Flask(__name__)
-
+    Database.dbname = config['dbname']
     @app.route("/")
     def kingslanding():
         return jsonify([
