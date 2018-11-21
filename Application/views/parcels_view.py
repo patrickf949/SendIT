@@ -3,20 +3,22 @@ from datetime import datetime
 from Application.models.parcels import Parcels
 from Application.models.users import Users
 from Application.controllers.validate import Validation
-import jwt
+
 
 blue_print = Blueprint("Parcels",__name__)
 
 response = Validation()
 
-@blue_print.route('/api/v2/auth/admin/signup',methods = ['POST'])
+@blue_print.route('/api/v2/admin/signup',methods = ['POST'])
 def admin_signup():
-    #logout_active_users()
-    data = request.get_json()    
+    """
+    Signup admin
+    """
+    data = request.get_json()
     return response.validate_admin_signup(data)
 
     
-@blue_print.route('/api/v2/auth/signup', methods = ['POST'])
+@blue_print.route('/api/v2/signup', methods = ['POST'])
 def signup():
     data = request.get_json()
     return response.validate_user_signup(data)

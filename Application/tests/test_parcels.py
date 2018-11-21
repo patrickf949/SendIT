@@ -1,12 +1,13 @@
 import unittest
 import json
 import pytest
-from Application import app,create_app
+from Application import create_app
 from Application.views import *
 from .testdata import TestData
 from Application.models.parcels import Parcels
 from Application.models.users import Users
 from Application.config import app_config
+from Application.controllers.database import Database
 
 class TestSendIT(unittest.TestCase):
     """
@@ -15,6 +16,7 @@ class TestSendIT(unittest.TestCase):
     def setUp(self):
         self.app = create_app(app_config['testing'])
         self.test_client = self.app.test_client()
+        Database.dbname = 'test_senditdb'
         self.testdata = TestData()
     
     
