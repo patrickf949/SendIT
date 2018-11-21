@@ -51,6 +51,8 @@ class Database():
                 parcel_description VARCHAR (50) NOT NULL,
                 weight_kgs INT NULL,
                 price INT NULL,
+                recipient VARCHAR (250) NOT NULL,
+                recipient_contact VARCHAR (250) NOT NULL,
                 pickup_location VARCHAR (250) NOT NULL,
                 current_location VARCHAR (250) NULL,
                 destination VARCHAR (250) NOT NULL,
@@ -76,12 +78,15 @@ class Database():
         """
         sql_command = """
         INSERT INTO parcels 
-        (user_id, parcel_description, pickup_location, current_location,destination,date_created,date_to_be_delivered) 
-        values ({user_id},'{parcel_description}','{pickup_location}','{current_location}','{destination}',
-        now(),now()+'2 days 2 hours');
+        (user_id, parcel_description, recipient, recipient_contact,
+        pickup_location, current_location, destination, date_created,date_to_be_delivered)
+        values ({user_id},'{recipient}','{contact}','{parcel_description}','{pickup_location}',
+        '{current_location}','{destination}', now(), now()+'2 days 2 hours');
         """.format(
             user_id=parcel['user_id'],
             parcel_description=parcel['parcel_description'],
+            recipient=parcel['recipient'],
+            contact=parcel['contact'],
             pickup_location=parcel['pickup_location'],
             current_location=parcel['pickup_location'],
             destination=['destination']
