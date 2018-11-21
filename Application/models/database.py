@@ -11,17 +11,18 @@ class Database():
     """
     Handle database connections
     """
+    dbname=''
     def __init__(self):
         """
         initialise database connection
         """
         credentials = """
         user='senditdb'
-        dbname='senditdb'
+        dbname={}
         password='sendit123'
         port=5432
         host='localhost'
-        """
+        """.format(dbname)
 
         connection = psycopg2.connect(credentials)
         connection.autocommit = True
@@ -128,6 +129,82 @@ class Database():
             WHERE 
             parcel_id={parcel_id};
         """.format(status=status, parcel_id=parcel_id)
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def change_destination(self, destination, parcel_id):
+        """
+        change status of parcel delivery order
+        params: status and parcel id
+        returns: n/a
+        """
+        sql_command = """
+        UPDATE parcels
+            SET destination = '{destination}'
+            WHERE 
+            parcel_id={parcel_id};
+        """.format(destination=destination, parcel_id=parcel_id)
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def check_availability_of_username(self, username):
+        """
+        Check if user exists during login or signup
+        params: username
+        returns: n/a
+        """
+        sql_command="""
+        SELECT EXISTS(SELECT 1 FROM parcels where username='{}')
+        """.format(username)
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def check_availability_of_email(self, username):
+        """
+        Check if user exists during login or signup
+        params: username
+        returns: n/a
+        """
+        sql_command="""
+        SELECT EXISTS(SELECT 1 FROM parcels where username='{}')
+        """.format(username)
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def validate_password(self,username,password):
+        """
+        Check if password passed is equal to password in database for specific user
+        params:username,password
+        returns:boolean
+        """
+
+
+    def check_availability_of_anyuser(self):
+        """
+        Check if user exists during login or signup
+        params: username
+        returns: n/a
+        """
+        sql_command="""
+        SELECT EXISTS(SELECT * FROM parcels)
+        """
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def check_availability_of_anyparcel(self, username):
+        """
+        Check if user exists during login or signup
+        params: username
+        returns: n/a
+        """
+        sql_command="""
+        SELECT EXISTS(SELECT * FROM parcels)
+        """
         rows = self.execute_query(sql_command)
         return rows
 
