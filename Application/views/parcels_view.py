@@ -2,12 +2,12 @@ from flask import jsonify,Flask,request, Blueprint
 from datetime import datetime
 from Application.models.parcels import Parcels
 from Application.models.users import Users
-from Application.models.validate import Validation
+from Application.controllers.validate import Validation
 import jwt
 
 blue_print = Blueprint("Parcels",__name__)
 
-response= Validation()
+response = Validation()
 
 @blue_print.route('/api/v2/auth/admin/signup',methods = ['POST'])
 def admin_signup():
