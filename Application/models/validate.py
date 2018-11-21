@@ -5,9 +5,12 @@ Handles all validation as well as manipulation
 from .parcels import Parcels
 from flask import jsonify
 from .users import Users
+from flask_jwt_extended
 
 class Validation():
-    #Handles all validation
+    """
+    All validation
+    """
     
     def validate_admin_signup(self,data):
         user_status = self.signup(data)
