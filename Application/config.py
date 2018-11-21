@@ -5,7 +5,7 @@ Congigure different environments
 import os
 class Config():
     DEBUG = False
-    DB_NAME = 'senditdb'
+    dbname = 'senditdb'
 
 class DevelopmentConfig(Config):
     DEBUG =  True
@@ -14,7 +14,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
-    DB_NAME = 'test_senditdb'
+    dbname = 'test_senditdb'
 
 
 class ProductionConfig(Config):
@@ -22,13 +22,10 @@ class ProductionConfig(Config):
     DEBUG = False
 
 
-class StagingConfig(Config):
-    DEBUG = True
 
 app_config = {
     'development':DevelopmentConfig,
     'testing':TestingConfig,
-    'staging':StagingConfig,
     'production':ProductionConfig
 }
 
