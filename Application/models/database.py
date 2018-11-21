@@ -58,7 +58,11 @@ class Database():
                 date_created TIMESTAMP,
                 date_to_be_delivered TIME
             );
-            
+            CREATE TABLE IF NOT EXISTS weight_categories(
+                weight_id SERIAL PRIMARY KEY,
+                weight_kgs INT NOT NULL,
+                price INT NULL,
+            );            
 		"""
         rows = self.execute_query(sql_command)
         return rows
@@ -131,4 +135,6 @@ class Database():
         """
         self.cursor.execute(sql_command)
         rows_returned = self.cursor.fetchall()
+        rowcount = self.cursor.rowcount()
+
         return rows_returned
