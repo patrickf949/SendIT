@@ -8,12 +8,14 @@ import psycopg2.extras
 
 
 class Database():
-    
+    """
+    Handle database connections
+    """
     def __init__(self):
         """
         initialise database connection
         """
-        credentials= """
+        credentials = """
         user='senditdb'
         dbname='senditdb'
         password='sendit123'
@@ -24,9 +26,9 @@ class Database():
         connection = psycopg2.connect(credentials)
         connection.autocommit = True
         self.cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        self.create_tables()
 
-        
-    
+
     def create_tables(self):
         """
         Create necessary tables in database
@@ -39,8 +41,8 @@ class Database():
                 username VARCHAR (250) NOT NULL UNIQUE,
                 email VARCHAR (250) NOT NULL UNIQUE,
                 contact VARCHAR (250) NOT NULL UNIQUE,
-                password VARCHAR (250),
-                date_created TIMESTAMP,
+                password VARCHAR (250) NOT NULL,
+                date_created TIMESTAMP NOT NULL,
                 admin BOOLEAN NOT NULL DEFAULT FALSE
             );
             CREATE TABLE IF NOT EXISTS parcels(
@@ -56,12 +58,13 @@ class Database():
                 date_created TIMESTAMP,
                 date_to_be_delivered TIME
             );
+            
 		"""
-        self.cursor.execute(sql_command)
-        rows = self.cursor.fetchall()
+        rows = self.execute_query(sql_command)
         return rows
-    
-    def add_parcel(self):
+
+
+    def add_parcel(self, parcel):
         """
         Add parcel to database
         params:n/a
@@ -70,33 +73,62 @@ class Database():
         sql_command = """
         INSERT INTO parcels 
         (user_id, parcel_description, pickup_location, current_location,destination,date_created,date_to_be_delivered) 
-        values (now(),now()+);
-        """
-        self.cursor.execute(sql_command)
-    
-    
-    def add_user(self):
+        values ({user_id},'{parcel_description}','{pickup_location}','{current_location}','{destination}',
+        now(),now()+'2 days 2 hours');
+        """.format(
+            user_id=parcel['user_id'],
+            parcel_description=parcel['parcel_description'],
+            pickup_location=parcel['pickup_location'],
+            current_location=parcel['pickup_location'],
+            destination=['destination']
+        )
+        rows = self.execute_query(sql_command)
+        return rows
+
+
+    def add_user(self, user):
         """
         Add user to database
         params:n/a
         returns:n/a
         """
         sql_command = """
-        INSERT INTO users (username,email,contact,password) 
-        values ();
-        """
-        self.cursor.execute(sql_command)
-        rows = self.cursor.fetchall()
+        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        values ('{username}','{email}','{contact}','{password}',now(),'{admin}');
+        """.format(
+            username=['username'],
+            email=['email'],
+            contact=['contact'],
+            password=user['password'],
+            admin=user['admin']
+        )
+
+        rows = self.execute_query(sql_command)
         return rows
-    
-    def change_status(self,status,parcel_id):
+
+
+    def change_status(self, status, parcel_id):
         """
         change status of parcel delivery order
         params: status and parcel id
         returns: n/a
         """
         sql_command = """
-        
-        """
+        UPDATE parcels
+            SET status = '{status}'
+            WHERE 
+            parcel_id={parcel_id};
+        """.format(status=status, parcel_id=parcel_id)
+        rows = self.execute_query(sql_command)
+        return rows
 
-    
+
+    def execute_query(self, sql_command):
+        """
+        Execute query
+        params: sql query statement
+        returns: result
+        """
+        self.cursor.execute(sql_command)
+        rows_returned = self.cursor.fetchall()
+        return rows_returned
