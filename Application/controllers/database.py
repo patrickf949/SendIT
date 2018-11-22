@@ -41,7 +41,7 @@ class Database():
                 user_id SERIAL PRIMARY KEY,
                 username VARCHAR (250) NOT NULL UNIQUE,
                 email VARCHAR (250) NOT NULL UNIQUE,
-                contact VARCHAR (250) NOT NULL UNIQUE,
+                contact VARCHAR (250) NOT NULL,
                 password VARCHAR (250) NOT NULL,
                 date_created TIMESTAMP NOT NULL,
                 admin BOOLEAN NOT NULL DEFAULT FALSE
@@ -63,12 +63,43 @@ class Database():
             );
             CREATE TABLE IF NOT EXISTS weight_categories(
                 weight_id SERIAL PRIMARY KEY,
-                weight_kgs INT NOT NULL,
-                price INT NULL,
-            );            
+                weight_kgs NUMRANGE NOT NULL UNIQUE,
+                price INT NOT NULL UNIQUE
+            );
 		"""
-        rows = self.execute_query(sql_command)
-        return rows
+        self.cursor.execute(sql_command)
+        self.insert_into_weight_categories()
+
+
+    def insert_into_weight_categories(self):
+        """
+        insert default values into weight categories
+        params:n/a
+        returns:n/a
+        """
+        sql_command="""
+        INSERT INTO weight_categories (price, weight_kgs)
+        VALUES (2000,'[0, 0.1)'),
+               (3000,'[0.1, 0.5)'),
+               (6000,'[0.5, 1)'),
+               (10000,'[1, 2)'),
+               (15000,'[2, 5)'),
+               (20000,'[5, 10)'),
+               (25000,'[10, 20)'),
+               (30000,'[20, 30)'),
+               (40000,'[30, 50)'),
+               (70000,'[50, 100)'),
+               (100000,'[100, 200)'),
+               (200000,'[200, 500)'),
+               (700000,'[500, 1000)');
+        """
+        sql_command1="""
+        SELECT EXISTS(SELECT TRUE FROM weight_categories WHERE price=3000)
+        """
+        table_empty = self.execute_query(sql_command1)
+        if not table_empty:
+            self.cursor.execute(sql_command)
+        
 
 
     def add_parcel(self, parcel):
@@ -106,9 +137,9 @@ class Database():
         INSERT INTO users (username,email,contact,password,date_created,admin) 
         values ('{username}','{email}','{contact}','{password}',now(),'{admin}');
         """.format(
-            username=['username'],
-            email=['email'],
-            contact=['contact'],
+            username=user['username'],
+            email=user['email'],
+            contact=user['contact'],
             password=user['password'],
             admin=user['admin']
         )
@@ -117,7 +148,7 @@ class Database():
         return rows
 
 
-    def change_status(self, status, parcel_id):
+    def change_status(self, column, value, parcel_id):
         """
         change status of parcel delivery order
         params: status and parcel id
@@ -125,54 +156,25 @@ class Database():
         """
         sql_command = """
         UPDATE parcels
-            SET status = '{status}'
+            SET {column} = '{value}'
             WHERE 
             parcel_id={parcel_id};
-        """.format(status=status, parcel_id=parcel_id)
+        """.format(column=column, value=value, parcel_id=parcel_id)
         rows = self.execute_query(sql_command)
         return rows
 
 
-    def change_destination(self, destination, parcel_id):
-        """
-        change status of parcel delivery order
-        params: status and parcel id
-        returns: n/a
-        """
-        sql_command = """
-        UPDATE parcels
-            SET destination = '{destination}'
-            WHERE 
-            parcel_id={parcel_id};
-        """.format(destination=destination, parcel_id=parcel_id)
-        rows = self.execute_query(sql_command)
-        return rows
-
-
-    def check_availability_of_username(self, username):
+    def check_availability_of_userdetails(self, column, value):
         """
         Check if user exists during login or signup
-        params: username
+        params: column name, value
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT 1 FROM parcels where username='{}')
-        """.format(username)
-        rows = self.execute_query(sql_command)
-        return rows
-
-
-    def check_availability_of_email(self, username):
-        """
-        Check if user exists during login or signup
-        params: username
-        returns: n/a
-        """
-        sql_command="""
-        SELECT EXISTS(SELECT 1 FROM parcels where username='{}')
-        """.format(username)
-        rows = self.execute_query(sql_command)
-        return rows
+        SELECT EXISTS(SELECT 1 FROM parcels where {column}='{value}')
+        """.format(value=value, column=column)
+        exists = self.execute_query(sql_command)
+        return exists
 
 
     def validate_password(self,username,password):
@@ -190,11 +192,10 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT * FROM parcels)
+        SELECT EXISTS(SELECT TRUE FROM parcels)
         """
-        rows = self.execute_query(sql_command)
-        return rows
-
+        exists = self.execute_query(sql_command)
+        return exists
 
     def check_availability_of_anyparcel(self, username):
         """
@@ -203,10 +204,10 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT * FROM parcels)
+        SELECT EXISTS(SELECT TRUE FROM parcels)
         """
-        rows = self.execute_query(sql_command)
-        return rows
+        exists = self.execute_query(sql_command)
+        return exists
 
 
     def execute_query(self, sql_command):
@@ -217,6 +218,5 @@ class Database():
         """
         self.cursor.execute(sql_command)
         rows_returned = self.cursor.fetchall()
-        rowcount = self.cursor.rowcount()
 
         return rows_returned

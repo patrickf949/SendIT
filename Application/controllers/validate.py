@@ -41,16 +41,16 @@ class Validation():
         
         valid_data =self.validate_userdata(temp_user)
 
-        if valid_data!=True:
+        if not valid_data:
             return valid_data
         
         user =dict(
-            username = username,
-            email = email,
-            password = password,
+            username=username,
+            email=email,
+            password=password,
         )
-        if admin==True:
-            
+        if not admin:
+            self.database.add_user(user)
             return jsonify({
                 'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
             }),200
