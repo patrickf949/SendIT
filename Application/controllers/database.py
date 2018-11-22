@@ -4,7 +4,7 @@ Handle database connection
 
 import psycopg2
 import psycopg2.extras
-
+from flask import jsonify
 
 
 class Database():
@@ -99,7 +99,7 @@ class Database():
         table_empty = self.execute_query(sql_command1)
         if not table_empty:
             self.cursor.execute(sql_command)
-        
+
 
 
     def add_parcel(self, parcel):
@@ -130,7 +130,7 @@ class Database():
     def add_user(self, user):
         """
         Add user to database
-        params:n/a
+        params: user information in dictionary
         returns:n/a
         """
         sql_command = """
@@ -146,9 +146,9 @@ class Database():
 
         self.cursor.execute(sql_command)
 
-        rows = self.check_availability_of_userdetails('username',user['username'])
-        print(rows[0]['exists'])
-        return rows[0]['exists']
+        user_added = self.check_availability_of_userdetails('username',user['username'])
+        print(user_added[0]['exists'])
+        return user_added[0]['exists']
 
 
     def change_status(self, column, value, parcel_id):
@@ -189,16 +189,18 @@ class Database():
         sql_command="""
         SELECT password FROM users where username='{username}';
         """.format(username=username)
-        db_password = self.cursor.execute(sql_command)
-        print(db_password)
-        return db_password 
+        db_password = self.execute_query(sql_command)
+
+        return db_password[0]['password'] 
 
     def validate_password(self,username,password):
         """
         Check if password password is equal to password in database
         """
         db_password = self.get_password(username)
-        
+        if password != db_password:
+            return jsonify({'message':'invalid username or password'}), 400
+        return True
 
 
     def check_availability_of_anyuser(self):
@@ -223,7 +225,7 @@ class Database():
         SELECT EXISTS(SELECT TRUE FROM parcels)
         """
         exists = self.execute_query(sql_command)
-        return exists
+        return exists[0]['exists']
 
 
     def execute_query(self, sql_command):

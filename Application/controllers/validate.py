@@ -75,11 +75,10 @@ class Validation():
                 return jsonify({
                 'message':'sorry! your '+key+' is required and can not be an empty string'
             }), 400
+            
             if i < 2:
-                print(i,'me',key)
                 user_dont_exist = self.check_user_exists(key,value)
                 if user_dont_exist != True:
-                    print(i,'me23')
                     return user_dont_exist
             i+=1
         return True
@@ -94,14 +93,16 @@ class Validation():
         username = data.get('username')
         password = data.get('password')
 
-        temp_user = dict(
-            username=username,
-            password=password
-        )
         userdont_exist = self.check_user_exists('username', username)
+
         if userdont_exist!=True:
             check_password = self.database.validate_password(username,password)
-            
+
+            if check_password == True:
+                return jsonify({'message':'Hello '+username+' you are logged into SendIT'}), 200
+
+            return check_password
+        return jsonify({'message':'invalid username or password'}), 400
 
 
 
@@ -119,7 +120,7 @@ class Validation():
 
 
     def validate_parcels_by_user(self,user_id):
-        
+
         if len(Users.user_accounts==0):
             return jsonify({
                 'message':'No clients in the system yet'
@@ -210,7 +211,12 @@ class Validation():
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
         status='pending'
-        temp_parcel = [parcel_description,client,recipient,pickup_location,destination]
+        temp_parcel = dict(
+            parcel_description=parcel_description,
+            user_id=client
+
+
+        )
 
         if user_id is False:
             return jsonify({
