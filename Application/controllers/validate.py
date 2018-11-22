@@ -24,16 +24,7 @@ class Validation():
         self.database = Database(Validation.dbname)
 
 
-    def validate_admin_signup(self,data):
-        user_status = self.signup(data, True)
-        return user_status
-    
-        
-    def validate_user_signup(self,data):
-        user_status = self.signup(data)
-        return user_status
-
-    def signup(self, data, admin = False):
+    def validate_signup(self, data, admin=False):
 
         username = data.get('username')
         email = data.get('email')
@@ -94,6 +85,14 @@ class Validation():
         return True
 
 
+    def validate_user_login(self, data, admin=False):
+        """
+        Handle login
+        params: user data
+        returns: bool
+        """
+
+
     def check_user_exists(self, key, value):
         """
         Check database for user existance
@@ -105,6 +104,7 @@ class Validation():
                 'message':key+' is already taken'
             }), 400
         return True
+
 
     def validate_parcels_by_user(self,user_id):
         

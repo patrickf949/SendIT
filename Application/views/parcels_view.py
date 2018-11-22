@@ -16,22 +16,24 @@ def admin_signup():
     Signup admin
     """
     data = request.get_json()
-    return response.validate_admin_signup(data)
+    return response.validate_signup(data,True)
 
     
 @blue_print.route('/api/v2/signup', methods = ['POST'])
 def signup():
     data = request.get_json()
-    return response.validate_user_signup(data)
+    return response.validate_signup(data)
 
 
 @blue_print.route('/api/v2/auth/login',methods = ['POST'])
 def login():
-    pass
+    data = request.get_json()
+    return response.validate_user_login(data)
 
 @blue_print.route('/api/v2/auth/admin/login',methods = ['POST'])
 def admin_login():
-    pass
+    data = request.get_json()
+    return response.validate_user_login(data,True)
 
 @blue_print.route('/api/v2/parcels')
 @jwt_required
