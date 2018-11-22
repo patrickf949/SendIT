@@ -3,6 +3,7 @@ Handles all validation as well as manipulation
 """
 from Application.models.parcels import Parcels
 from .database import Database
+
 from flask import jsonify
 from Application.models.users import Users
 from flask_jwt_extended import (
@@ -18,6 +19,7 @@ class Validation():
     All validation
     """
     dbname=''
+    jwt=''
     def __init__(self):
         self.database = Database(Validation.dbname)
 
@@ -28,7 +30,7 @@ class Validation():
     
         
     def validate_user_signup(self,data):
-        user_status = self.signup(data,'client')
+        user_status = self.signup(data)
         return user_status
 
     def signup(self, data, admin = False):
@@ -45,9 +47,9 @@ class Validation():
             contact=contact,
         )
         
-        valid_data =self.validate_userdata(temp_user)
+        valid_data =self.validate_userdata(temp_user.copy())
         print(valid_data)
-        if not valid_data:
+        if valid_data!=True:
             return valid_data
 
         user = temp_user
@@ -55,12 +57,12 @@ class Validation():
         if not admin:
             self.database.add_user(user)
             return jsonify({
-                'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
+                'message': 'hello! '+user['username']+' Your Account has been created. Please login',
             }), 200
         else:
             self.database.add_user(user)
             return jsonify({
-                'message': 'hello! '+user['username']+' Your Admin Account has been created and automatically logged in',
+                'message': 'hello! '+user['username']+' Your Admin Account has been created. Please login',
             }), 200
 
 
@@ -69,23 +71,26 @@ class Validation():
         validate user data for signup
         """
         i=0
+        print(temp_list)
         for key,value in temp_list.items():
-            print(i)
-            if not isinstance(value, str):
+            print(i) 
+            if type(value)!=str:
                 return jsonify({
-                'message':'sorry! '+key+' fields must be sequence of characters'
-            }),400
-            
-            elif not value or value.isspace():
-                return jsonify({
-                'message':'sorry! your '+key+' username is required and can not be an empty string'
+                'message':'sorry! '+key+' field must be sequence of characters'
             }), 400
-            elif i < 2:
+            
+            if not value or value.isspace():
+                print(i,'me')
+                return jsonify({
+                'message':'sorry! your '+key+' is required and can not be an empty string'
+            }), 400
+            if i < 2:
+                print(i,'me',key)
                 user_dont_exist = self.check_user_exists(key,value)
-                if user_dont_exist:
+                if user_dont_exist != True:
+                    print(i,'me23')
                     return user_dont_exist
             i+=1
-            
         return True
 
 
@@ -94,15 +99,16 @@ class Validation():
         Check database for user existance
         """
         user_exists = self.database.check_availability_of_userdetails(key,value)
-        print(user_exists[0]['exists'])
-        if user_exists:
+        
+        if user_exists[0]['exists'] == True:
             return jsonify({
                 'message':key+' is already taken'
             }), 400
         return True
 
     def validate_parcels_by_user(self,user_id):
-        if len(Users.user_accounts)==0:
+        
+        if len(Users.user_accounts==0):
             return jsonify({
                 'message':'No clients in the system yet'
             }),400

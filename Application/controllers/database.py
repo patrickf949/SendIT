@@ -11,8 +11,8 @@ class Database():
     """
     Handle database connections
     """
-    testify=''
-    def __init__(self, dbname):
+    
+    def __init__(self, dbname='senditdb'):
         """
         initialise database connection
         """
@@ -174,7 +174,7 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT 1 FROM users where {column}='{value}')
+        SELECT EXISTS(SELECT 1 FROM users where {column}='{value}');
         """.format(value=value, column=column)
         exists = self.execute_query(sql_command)
         return exists
@@ -186,6 +186,9 @@ class Database():
         params:username,password
         returns:boolean
         """
+        sql_command="""
+        SELECT password FROM users where username='{username}';
+        """.format(username=username)
 
 
     def check_availability_of_anyuser(self):
@@ -223,3 +226,7 @@ class Database():
         rows_returned = self.cursor.fetchall()
 
         return rows_returned
+
+    
+    def drop_all_tables(self):
+        self.cursor.execute("Drop table users,parcels,weight_categories")

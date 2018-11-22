@@ -3,6 +3,7 @@ from datetime import datetime
 from Application.models.parcels import Parcels
 from Application.models.users import Users
 from Application.controllers.validate import Validation
+from flask_jwt_extended import jwt_required
 
 
 blue_print = Blueprint("Parcels",__name__)
@@ -33,10 +34,12 @@ def admin_login():
     pass
 
 @blue_print.route('/api/v2/parcels')
+@jwt_required
 def getParcels():
     return response.validate_get_all_parcels()    
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>')
+@jwt_required
 def getParcel(parcel_id):
     """
     Get parcel by id
@@ -46,6 +49,7 @@ def getParcel(parcel_id):
     return response.validate_get_parcel_by_id(parcel_id)
 
 @blue_print.route ('/api/v2/parcels', methods = ['POST'])
+@jwt_required
 def addParcel():
     """	
     Create a parcel delivery order
@@ -57,6 +61,7 @@ def addParcel():
     return response.validate_parcel_addition(data)
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>/update', methods = ['PUT'])
+@jwt_required
 def updateParcel(parcel_id):
     """
     Update a specific parcel delivery order
@@ -71,6 +76,7 @@ def updateParcel(parcel_id):
     
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>/cancel')
+@jwt_required
 def cancel_delivery_order(parcel_id):
     """
     Cancel a delivery order
@@ -83,6 +89,7 @@ def cancel_delivery_order(parcel_id):
 
 
 @blue_print.route('/api/v2/users/<int:user_id>/parcels')
+@jwt_required
 def get_parcels_by_userId(user_id):
     """
     Gets all ids by a specified user id
@@ -93,6 +100,7 @@ def get_parcels_by_userId(user_id):
     return response.validate_parcels_by_user(user_id)
 
 @blue_print.route('/api/v2/users')
+@jwt_required
 def get_all_users():
     """
     gets all users in the system
