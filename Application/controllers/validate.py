@@ -19,7 +19,6 @@ class Validation():
     All validation
     """
     dbname=''
-    jwt=''
     def __init__(self):
         self.database = Database(Validation.dbname)
 
@@ -57,13 +56,15 @@ class Validation():
             }), 200
 
 
-    def validate_userdata(self, temp_list):
+    def validate_userdata(self, temp_dict):
         """
         validate user data for signup
+        params: user information
+        returns: bool or informative message
         """
         i=0
-        print(temp_list)
-        for key,value in temp_list.items():
+        print(temp_dict)
+        for key,value in temp_dict.items():
             print(i) 
             if type(value)!=str:
                 return jsonify({
@@ -88,7 +89,7 @@ class Validation():
         """
         Handle login
         params: user data
-        returns:n/a
+        returns: informative messsage
         """
         username = data.get('username')
         password = data.get('password')
