@@ -3,28 +3,38 @@ from datetime import datetime
 from Application.models.parcels import Parcels
 from Application.models.users import Users
 from Application.models.validate import Validation
+import jwt
 
 blue_print = Blueprint("Parcels",__name__)
 
 response= Validation()
 
-@blue_print.route('/api/v1/admin/signup',methods = ['POST'])
+@blue_print.route('/api/v2/auth/admin/signup',methods = ['POST'])
 def admin_signup():
     #logout_active_users()
     data = request.get_json()    
     return response.validate_admin_signup(data)
 
     
-@blue_print.route('/api/v1/user/signup', methods = ['POST'])
+@blue_print.route('/api/v2/auth/signup', methods = ['POST'])
 def signup():
     data = request.get_json()
     return response.validate_user_signup(data)
 
-@blue_print.route('/api/v1/parcels')
+
+@blue_print.route('/api/v2/auth/login',methods = ['POST'])
+def login():
+    pass
+
+@blue_print.route('/api/v2/auth/admin/login',methods = ['POST'])
+def admin_login():
+    pass
+
+@blue_print.route('/api/v2/parcels')
 def getParcels():
     return response.validate_get_all_parcels()    
 
-@blue_print.route('/api/v1/parcels/<int:parcel_id>')
+@blue_print.route('/api/v2/parcels/<int:parcel_id>')
 def getParcel(parcel_id):
     """
     Get parcel by id
@@ -33,7 +43,7 @@ def getParcel(parcel_id):
     """
     return response.validate_get_parcel_by_id(parcel_id)
 
-@blue_print.route ('/api/v1/parcels', methods = ['POST'])
+@blue_print.route ('/api/v2/parcels', methods = ['POST'])
 def addParcel():
     """	
     Create a parcel delivery order
@@ -44,7 +54,7 @@ def addParcel():
     
     return response.validate_parcel_addition(data)
 
-@blue_print.route('/api/v1/parcels/<int:parcel_id>/update', methods = ['PUT'])
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/update', methods = ['PUT'])
 def updateParcel(parcel_id):
     """
     Update a specific parcel delivery order
@@ -58,7 +68,7 @@ def updateParcel(parcel_id):
         
     
 
-@blue_print.route('/api/v1/parcels/<int:parcel_id>/cancel')
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/cancel')
 def cancel_delivery_order(parcel_id):
     """
     Cancel a delivery order
@@ -70,7 +80,7 @@ def cancel_delivery_order(parcel_id):
 
 
 
-@blue_print.route('/api/v1/users/<int:user_id>/parcels')
+@blue_print.route('/api/v2/users/<int:user_id>/parcels')
 def get_parcels_by_userId(user_id):
     """
     Gets all ids by a specified user id
@@ -80,7 +90,7 @@ def get_parcels_by_userId(user_id):
     
     return response.validate_parcels_by_user(user_id)
 
-@blue_print.route('/api/v1/users')
+@blue_print.route('/api/v2/users')
 def get_all_users():
     """
     gets all users in the system

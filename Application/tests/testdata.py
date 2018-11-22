@@ -49,10 +49,11 @@ class TestData():
     valid_admin_signup={
         "username":"Andrew",
         "email":"andrew@gmail.com",
+        "contact":"0758688174",
         "password":"andyfofofo"
     }
     invalid_admin_signup={
-        "email":"bumbelidaha",
+        "username":"bumbelidaha",
         "books":"na"
 
     }
@@ -67,6 +68,7 @@ class TestData():
     valid_user_signup={
         "username":"Kwage",
         "email":"andrdddew@gmail.com",
+        "contact":"0824323423",
         "password":"andyfofofo"
     }
     valid_user_login={
@@ -77,23 +79,4 @@ class TestData():
         "email":"kwage@gmail.com",
         "password":"andyfofofo"
     }
-    def add_parcel_delivery_order(self,parcel_to_add):
-        """Adds parcel to list for testing purposes"""
-        parcel_to_add['status']='pending'
-        parcel_to_add['parcel_id']=len(Parcels.parcels)+1
-        parcel_to_add['user_id']=len(Users.user_accounts)+1
-        Users.user_accounts.append(dict(
-            username = parcel_to_add['client'],
-            user_id= parcel_to_add['user_id'],
-            email ='random@gmail.com'
-        ))
-        print(parcel_to_add)
     
-        Parcels.parcels.append(parcel_to_add)
-        print(Parcels.parcels)
-        
-    
-
-    def empty_all_lists(self):
-        del Parcels.parcels[:]
-        del Users.user_accounts[:]
