@@ -98,12 +98,8 @@ class Validation():
 
         if userdont_exist!=True:
             check_password = self.database.validate_password(username,password)
-
-            if check_password == True:
-                return jsonify({'message':'Hello '+username+' you are logged into SendIT'}), 200
-
             return check_password
-        return jsonify({'message':'invalid username or password'}), 400
+        return jsonify({'message':'Non existent user, please sign up'}), 400
 
 
 
@@ -120,7 +116,7 @@ class Validation():
         return True
 
 
-    def validate_parcels_by_user(self,user_id):
+    def validate_parcels_by_user(self, username, user_id):
 
         if len(Users.user_accounts==0):
             return jsonify({
@@ -145,7 +141,7 @@ class Validation():
             "parcels":user_parcels
         })
     
-    def validate_cancel_parcel_delivery_order(self,parcel_id):
+    def validate_cancel_parcel_delivery_order(self, username,parcel_id):
         if len(Parcels.parcels)==0:
             return jsonify({
                 'message':'No parcels yet'
@@ -162,7 +158,7 @@ class Validation():
         }),200
 
 
-    def validate_update_parcel_delivery_order(self,data,parcel_id):
+    def validate_update_parcel_delivery_order(self, username, data, parcel_id):
         parcel_exists =self.check_if_parcel_id_exists(parcel_id)
         if parcel_exists!=True:
             return parcel_exists
@@ -201,12 +197,12 @@ class Validation():
             'parcel': Parcels.parcels[parcel_index]
         }),200
     
-    def validate_parcel_addition(self,data):
+    def validate_parcel_addition(self, username,data):
         
         
         parcel_id=len(Parcels.parcels)+1
         parcel_description = data.get('parcel_description')
-        client = data.get('client')
+        client = username
         user_id=self.get_user_id(client)
         recipient = data.get('recipient')
         pickup_location = data.get('pickup_location')
@@ -215,8 +211,6 @@ class Validation():
         temp_parcel = dict(
             parcel_description=parcel_description,
             user_id=client
-
-
         )
 
         if user_id is False:
@@ -260,7 +254,7 @@ class Validation():
     
 
 
-    def validate_get_parcel_by_id(self,parcel_id):
+    def validate_get_parcel_by_id(self, username,parcel_id):
         if self.check_if_parcel_id_exists(parcel_id)!=True:
             return self.check_if_parcel_id_exists(parcel_id)
             
@@ -275,7 +269,8 @@ class Validation():
         }), 400
     
 
-    def validate_get_all_parcels(self):
+    def validate_get_all_parcels(self, username):
+        
         if len(Parcels.parcels)>0:
             return jsonify({
             'parcels':Parcels.parcels
@@ -294,9 +289,9 @@ class Validation():
                 return user_id
 
         return False
-    
 
-    def validate_get_all_users(self):
+
+    def validate_get_all_users(self,username):
 
         if len(Users.user_accounts)>0:
             return jsonify({

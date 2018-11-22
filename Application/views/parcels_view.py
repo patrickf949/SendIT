@@ -33,10 +33,10 @@ def getParcel(parcel_id):
     params: parcel id	
     returns: specified parcel
     """
-    username = get_jwt_identity
-    return response.validate_get_parcel_by_id(parcel_id,username)
+    current_user = get_jwt_identity
+    return response.validate_get_parcel_by_id(parcel_id,current_user)
 
-@blue_print.route ('/api/v2/parcels', methods = ['POST'])
+@blue_print.route ('/api/v2/parcels', methods = ['GET','POST'])
 @jwt_required
 def addParcel():
     """	
