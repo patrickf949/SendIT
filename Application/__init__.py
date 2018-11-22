@@ -7,7 +7,6 @@ from flask_jwt_extended import (
 from Application.controllers.validate import Validation
 
 
-
 def create_app(config):
 
     app = Flask(__name__)

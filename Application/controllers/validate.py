@@ -197,7 +197,7 @@ class Validation():
             'parcel': Parcels.parcels[parcel_index]
         }),200
     
-    def validate_parcel_addition(self, username,data):
+    def validate_parcel_addition(self, username, data):
         """
         Validate parcel addition
         params: username, parcel information
@@ -219,7 +219,7 @@ class Validation():
         invalid_user = self.check_user_dont_exist('username',username)
         if invalid_user == True:
             return jsonify({
-                'Message':'User '+username+' Lets make things official. Please signup'
+                'Message':'@'+username+' Lets make things official. Please signup'
             }), 400
 
         for key,value in temp_parcel.items():
@@ -233,8 +233,8 @@ class Validation():
                     'message':'Please add your parcel'+key+'. It cannot be a space',
                 }),400
         
-
-        self.database.add_parcel()
+        temp_parcel['username'] = username
+        self.database.add_parcel(temp_parcel)
 
         
 

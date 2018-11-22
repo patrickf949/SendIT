@@ -123,7 +123,8 @@ class Database():
             current_location=parcel['pickup_location'],
             destination=['destination']
         )
-        rows = self.execute_query(sql_command)
+        rows = self.cursor.execute(sql_command)
+        add_parcel = self.execute_query
         return rows
 
 
@@ -180,26 +181,27 @@ class Database():
         return exists
 
 
-    def get_password(self,username):
+    def get_from_users(self, column, username):
         """
-        Get password from database
-        params:username
+        Get column from users table
+        params:column name, username
         returns:password
         """
         sql_command="""
-        SELECT password FROM users where username='{username}';
-        """.format(username=username)
+        SELECT {column} FROM users where username='{username}';
+        """.format(username=username, column=column)
         db_password = self.execute_query(sql_command)
 
-        return db_password[0]['password'] 
+        return db_password[0][column]
 
     def validate_password(self,username,password):
         """
         Check if password password is equal to password in database
         """
-        db_password = self.get_password(username)
+        db_password = self.get_from_users('password',username)
         if password != db_password:
             return jsonify({'message':'invalid username or password'}), 400
+
         return True
 
 
