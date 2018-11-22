@@ -11,7 +11,7 @@ class Database():
     """
     Handle database connections
     """
-    
+    testify=''
     def __init__(self, dbname):
         """
         initialise database connection
@@ -144,8 +144,11 @@ class Database():
             admin=user['admin']
         )
 
-        rows = self.execute_query(sql_command)
-        return rows
+        self.cursor.execute(sql_command)
+
+        rows = self.check_availability_of_userdetails('username',user['username'])
+        print(rows[0]['exists'])
+        return rows[0]['exists']
 
 
     def change_status(self, column, value, parcel_id):
@@ -171,7 +174,7 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT 1 FROM parcels where {column}='{value}')
+        SELECT EXISTS(SELECT 1 FROM users where {column}='{value}')
         """.format(value=value, column=column)
         exists = self.execute_query(sql_command)
         return exists
@@ -192,7 +195,7 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT TRUE FROM parcels)
+        SELECT EXISTS(SELECT TRUE FROM users where user_id=1)
         """
         exists = self.execute_query(sql_command)
         return exists

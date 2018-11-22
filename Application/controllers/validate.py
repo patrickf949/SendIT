@@ -23,7 +23,7 @@ class Validation():
 
 
     def validate_admin_signup(self,data):
-        user_status = self.signup(data)
+        user_status = self.signup(data, True)
         return user_status
     
         
@@ -36,45 +36,70 @@ class Validation():
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
+        contact =data.get('contact')
         
-        temp_user=[username,email,password]
-        
-        valid_data =self.validate_userdata(temp_user)
-
-        if not valid_data:
-            return valid_data
-        
-        user =dict(
+        temp_user = dict(
             username=username,
             email=email,
             password=password,
+            contact=contact,
         )
+        
+        valid_data =self.validate_userdata(temp_user)
+        print(valid_data)
+        if not valid_data:
+            return valid_data
+
+        user = temp_user
+        user['admin']=admin
         if not admin:
             self.database.add_user(user)
             return jsonify({
                 'message': 'hello! '+user['username']+' Your Account has been created and automatically logged in',
-            }),200
+            }), 200
         else:
-
+            self.database.add_user(user)
             return jsonify({
                 'message': 'hello! '+user['username']+' Your Admin Account has been created and automatically logged in',
-            }),200
+            }), 200
 
 
-    def validate_userdata(self,temp_list):
-        for element in temp_list:
-            if type(element)!=str:
+    def validate_userdata(self, temp_list):
+        """
+        validate user data for signup
+        """
+        i=0
+        for key,value in temp_list.items():
+            print(i)
+            if not isinstance(value, str):
                 return jsonify({
-                'message':'sorry! All fields must be strings'
+                'message':'sorry! '+key+' fields must be sequence of characters'
             }),400
-
-            elif not element or element.isspace():
+            
+            elif not value or value.isspace():
                 return jsonify({
-                'message':'sorry! your username is required and can not be an empty string'
+                'message':'sorry! your '+key+' username is required and can not be an empty string'
             }), 400
-        
+            elif i < 2:
+                user_dont_exist = self.check_user_exists(key,value)
+                if user_dont_exist:
+                    return user_dont_exist
+            i+=1
+            
         return True
 
+
+    def check_user_exists(self, key, value):
+        """
+        Check database for user existance
+        """
+        user_exists = self.database.check_availability_of_userdetails(key,value)
+        print(user_exists[0]['exists'])
+        if user_exists:
+            return jsonify({
+                'message':key+' is already taken'
+            }), 400
+        return True
 
     def validate_parcels_by_user(self,user_id):
         if len(Users.user_accounts)==0:
