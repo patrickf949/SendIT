@@ -1,9 +1,9 @@
 from flask import jsonify,Flask,request, Blueprint
-from datetime import datetime
 from Application.models.parcels import Parcels
+import Application
 from Application.models.users import Users
 from Application.controllers.validate import Validation
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required,get_jwt_identity
 
 
 blue_print = Blueprint("Parcels",__name__)
@@ -18,27 +18,12 @@ def admin_signup():
     data = request.get_json()
     return response.validate_signup(data,True)
 
-    
-@blue_print.route('/api/v2/signup', methods = ['POST'])
-def signup():
-    data = request.get_json()
-    return response.validate_signup(data)
-
-
-@blue_print.route('/api/v2/auth/login',methods = ['POST'])
-def login():
-    data = request.get_json()
-    return response.validate_user_login(data)
 
 @blue_print.route('/api/v2/auth/admin/login',methods = ['POST'])
 def admin_login():
     data = request.get_json()
     return response.validate_user_login(data,True)
 
-@blue_print.route('/api/v2/parcels')
-@jwt_required
-def getParcels():
-    return response.validate_get_all_parcels()    
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>')
 @jwt_required
@@ -48,7 +33,8 @@ def getParcel(parcel_id):
     params: parcel id	
     returns: specified parcel
     """
-    return response.validate_get_parcel_by_id(parcel_id)
+    username = get_jwt_identity
+    return response.validate_get_parcel_by_id(parcel_id,username)
 
 @blue_print.route ('/api/v2/parcels', methods = ['POST'])
 @jwt_required
@@ -58,9 +44,14 @@ def addParcel():
     params: n/a
     returns: created parcel
     """
-    data = request.get_json()
+    current_user = get_jwt_identity()
+    if request.method == 'POST':
+        data = request.get_json()
+        return response.validate_parcel_addition(current_user,data)
+    elif request.method == 'GET':
+        return response.validate_get_all_parcels(current_user)
     
-    return response.validate_parcel_addition(data)
+
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>/update', methods = ['PUT'])
 @jwt_required
@@ -71,8 +62,9 @@ def updateParcel(parcel_id):
     returns: updated parcel 
     """
     data = request.get_json()
-    
-    return response.validate_update_parcel_delivery_order(data,parcel_id)
+    current_user = get_jwt_identity()
+
+    return response.validate_update_parcel_delivery_order(current_user, data, parcel_id)
 
         
     
@@ -85,8 +77,9 @@ def cancel_delivery_order(parcel_id):
     params: parcelid
     returns: cancelled delivery order
     """
-    
-    return response.validate_cancel_parcel_delivery_order(parcel_id)
+    current_user = get_jwt_identity()
+    print(current_user)
+    return response.validate_cancel_parcel_delivery_order(current_user, parcel_id)
 
 
 
@@ -98,8 +91,8 @@ def get_parcels_by_userId(user_id):
     params: user id
     returns: specified user's parcels
     """
-    
-    return response.validate_parcels_by_user(user_id)
+    current_user = get_jwt_identity()
+    return response.validate_parcels_by_user(current_user,user_id)
 
 @blue_print.route('/api/v2/users')
 @jwt_required
@@ -107,5 +100,6 @@ def get_all_users():
     """
     gets all users in the system
     """
-    return response.validate_get_all_users()
+    current_user = get_jwt_identity()
+    return response.validate_get_all_users(current_user)
 
