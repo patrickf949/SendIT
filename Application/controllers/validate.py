@@ -43,7 +43,7 @@ class Validation():
             return valid_data
 
         user = temp_user
-        user['admin']=admin
+        user['admin'] = admin
         if not admin:
             self.database.add_user(user)
             return jsonify({
@@ -78,7 +78,7 @@ class Validation():
             }), 400
             
             if i < 2:
-                user_dont_exist = self.check_user_exists(key,value)
+                user_dont_exist = self.check_user_dont_exist(key,value)
                 if user_dont_exist != True:
                     return user_dont_exist
             i+=1
@@ -94,7 +94,7 @@ class Validation():
         username = data.get('username')
         password = data.get('password')
 
-        userdont_exist = self.check_user_exists('username', username)
+        userdont_exist = self.check_user_dont_exist('username', username)
 
         if userdont_exist!=True:
             check_password = self.database.validate_password(username,password)
@@ -103,7 +103,7 @@ class Validation():
 
 
 
-    def check_user_exists(self, key, value):
+    def check_user_dont_exist(self, key, value):
         """
         Check database for user existance
         """
@@ -198,58 +198,49 @@ class Validation():
         }),200
     
     def validate_parcel_addition(self, username,data):
-        
-        
-        parcel_id=len(Parcels.parcels)+1
+        """
+        Validate parcel addition
+        params: username, parcel information
+        """
         parcel_description = data.get('parcel_description')
-        client = username
-        user_id=self.get_user_id(client)
         recipient = data.get('recipient')
+        contact = data.get('contact')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
         status='pending'
         temp_parcel = dict(
             parcel_description=parcel_description,
-            user_id=client
+            recipient=recipient,
+            contact=contact,
+            pickup_location=pickup_location,
+            destination=destination,
         )
 
-        if user_id is False:
+        invalid_user = self.check_user_dont_exist('username',username)
+        if invalid_user == True:
             return jsonify({
-                    'message':'Create an account first'
-                }),400
-        for element in temp_parcel:
-            if type(element)!=str:
+                'Message':'User '+username+' Lets make things official. Please signup'
+            }), 400
+
+        for key,value in temp_parcel.items():
+            if type(value)!=str:
                 return jsonify({
-                    'message':'All specifications should be a sequence of characters'
+                    'message':'Your '+key+' should be a sequence of characters'
                 }),400
 
-            elif not element or element.isspace():
+            elif not value or value.isspace():
                 return jsonify({
-                    'message':'All your specifications should be available and should not be a space. Make sure you have the following',
-                    '1. ':'parcel description',
-                    '2. ':'recipient',
-                    '3. ':'recipients contact',
-                    '4. ':'pickup location',
-                    '5. ':'destination'
+                    'message':'Please add your parcel'+key+'. It cannot be a space',
                 }),400
-
-        parcel =dict(
-            parcel_id=parcel_id,
-            parcel_description = parcel_description,
-            client = client,
-            user_id=user_id,
-            recipient = recipient,
-            pickup_location = pickup_location,
-            destination =destination,
-            status = status
-        )
         
 
-        Parcels.parcels.append(parcel)
+        self.database.add_parcel()
+
+        
 
         return jsonify({
-            'message': 'hello! '+Parcels.parcels[-1]['client']+' Your Parcel Delivery order has been placed',
-            'Parcel':Parcels.parcels[-1]
+            'message': 'hello! '+username+' Your Parcel Delivery order has been placed',
+            'Parcel':temp_parcel
         }),200
     
 
