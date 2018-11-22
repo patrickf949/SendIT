@@ -190,12 +190,15 @@ class Database():
         SELECT password FROM users where username='{username}';
         """.format(username=username)
         db_password = self.cursor.execute(sql_command)
+        print(db_password)
         return db_password 
 
     def validate_password(self,username,password):
         """
         Check if password password is equal to password in database
         """
+        db_password = self.get_password(username)
+        
 
 
     def check_availability_of_anyuser(self):

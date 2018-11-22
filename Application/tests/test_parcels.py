@@ -63,7 +63,7 @@ class TestSendIT(unittest.TestCase):
         )
         message = json.loads(response.data.decode())
 
-        # self.assertEqual(message['message'],'hello! Andrew Your Admin Account has been created. Please login')
+        self.assertEqual(message['message'],'hello! Andrew Your Admin Account has been created. Please login')
         self.assertEqual(response.status_code, 200)
     
     
