@@ -89,8 +89,20 @@ class Validation():
         """
         Handle login
         params: user data
-        returns: bool
+        returns:n/a
         """
+        username = data.get('username')
+        password = data.get('password')
+
+        temp_user = dict(
+            username=username,
+            password=password
+        )
+        userdont_exist = self.check_user_exists('username', username)
+        if userdont_exist!=True:
+            check_password = self.database.validate_password(username,password)
+            
+
 
 
     def check_user_exists(self, key, value):

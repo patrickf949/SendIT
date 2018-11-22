@@ -180,15 +180,22 @@ class Database():
         return exists
 
 
-    def validate_password(self,username,password):
+    def get_password(self,username):
         """
-        Check if password passed is equal to password in database for specific user
-        params:username,password
-        returns:boolean
+        Get password from database
+        params:username
+        returns:password
         """
         sql_command="""
         SELECT password FROM users where username='{username}';
         """.format(username=username)
+        db_password = self.cursor.execute(sql_command)
+        return db_password 
+
+    def validate_password(self,username,password):
+        """
+        Check if password password is equal to password in database
+        """
 
 
     def check_availability_of_anyuser(self):
