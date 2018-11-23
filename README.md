@@ -29,9 +29,11 @@ SendIT is a courier service that helps users deliver parcels to different destin
 ` $ source venv/bin/activate `
 
 4. Inside the application folder, install all the requirements
+
 ` $ pip install -r requirements.txt`
 
 5. Run Application
+
 ` $ python run.py`
 
 
@@ -66,13 +68,13 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 | URL  | HTTP Method | Description|
 |--------------|-------------|------------|
-|`/api/v1/auth/signup`|`PUT`|Sign up user|
-|`/api/v1/auth/login`|`PUT`|Login user|
-|`/api/v1/parcels`    | `GET`       |Fetch all parcel delivery orders-admin |
-|`/api/v1/users`|`GET`|Fetch all users-admin|
-|`/api/v1/parcels/<int:parcelId>`|`GET`|  Fetch a specific parcel delivery order-admin |
-|`/api/v1/parcels/<int:parcelId>/cancel`|`PUT`| Cancel the specific parcel delivery order-client|
-|`/api/v1/parcels`|`POST`| Create a parcel delivery order - client |
-|`/api/v1/parcels/<int:parcel_id>/destination`|`PUT`| Update destination of parcel delivery order-client |
-|`/api/v1/parcels/<int:parcel_id>/presentLocation`|`PUT`| Update present location of parcel delivery order-client/admin |
-|`/api/v1/users/<int:user_id>/parcels`|`GET`| Get parcel delivery orders by user - admin|
+| `/api/v1/auth/signup` |`POST`| Sign up user |
+| `/api/v1/auth/login` | `POST`| Login user |
+| `/api/v1/parcels`    | `GET` | Fetch all parcel delivery orders-admin |
+| `/api/v1/users` | `GET` | Fetch all users-admin |
+| `/api/v1/parcels/<int:parcelId>` | `GET` |  Fetch a specific parcel delivery order-admin |
+| `/api/v1/parcels/<int:parcelId>/cancel`|`PUT`| Cancel the specific parcel delivery order-client |
+| `/api/v1/parcels`|`POST`| Create a parcel delivery order - client |
+| `/api/v1/parcels/<int:parcel_id>/destination`|`PUT`| Update destination of parcel delivery order-client |
+| `/api/v1/parcels/<int:parcel_id>/presentLocation`|`PUT`| Update present location of parcel delivery order-client/admin |
+| `/api/v1/users/<int:user_id>/parcels`|`GET`| Get parcel delivery orders by user - admin|
