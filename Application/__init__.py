@@ -1,7 +1,7 @@
 import datetime
 from flask import jsonify, Flask, request
 from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token, jwt_refresh_token_required,
+    jwt_required, create_access_token,
     create_refresh_token, get_jwt_identity,
     )
 from Application.controllers.validate import Validation
@@ -13,8 +13,6 @@ def create_app(config):
     app.config['JWT_SECRET_KEY'] = 'Don-t-you-test-125'
     Validation.dbname = config.dbname
 
-    jwt = JWTManager(app)
-
     @app.route("/")
     def kingslanding():
         return jsonify([
@@ -22,16 +20,17 @@ def create_app(config):
             +"SendIT is a courier service that helps users deliver parcels to different destinations."
             +" SendIT provides courier quotes based on weight categories.",
             {
-                "/api/v2/signup | POST" : "User Sign up",
-                "/api/v2/login | POST" : "User Login",
+                "/api/v2/auth/signup | POST" : "User Sign up",
+                "/api/v2/auth/login | POST" : "User Login",
                 "/api/v2/parcels | POST" : "Create parcel",
-                "/api/v2/signup | POST" : "Create parcel",
                 "/api/v2/parcels | GET" :  "Fetch all parcels",
                 "/api/v2/parcel/<int:parcelId> | GET" : "fetch parcel by id",
                 "/api/v2/parcels/<int:parcelId>/cancel | GET" : "Cancel a parcel delivery order",
                 "/api/v2/users | GET" : "View all users",
-                "/api/v2/users/<int:userId>/parcels | POST" : "Fetch parcels by a specific user",
-                "/api/v2/parcels/<int:parcelId>/update | PUT" : "Update a parcel delivery order"
+                "/api/v2/users/<int:userId>/parcels | GET" : "Fetch parcels by a specific user",
+                "/api/v2/parcels/<int:parcelId>/destination | PUT" : "Update a parcel delivery order's destination",
+                "/api/v2/parcels/<int:parcelId>/presentLocation | PUT" : "Update the present location of a parcel delivery order",
+                "/api/v2/parcels/<int:parcelId>/status | PUT" : "Update the status of a parel delivery order's destination",
             }
         ])
 
@@ -46,7 +45,7 @@ def create_app(config):
         return response, 200
 
 
-    @app.route('/api/v2/signup', methods=['POST'])
+    @app.route('/api/v2/auth/signup', methods=['POST'])
     def signup():
         data = request.get_json()
         response = Validation()

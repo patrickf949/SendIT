@@ -95,3 +95,32 @@ def get_weight_categories():
     """
     current_user = get_jwt_identity()
     return response.weight_categories(current_user)
+
+@blue_print.route('/api/v2/parcels/<int:parcelId>/destination', methods=['PUT'])
+@jwt_required
+def change_destination(parcel_id):
+    """
+    Change destination of parcel delivery order - user
+    """
+    current_user = get_jwt_identity()
+    return response.weight_categories(current_user)
+
+@blue_print.route('/api/v2/parcels/<int:parcelId>/presentLocation', methods=['PUT'])
+@jwt_required
+def change_presentlocation(parcel_id):
+    """
+    Change present location of parcel delivery order - admin
+    """
+    current_user = get_jwt_identity()
+    return response.weight_categories(current_user)
+
+@blue_print.route('/api/v2/parcels/<int:parcelId>/status', methods=['PUT'])
+@jwt_required
+def change_status(parcel_id):
+    """
+    Change status of a parcel delivery order-admin
+    params:parcel id
+    returns: edited parcel
+    """
+    current_user = get_jwt_identity()
+    return response.weight_categories(current_user)

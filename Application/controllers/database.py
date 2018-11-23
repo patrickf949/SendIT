@@ -249,10 +249,10 @@ class Database():
         returns: n/a
         """
         sql_command="""
-        SELECT EXISTS(SELECT TRUE FROM users where user_id=1)
+        SELECT EXISTS(SELECT TRUE FROM users where user_id=2)
         """
         exists = self.execute_query(sql_command)
-        return exists
+        return exists[0]['exists']
 
     def check_availability_of_anyparcel(self, username):
         """
