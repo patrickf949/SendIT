@@ -199,10 +199,11 @@ class Database():
         UPDATE parcels
             SET {column} = '{value}'
             WHERE 
-            parcel_id={parcel_id};
+            parcel_id={parcel_id} 
+            RETURNING parcel_id,parcel_description,{column};
         """.format(column=column, value=value, parcel_id=parcel_id)
         rows = self.execute_query(sql_command)
-        return rows
+        return rows[0]
 
 
     def check_availability_of_userdetails(self, column, value):
@@ -228,8 +229,24 @@ class Database():
         SELECT {column} FROM users where username='{username}';
         """.format(username=username, column=column)
         db_value = self.execute_query(sql_command)
-        print(db_value)
+
         return db_value[0][column]
+
+
+    def parcel_exists(self, parcel_id):
+        """
+        Get column from users table
+        params:column name, username
+        returns:password
+        """
+        sql_command="""
+        SELECT EXISTS(SELECT TRUE FROM parcels WHERE parcel_id={})
+        """.format(parcel_id)
+        db_value = self.execute_query(sql_command)
+
+        return db_value[0]['exists']
+
+
 
     def validate_password(self,username,password):
         """
@@ -254,7 +271,7 @@ class Database():
         exists = self.execute_query(sql_command)
         return exists[0]['exists']
 
-    def check_availability_of_anyparcel(self, username):
+    def check_availability_of_anyparcel(self):
         """
         Check if user exists during login or signup
         params: username

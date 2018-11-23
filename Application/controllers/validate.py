@@ -292,14 +292,10 @@ class Validation():
         }),400
     
     def check_if_parcel_id_exists(self,parcel_id):
-        if len(Parcels.parcels)==0:
+        id_exists = self.database.parcel_exists(parcel_id)
+        if id_exists == False:
             return jsonify({
-                'message':'No parcel delivery orders'
-            }),400
-        
-        if parcel_id>len(Parcels.parcels) or parcel_id==0:
-            return jsonify({
-                'message':'invalid parcel id'
+                'message' : 'Invalid parcel'
             }),400
 
         return True
@@ -320,4 +316,61 @@ class Validation():
             'Categories' : categories
         })
 
+
+    def validate_change_present_location(self, username, parcel_id ,data):
+        """
+        Change the present location location of parcel
+        """
+        return self.update_parcel_by_admin(username, parcel_id, data, 'current_location')
+
+
+    def update_parcel_by_admin(self, username, parcel_id, data, column):
+        if self.is_admin(username)!=True:
+            return jsonify({
+                'message':'@'+username+' You are not authorized to do this'
+            }), 400
+        column_data = data.get(column)
+        if not column_data or column_data.isspace():
+            return jsonify({
+                'Message': column+' should be a sequence of characters'
+            }), 400
+        
+        exists = self.check_if_parcel_id_exists(parcel_id)
+        if exists != True:
+            return exists
+        
+        updated_fields = self.database.change_status(column, column_data, parcel_id)
+        if not updated_fields:
+            return jsonify({
+                'Message' : 'Update destination failed'
+            }), 400
+        
+        return jsonify({
+            'Message' : 'Update successful',
+            'Updated fields' : updated_fields
+        })
+
+
+    def validate_change_status(self, username, parcel_id, data):
+        """
+        Change the status of the parcel delivery order
+        """
+        return self.update_parcel_by_admin(username, parcel_id, data, 'status')
+
+
+    def validate_change_destination(self,username,parcel_id, data):
+        """
+        Change the destination of the parcel delivery order
+        """
+        pass
+    
+
+    def is_admin(self,username):
+        """
+        Check if user is admin
+        params: n/a
+        returns:n/a
+        """
+        is_admin = self.database.get_from_users('admin', username)
+        return is_admin
 

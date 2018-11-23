@@ -96,7 +96,7 @@ def get_weight_categories():
     current_user = get_jwt_identity()
     return response.weight_categories(current_user)
 
-@blue_print.route('/api/v2/parcels/<int:parcelId>/destination', methods=['PUT'])
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/destination', methods=['PUT'])
 @jwt_required
 def change_destination(parcel_id):
     """
@@ -104,9 +104,9 @@ def change_destination(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.weight_categories(current_user,parcel_id,data)
+    return response.validate_change_destination(current_user,parcel_id,data)
 
-@blue_print.route('/api/v2/parcels/<int:parcelId>/presentLocation', methods=['PUT'])
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/presentLocation', methods=['PUT'])
 @jwt_required
 def change_presentlocation(parcel_id):
     """
@@ -114,9 +114,9 @@ def change_presentlocation(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.weight_categories(current_user,parcel_id,data)
+    return response.validate_change_present_location(current_user,parcel_id,data)
 
-@blue_print.route('/api/v2/parcels/<int:parcelId>/status', methods=['PUT'])
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/status', methods=['PUT'])
 @jwt_required
 def change_status(parcel_id):
     """
@@ -126,4 +126,4 @@ def change_status(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.weight_categories(current_user)
+    return response.validate_change_status(current_user,parcel_id,data)

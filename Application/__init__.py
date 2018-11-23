@@ -60,6 +60,7 @@ def create_app(config):
         logged_in = response.validate_user_login(data)
         if logged_in == True:
             username = data.get('username')
+            is_admin = response.is_admin(username)
             access_token = create_access_token(
                 identity=username, 
                 expires_delta=datetime.timedelta(days=1)
