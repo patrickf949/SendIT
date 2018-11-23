@@ -38,33 +38,6 @@ def addParcel():
         return response.validate_get_all_parcels(current_user)
 
 
-@blue_print.route('/api/v2/parcels/<int:parcel_id>/update', methods=['PUT'])
-@jwt_required
-def updateParcel(parcel_id):
-    """
-    Update a specific parcel delivery order
-    params: parcel_id
-    returns: updated parcel 
-    """
-    data = request.get_json()
-    current_user = get_jwt_identity()
-
-    return response.validate_update_parcel_delivery_order(current_user, data, parcel_id)
-    
-
-@blue_print.route('/api/v2/parcels/<int:parcel_id>/cancel')
-@jwt_required
-def cancel_delivery_order(parcel_id):
-    """
-    Cancel a delivery order
-    params: parcelid
-    returns: cancelled delivery order
-    """
-    current_user = get_jwt_identity()
-    print(current_user)
-    return response.validate_cancel_parcel_delivery_order(current_user, parcel_id)
-
-
 @blue_print.route('/api/v2/users/<int:user_id>/parcels')
 @jwt_required
 def get_parcels_by_userId(user_id):

@@ -111,85 +111,12 @@ class Validation():
 
 
     def validate_parcels_by_user(self, username, user_id):
-
-        if len(Users.user_accounts==0):
-            return jsonify({
-                'message':'No clients in the system yet'
-            }),400
-        if user_id>len(Users.user_accounts):
-            return jsonify({
-                'message':'No client has the id you requested'
-            }),400
-
-        user_parcels=[]
-        for parcel in Parcels.parcels:
-            if parcel['user_id']==user_id:
-                user_parcels.append(parcel)
-        if len(user_parcels)==0:
-            return jsonify({
-                "message":Users.user_accounts[user_id-1]['username']+" has no parcels yet"
-            })
-
-        return jsonify({
-            "message":Users.user_accounts[user_id-1]['username']+"'s parcels",
-            "parcels":user_parcels
-        })
+        """
+        Validate get parcels by user
+        """
+        pass
     
-    def validate_cancel_parcel_delivery_order(self, username,parcel_id):
-        if len(Parcels.parcels)==0:
-            return jsonify({
-                'message':'No parcels yet'
-            }),400
-        elif parcel_id>len(Parcels.parcels):
-            return jsonify({
-                'message':'Parcel does not exist'
-            }),400
-        
-        Parcels.parcels[parcel_id-1]['status']='canceled'
-        return jsonify({
-            'message':'Parcel status has been changed to canceled',
-            'Parcel':Parcels.parcels[parcel_id-1]
-        }),200
 
-
-    def validate_update_parcel_delivery_order(self, username, data, parcel_id):
-        parcel_exists =self.check_if_parcel_id_exists(parcel_id)
-        if parcel_exists!=True:
-            return parcel_exists
-        parcel_description = data.get('parcel_description')
-        recipient = data.get('recipient')
-        pickup_location = data.get('pickup_location')
-        destination =data.get('destination')        
-
-        if not parcel_description or parcel_description.isspace():
-            return jsonify({
-                'message':'sorry! the parcel_description is required and can not be an empty string'
-            }), 400
-
-        if not recipient or recipient.isspace():
-            return jsonify({
-                'message':'sorry! the recipient is required and can not be an empty string'
-            }), 400
-
-        if not pickup_location or pickup_location.isspace():
-            return jsonify({
-                'message':'sorry! the pickup_location is required and can not be an empty string'
-            }), 400
-
-        
-        parcel_index =parcel_id-1
-        
-        Parcels.parcels[parcel_index]['parcel_description'] = parcel_description
-        Parcels.parcels[parcel_index]['recipient'] = recipient
-        Parcels.parcels[parcel_index]['pickup_location'] = pickup_location
-        Parcels.parcels[parcel_index]['destination'] =destination
-        
-        
-        
-        return jsonify({
-            'Message': 'Parcel has been Updated',
-            'parcel': Parcels.parcels[parcel_index]
-        }),200
     
     def validate_parcel_addition(self, username, data):
         """
@@ -201,7 +128,6 @@ class Validation():
         contact = data.get('contact')
         pickup_location = data.get('pickup_location')
         destination =data.get('destination')
-        status='pending'
         temp_parcel = dict(
             parcel_description=parcel_description,
             recipient=recipient,
@@ -220,12 +146,12 @@ class Validation():
             if type(value)!=str:
                 return jsonify({
                     'message':'Your '+key+' should be a sequence of characters'
-                }),400
+                }), 400
 
             elif not value or value.isspace():
                 return jsonify({
                     'message':'Please add your parcel'+key+'. It cannot be a space',
-                }),400
+                }), 400
         
         temp_parcel['username'] = username
         added_parcel = dict(self.database.add_parcel(temp_parcel))
@@ -235,62 +161,47 @@ class Validation():
             return jsonify({
                 'message' : 'hello! '+username+' Your Parcel Delivery order has been placed',
                 'Parcel': added_parcel
-            }),200
+            }), 200
         
         return jsonify({
             'message' : '@'+username+' your parcel has not been added'
-        })
+        }), 400
     
 
 
     def validate_get_parcel_by_id(self, username,parcel_id):
-        if self.check_if_parcel_id_exists(parcel_id)!=True:
-            return self.check_if_parcel_id_exists(parcel_id)
-            
-        for parcel in Parcels.parcels:
-            if parcel['parcel_id'] == parcel_id:
-                return jsonify({
-                    'Specified parcel':parcel
-                }), 200
-
-        return jsonify({
-            'message':'the parcel was not found'
-        }), 400
+        """
+        Get parcels by id
+        """
+        pass
     
 
     def validate_get_all_parcels(self, username):
-        
-        if len(Parcels.parcels)>0:
-            return jsonify({
-            'parcels':Parcels.parcels
-            }),200
-
-        return jsonify({
-            'message':'No parcels added yet'
-        }),400
-
+        """
+        get all parcels
+        """
     
-    def get_user_id(self,client):
-        
-        for user in Users.user_accounts:
-            if user['username']==client:
-                user_id = user['user_id']
-                return user_id
+    def get_user_id(self,username):
+        """
+        Get user id
+        """
+        user_id = self.database.get_from_users('user_id', username)
+        if not user_id:
+            return jsonify({
+                'Message' : '@'+username+' lets make things official. Sign up with send it'
+            }), 400
+        return user_id
 
-        return False
+        
+
 
 
     def validate_get_all_users(self,username):
+        """
+        Get all users
+        """
+        pass
 
-        if len(Users.user_accounts)>0:
-            return jsonify({
-                'Users':Users.user_accounts
-            }),200
-
-        return jsonify({
-            'message':'No users in the system'
-        }),400
-    
     def check_if_parcel_id_exists(self,parcel_id):
         id_exists = self.database.parcel_exists(parcel_id)
         if id_exists == False:
@@ -342,7 +253,7 @@ class Validation():
         updated_fields = self.database.change_status(column, column_data, parcel_id)
         if not updated_fields:
             return jsonify({
-                'Message' : 'Update destination failed'
+                'Message' : 'Update '+column+' failed'
             }), 400
         
         return jsonify({
@@ -355,15 +266,44 @@ class Validation():
         """
         Change the status of the parcel delivery order
         """
-        return self.update_parcel_by_admin(username, parcel_id, data, 'status')
+        status = data.get('status')
+        if status == 'pending' or status == 'in transit' or status == 'canceled' or status == 'delivered':
+            return self.update_parcel_by_admin(username, parcel_id, data, 'status')
+        return jsonify({
+            'Message' : 'Status has to be pending, or in transit, or canceled, or delivered'
+        }), 200
 
 
     def validate_change_destination(self,username,parcel_id, data):
         """
         Change the destination of the parcel delivery order
         """
-        pass
+        destination = data.get('destination')
+        if not destination or destination.isspace():
+            return jsonify({
+                'Messsage' : ''
+        }), 400
+        user_id = self.get_user_id(username)
+        if type(user_id)==tuple:
+            return user_id
+        if self.check_user_created_parcel(user_id, parcel_id)!=True:
+            return jsonify({
+                'message' : 'You did not create the parcel'
+            })
+            
+        updated_fields = self.database.change_status('destination', destination, parcel_id)
+        if not updated_fields:
+            return jsonify({
+            'Message' : 'Update destination failed'
+            }), 400
     
+        return jsonify({
+            'message' : 'Updated destination',
+            'updated fields' : updated_fields
+        }), 200
+
+
+
 
     def is_admin(self,username):
         """
@@ -374,3 +314,15 @@ class Validation():
         is_admin = self.database.get_from_users('admin', username)
         return is_admin
 
+
+    def check_user_created_parcel(self, user_id, parcel_id):
+        """
+        Check if user created parcel
+        """
+        sql_command = """
+        SELECT EXISTS(SELECT * FROM parcels where parcel_id={parcel_id} and user_id={user_id})
+        """.format(parcel_id=parcel_id,user_id=user_id)
+        rows = self.database.execute_query(sql_command)
+        return rows[0]['exists']
+
+        
