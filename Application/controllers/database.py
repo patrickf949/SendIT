@@ -103,7 +103,7 @@ class Database():
         Enter Default data to database
         """
         table_empty = self.execute_query(sql_command1)
-        if not table_empty:
+        if not table_empty[0]['exists']:
             self.cursor.execute(sql_command2)
 
 
