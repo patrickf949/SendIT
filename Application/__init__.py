@@ -27,7 +27,7 @@ def create_app(config):
                 "/api/v2/parcel/<int:parcelId> | GET" : "fetch parcel by id",
                 "/api/v2/parcels/<int:parcelId>/cancel | GET" : "Cancel a parcel delivery order",
                 "/api/v2/users | GET" : "View all users",
-                "/api/v2/users/<int:userId>/parcels | GET" : "Fetch parcels by a specific user",
+                "/api/v2/users/<int:userId>/parcels | GET" : "Fetch parcels by a specific user - admin",
                 "/api/v2/parcels/<int:parcelId>/destination | PUT" : "Update a parcel delivery order's destination",
                 "/api/v2/parcels/<int:parcelId>/presentLocation | PUT" : "Update the present location of a parcel delivery order",
                 "/api/v2/parcels/<int:parcelId>/status | PUT" : "Update the status of a parel delivery order's destination",
