@@ -314,8 +314,10 @@ class Validation():
         sql_command = "SELECT * FROM weight_categories"
         self.database.insert_into_weight_categories()
         rows = self.database.execute_query(sql_command)
+        categories = str(rows.copy())
         return jsonify({
             '@'+username : 'Here are our available weight categories',
-            'Categories' : rows
+            'Categories' : categories
         })
+
 
