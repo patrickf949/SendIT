@@ -113,24 +113,34 @@ class Validation():
     def validate_parcels_by_user(self, username, user_id):
         """
         Validate get parcels by user
+        params:username and id
+        returns:
         """
-        user_id = self.get_user_id(username)
-        if not user_id:
-            return jsonify({
-                'Message' : '@'+username+' lets make things official. Please sign up'
-            }), 400
+        user_id1 = self.get_user_id(username)
+        user_admin = self.is_admin(username)
+        if not user_admin:            
+            if not user_id1 or user_id1!=user_id:
+                return jsonify({
+                    'Message' : '@'+username+' You have no authorization.'
+                }), 400
+        return self.get_parcels_by_user_id(user_id)
+    
+    def get_parcels_by_user_id(self,user_id):
+        """
+        Get parcels by user id
+        """
         sql_command="""
-        SELECT * FROM parcels where user_id={};
-        """.format(user_id)
+        SELECT * FROM parcels where user_id={user_id};
+        """.format(user_id=user_id)
         rows = self.database.execute_query(sql_command)
         if not rows:
             return jsonify({
-                'Message': '@'+username+' has no parcel delivery orders yet'
+                'Message': 'no parcel delivery orders from specified user'
             }), 400
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
-            '@'+username+' s parcels' : rows
+            'parcels by user' : rows
         }), 200
 
     
