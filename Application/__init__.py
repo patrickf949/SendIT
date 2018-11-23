@@ -1,8 +1,8 @@
 import datetime
 from flask import jsonify, Flask, request
 from flask_jwt_extended import (
-    jwt_required, create_access_token,
-    create_refresh_token, get_jwt_identity,
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity,
     )
 from Application.controllers.validate import Validation
 
@@ -13,6 +13,7 @@ def create_app(config):
     app.config['JWT_SECRET_KEY'] = 'Don-t-you-test-125'
     Validation.dbname = config.dbname
 
+    jwt = JWTManager(app)
     @app.route("/")
     def kingslanding():
         return jsonify([
