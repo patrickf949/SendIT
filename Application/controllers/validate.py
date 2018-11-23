@@ -1,18 +1,12 @@
 """
 Handles all validation as well as manipulation
 """
-from Application.models.parcels import Parcels
-from .database import Database
-
+from json import dumps
 from flask import jsonify
 from Application.models.users import Users
-from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    jwt_refresh_token_required, create_refresh_token,
-    get_jwt_identity, set_access_cookies,
-    set_refresh_cookies, unset_jwt_cookies
-)
-
+from Application.models.parcels import Parcels
+import datetime
+from .database import Database
 
 class Validation():
     """
@@ -213,7 +207,7 @@ class Validation():
             recipient=recipient,
             contact=contact,
             pickup_location=pickup_location,
-            destination=destination,
+            destination=destination
         )
 
         invalid_user = self.check_user_dont_exist('username',username)
@@ -234,14 +228,18 @@ class Validation():
                 }),400
         
         temp_parcel['username'] = username
-        self.database.add_parcel(temp_parcel)
-
+        added_parcel = dict(self.database.add_parcel(temp_parcel))
+        print(added_parcel)
         
-
+        if type(added_parcel)==dict:
+            return jsonify({
+                'message' : 'hello! '+username+' Your Parcel Delivery order has been placed',
+                'Parcel': added_parcel
+            }),200
+        
         return jsonify({
-            'message': 'hello! '+username+' Your Parcel Delivery order has been placed',
-            'Parcel':temp_parcel
-        }),200
+            'message' : '@'+username+' your parcel has not been added'
+        })
     
 
 
@@ -305,3 +303,19 @@ class Validation():
             }),400
 
         return True
+
+
+    def weight_categories(self,username):
+        """
+        get available weight categories
+        params:username
+        returns: weight categories
+        """
+        sql_command = "SELECT * FROM weight_categories"
+        self.database.insert_into_weight_categories()
+        rows = self.database.execute_query(sql_command)
+        return jsonify({
+            '@'+username : 'Here are our available weight categories',
+            'Categories' : rows
+        })
+

@@ -35,17 +35,6 @@ def create_app(config):
             }
         ])
 
-    @app.route("/api/v2/refresh-token")
-    @jwt_refresh_token_required
-    def refresh_token():
-        """
-        Refresh tokens
-        """
-        logged_in_user = get_jwt_identity()
-        access_token = create_access_token(identity=logged_in_user)
-
-        response = jsonify({'refreshed':True}), 200
-
 
     @app.route("/api/v2/logout", methods=['POST'])
     def logout():

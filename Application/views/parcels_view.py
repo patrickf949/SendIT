@@ -85,3 +85,13 @@ def get_all_users():
     """
     current_user = get_jwt_identity()
     return response.validate_get_all_users(current_user)
+
+
+@blue_print.route('/api/v2/parcel/categories')
+@jwt_required
+def get_weight_categories():
+    """
+    Get all weight categories for a logged in user
+    """
+    current_user = get_jwt_identity()
+    return response.weight_categories(current_user)

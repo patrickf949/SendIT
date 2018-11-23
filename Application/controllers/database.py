@@ -59,7 +59,7 @@ class Database():
                 destination VARCHAR (250) NOT NULL,
                 status varchar(25) check (status in ('pending', 'delivered', 'in transit', 'canceled')) DEFAULT 'pending',
                 date_created TIMESTAMP,
-                date_to_be_delivered TIME
+                date_to_be_delivered TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS weight_categories(
                 weight_id SERIAL PRIMARY KEY,
@@ -77,7 +77,7 @@ class Database():
         params:n/a
         returns:n/a
         """
-        sql_command="""
+        sql_command = """
         INSERT INTO weight_categories (price, weight_kgs)
         VALUES (2000,'[0, 0.1)'),
                (3000,'[0.1, 0.5)'),
@@ -94,38 +94,75 @@ class Database():
                (700000,'[500, 1000)');
         """
         sql_command1="""
-        SELECT EXISTS(SELECT TRUE FROM weight_categories WHERE price=3000)
+        SELECT EXISTS(SELECT TRUE FROM weight_categories WHERE price=3000);
+        """
+        self.populate_default_data(sql_command1,sql_command)
+    
+    def populate_default_data(self,sql_command1,sql_command2):
+        """
+        Enter Default data to database
         """
         table_empty = self.execute_query(sql_command1)
         if not table_empty:
-            self.cursor.execute(sql_command)
+            self.cursor.execute(sql_command2)
 
+
+
+    def insert_admin_users(self):
+        """
+        create an admin if non existent
+        params:n/a
+        returns:n/a
+        """
+        sql_command = """
+        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        values ('Admin1','i-sendit@gmail.com','07888392838','doNot2114',now(),TRUE);
+        """
+        sql_command1 = """
+        SELECT EXISTS(SELECT TRUE FROM users where admin='true');
+        """
+        self.populate_default_data(sql_command1,sql_command)
 
 
     def add_parcel(self, parcel):
         """
         Add parcel to database
-        params:n/a
-        returns:n/a
+        params:parcel information
+        returns:added parcel from database
         """
+        user_id = self.get_from_users('user_id', parcel['username'])
         sql_command = """
         INSERT INTO parcels 
         (user_id, parcel_description, recipient, recipient_contact,
         pickup_location, current_location, destination, date_created,date_to_be_delivered)
-        values ({user_id},'{recipient}','{contact}','{parcel_description}','{pickup_location}',
+        values ({user_id},'{parcel_description}','{recipient}','{contact}','{pickup_location}',
         '{current_location}','{destination}', now(), now()+'2 days 2 hours');
         """.format(
-            user_id=parcel['user_id'],
+            user_id=user_id,
             parcel_description=parcel['parcel_description'],
             recipient=parcel['recipient'],
             contact=parcel['contact'],
             pickup_location=parcel['pickup_location'],
             current_location=parcel['pickup_location'],
-            destination=['destination']
+            destination=parcel['destination']
         )
-        rows = self.cursor.execute(sql_command)
-        add_parcel = self.execute_query
-        return rows
+        sql_command1="""
+        SELECT * FROM parcels
+            WHERE user_id='{}'
+            ORDER BY date_created DESC
+            LIMIT 1;
+        """.format(user_id)
+        self.cursor.execute(sql_command)
+
+        added_parcel = self.execute_query(sql_command1)
+        print(added_parcel)
+
+        new_parcel = dict(added_parcel[0])
+
+        new_parcel['date_created'] = str(added_parcel[0]['date_created'])
+        new_parcel['date_to_be_delivered'] = str(added_parcel[0]['date_to_be_delivered'])
+
+        return new_parcel
 
 
     def add_user(self, user):
@@ -136,13 +173,12 @@ class Database():
         """
         sql_command = """
         INSERT INTO users (username,email,contact,password,date_created,admin) 
-        values ('{username}','{email}','{contact}','{password}',now(),'{admin}');
+        values ('{username}','{email}','{contact}','{password}',now(),'false');
         """.format(
             username=user['username'],
             email=user['email'],
             contact=user['contact'],
             password=user['password'],
-            admin=user['admin']
         )
 
         self.cursor.execute(sql_command)
@@ -190,9 +226,9 @@ class Database():
         sql_command="""
         SELECT {column} FROM users where username='{username}';
         """.format(username=username, column=column)
-        db_password = self.execute_query(sql_command)
-
-        return db_password[0][column]
+        db_value = self.execute_query(sql_command)
+        print(db_value)
+        return db_value[0][column]
 
     def validate_password(self,username,password):
         """
@@ -243,4 +279,5 @@ class Database():
 
     
     def drop_all_tables(self):
+        """Drop tables from database"""
         self.cursor.execute("Drop table users,parcels,weight_categories")
