@@ -42,7 +42,6 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
         )
         message = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code,200)
         self.assertEqual(message['parcels'], 'Parcels')
     
