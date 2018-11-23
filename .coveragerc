@@ -5,4 +5,5 @@ omit =
     */.vscode
     */python?.?/*
     Application/models/*
+    Application/controllers/*
     

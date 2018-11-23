@@ -1,9 +1,14 @@
 language: python
 python: 
-  - "3.5"
+  - "3.6"
 
 install:
   - pip install -r requirements.txt
+service:
+  - postgres
+before_script:
+  - psql -c "CREATE DATABASE test_senditdb;" -U postgres
+  - psql -c "CREATE USER senditdb WITH PASSWORD 's3ndIt2m3';" -U postgres
 script:
   - pytest -v
   - pytest --cov

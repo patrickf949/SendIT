@@ -1,21 +1,25 @@
 import unittest
 import json
 import pytest
-from Application import app,create_app
+from Application import create_app
 from Application.views import *
 from .testdata import TestData
 from Application.models.parcels import Parcels
 from Application.models.users import Users
 from Application.config import app_config
+from Application.controllers.database import Database
 
 class TestSendIT(unittest.TestCase):
     """
     This class tests our api endpoints
     """
     def setUp(self):
-        self.app = create_app(app_config['testing'])
+        self.env = app_config['testing']
+        self.app = create_app(self.env)
         self.test_client = self.app.test_client()
+        Database.dbname = self.env.dbname
         self.testdata = TestData()
+        self.table_drop = Database(self.env.dbname)
     
     
     def test_istestdata_instance(self):
@@ -59,7 +63,7 @@ class TestSendIT(unittest.TestCase):
         )
         message = json.loads(response.data.decode())
 
-        self.assertEqual(message['message'],'hello! Andrew Your Admin Account has been created and automatically logged in')
+        self.assertEqual(message['message'],'hello! Andrew Your Admin Account has been created. Please login')
         self.assertEqual(response.status_code, 200)
     
     
@@ -287,6 +291,4 @@ class TestSendIT(unittest.TestCase):
         
 
     def tearDown(self):
-        pass
-
-    
+        self.table_drop.drop_all_tables()
