@@ -58,8 +58,8 @@ class TestData():
 
     }
     valid_admin_login={
-        "email":"andrew@gmail.com",
-        "password":"andyfofofo"
+        "email":'Admin1',
+        "password":"doNot2114"
     }
     invalid_admin_login={
         "email":"andrew@gmaidsdsl.com",
@@ -72,7 +72,7 @@ class TestData():
         "password":"andyfofofo"
     }
     valid_user_login={
-        "email":"andrdddew@gmail.com",
+        "email":"Kwage",
         "password":"andyfofofo"
     }
     invalid_user_login={
