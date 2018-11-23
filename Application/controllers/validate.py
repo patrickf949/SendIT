@@ -38,16 +38,12 @@ class Validation():
 
         user = temp_user
         user['admin'] = admin
-        if not admin:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Account has been created. Please login',
-            }), 200
-        else:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Admin Account has been created. Please login',
-            }), 200
+
+        self.database.add_user(user)
+        return jsonify({
+            'message': 'hello! '+user['username']+' Your Account has been created. Please login',
+        }), 200
+
 
 
     def validate_userdata(self, temp_dict):
