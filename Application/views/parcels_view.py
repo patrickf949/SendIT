@@ -19,7 +19,7 @@ def getParcel(parcel_id):
     returns: specified parcel
     """
     current_user = get_jwt_identity
-    return response.validate_get_parcel_by_id(parcel_id,current_user)
+    return response.validate_get_parcel_by_id(current_user, parcel_id)
 
 
 @blue_print.route ('/api/v2/parcels', methods=['GET','POST'])
@@ -35,6 +35,9 @@ def addParcel():
         data = request.get_json()
         return response.validate_parcel_addition(current_user,data)
     elif request.method == 'GET':
+        if not response.is_admin(current_user):
+            user_id = response.get_user_id(current_user)
+            return response.get_parcels_by_user_id(user_id)
         return response.validate_get_all_parcels(current_user)
 
 
