@@ -229,7 +229,8 @@ class Database():
         SELECT {column} FROM users where username='{username}';
         """.format(username=username, column=column)
         db_value = self.execute_query(sql_command)
-
+        if not db_value:
+            return False
         return db_value[0][column]
 
 
