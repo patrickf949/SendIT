@@ -8,11 +8,38 @@ SendIT is a courier service that helps users deliver parcels to different destin
 [![Maintainability](https://api.codeclimate.com/v1/badges/f0cc2da5a5ff305119d5/maintainability)](https://codeclimate.com/github/patrickf949/SendIT/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/patrickf949/SendIT/badge.svg?branch=develop)](https://coveralls.io/github/patrickf949/SendIT?branch=develop)
 
+### REQUIREMENTS 
+
+1. Install postgres
+2. Python 3.6
+
+
+### SETTING UP APPLICATION
+
+1. Clone the repository
+
+` $ git clone https://github.com/patrickf949/SendIT.git `
+
+2. Set up virutal environment
+
+` $ virtualenv venv`
+
+3. Activate virtual environment
+
+` $ source venv/bin/activate `
+
+4. Inside the application folder, install all the requirements
+` $ pip install -r requirements.txt`
+
+5. Run Application
+` $ python run.py`
+
+
 ## Front End
 
 [Github pages link](https://patrickf949.github.io/SendIT/Application/ui/)
 
-### Technologies used]
+### Technologies used
 
 Html & Css - [w3schools](https://www.w3schools.com/)
 
