@@ -1,11 +1,11 @@
 """
 Handles all validation as well as manipulation
 """
+import datetime
 from json import dumps
 from flask import jsonify
 from Application.models.users import Users
 from Application.models.parcels import Parcels
-import datetime
 from .database import Database
 
 class Validation():
@@ -203,7 +203,7 @@ class Validation():
         
         if user_is_admin!=True:
             return jsonify({
-                'Message':'@'+username+' you do not have authorization'
+                'Message': ' you do not have authorization'
             }), 400
 
         exists = self.check_if_parcel_id_exists(parcel_id)
