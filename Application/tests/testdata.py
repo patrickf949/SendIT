@@ -72,7 +72,7 @@ class TestData():
         "password":"andyfofofo"
     }
     valid_user_login={
-        "email":"andrdddew@gmail.com",
+        "email":"Kwage",
         "password":"andyfofofo"
     }
     invalid_user_login={

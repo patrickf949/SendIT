@@ -180,6 +180,8 @@ class Validation():
         """
         get all parcels
         """
+        return self.get_all(username,'parcels')
+
     
     def get_user_id(self,username):
         """
@@ -192,22 +194,41 @@ class Validation():
             }), 400
         return user_id
 
-        
-
-
-
     def validate_get_all_users(self,username):
         """
         Get all users
         """
-        pass
+        return self.get_all(username,'users')
+
+    def get_all(self,username,table):
+        is_user_admin = self.is_admin(username)
+        if not is_user_admin:
+            return jsonify({
+                'Message': '@'+username+', you are not authorized to view this.'
+            }), 400
+        sql_command="""
+        SELECT * FROM {};
+        """.format(table)
+        all_elements = self.database.execute_query(sql_command)
+        if not all_elements:
+            return jsonify({
+                'Users':'No '+table+' in system'
+            }), 400
+        for element in all_elements:
+            for key,value in element.items():
+                if key == 'date_created' or key == 'date_to_be_delivered':
+                    value == str(value)
+        return jsonify({
+            'All '+table+'': all_elements
+            }), 200
+
 
     def check_if_parcel_id_exists(self,parcel_id):
         id_exists = self.database.parcel_exists(parcel_id)
         if id_exists == False:
             return jsonify({
                 'message' : 'Invalid parcel'
-            }),400
+            }), 400
 
         return True
 
@@ -324,5 +345,3 @@ class Validation():
         """.format(parcel_id=parcel_id,user_id=user_id)
         rows = self.database.execute_query(sql_command)
         return rows[0]['exists']
-
-        
