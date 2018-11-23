@@ -39,6 +39,8 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 | URL | HTTP Method | Description|
 |--------------|-------------|------------|
+|`/api/v1/admin/signup`|`POST`| Admin Sign up |
+|`/api/v1/user/signup`|`POST`| Admin Sign up |
 |`/api/v1/parcels`    | `GET`       |Fetch all parcel delivery orders-admin |
 |`/api/v1/users`|`GET`|Fetch all users-admin|
 |`/api/v1/parcels/<int:parcelId>`|`GET`|  Fetch a specific parcel delivery order-admin |
