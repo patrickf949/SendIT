@@ -73,7 +73,6 @@ Our backend is a work-in-progress Application programming interface that emulate
 | `/api/v2/parcels`    | `GET` | Fetch all parcel delivery orders-admin |
 | `/api/v2/users` | `GET` | Fetch all users-admin |
 | `/api/v2/parcels/<int:parcelId>` | `GET` |  Fetch a specific parcel delivery order-admin |
-| `/api/v2/parcels/<int:parcelId>/cancel`|`PUT`| Cancel the specific parcel delivery order-client |
 | `/api/v2/parcels`|`POST`| Create a parcel delivery order - client |
 | `/api/v2/parcels/<int:parcel_id>/destination`|`PUT`| Update destination of parcel delivery order-client |
 | `/api/v2/parcels/<int:parcel_id>/presentLocation`|`PUT`| Update present location of parcel delivery order-client/admin |
