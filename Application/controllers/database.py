@@ -69,6 +69,7 @@ class Database():
 		"""
         self.cursor.execute(sql_command)
         self.insert_into_weight_categories()
+        self.insert_admin_user()
 
 
     def insert_into_weight_categories(self):
@@ -108,7 +109,7 @@ class Database():
 
 
 
-    def insert_admin_users(self):
+    def insert_admin_user(self):
         """
         create an admin if non existent
         params:n/a
@@ -116,7 +117,7 @@ class Database():
         """
         sql_command = """
         INSERT INTO users (username,email,contact,password,date_created,admin) 
-        values ('Admin1','i-sendit@gmail.com','07888392838','doNot2114',now(),TRUE);
+        values ('Admin1','i-sendit@gmail.com','07888392838','doNot2114',now(),'t');
         """
         sql_command1 = """
         SELECT EXISTS(SELECT TRUE FROM users where admin='true');
