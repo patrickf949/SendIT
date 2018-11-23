@@ -20,18 +20,21 @@ class TestSendIT(unittest.TestCase):
         Database.dbname = self.env.dbname
         self.testdata = TestData()
         self.table_drop = Database(self.env.dbname)
+        self.usertoken=''
+        self.admintoken=''
     
     
     def test_istestdata_instance(self):
         assert isinstance(self.testdata, TestData)
 
-    def user_signup(self, email, password):
+    def auser_signup(self, email, password):
         response = self.test_client.post(
             'api/v2/auth/signup',
             data=json.dumps(self.testdata.valid_admin_signup),
         content_type='application/json')
         message = json.loads(response.data.decode)
         self.assertEqual(message.status_code,200)
+        
     
     def test_get_all_parcels(self):
         response = self.test_client.get(
@@ -58,7 +61,7 @@ class TestSendIT(unittest.TestCase):
     def test_signup_valid_params(self):
         
         response = self.test_client.post(
-            '/api/v2/admin/signup',
+            '/api/v2/auth/signup',
             content_type='application/json',
             data=json.dumps(self.testdata.valid_admin_signup)
         )
@@ -82,7 +85,7 @@ class TestSendIT(unittest.TestCase):
 
     def test_admin_signup_empty(self):
         response = self.test_client.post(
-            '/api/v2/admin/signup',
+            '/api/v2/auth/signup',
             content_type='application/json',
             data=json.dumps(self.testdata.empty)
         )
@@ -100,7 +103,7 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.valid_admin_login)
         )
-        
+
         self.assertEqual(response.status_code, 200)
 
     def test_user_signup_valid_params(self):
@@ -131,7 +134,6 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
 
-    @pytest.mark.skip(reason="no way of currently testing this")
     def test_user_login(self):
         
         response = self.test_client.post(
@@ -139,8 +141,8 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json',
             data=json.dumps(self.testdata.valid_user_login)
         )
-        
-        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.status_code, 400)
 
     def test_valid_parcel_addition(self):
         response = self.test_client.post(
@@ -272,9 +274,7 @@ class TestSendIT(unittest.TestCase):
     
 
     def test_get_parcels_by_user_id(self):
-        
-        
-        
+ 
         response = self.test_client.get(
             '/api/v2/parcels/43',
             content_type='application/json'
@@ -288,8 +288,6 @@ class TestSendIT(unittest.TestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code,400)
-        
-        
 
     def tearDown(self):
         self.table_drop.drop_all_tables()
