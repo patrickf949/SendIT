@@ -30,8 +30,11 @@ SendIT is a courier service that helps users deliver parcels to different destin
 3. Activate virtual environment
 
     FOR LINUX
+
 ` $ source venv/bin/activate `
+
     FOR WINDOWS
+
 ` $ .\venv\Scripts\activate `
 
 4. Inside the application folder, install all the requirements
@@ -151,7 +154,7 @@ NB:
 
     
         {
-            "status":"pending"
+            "current_location":"Kampala"
         }
     
 
