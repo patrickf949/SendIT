@@ -82,7 +82,6 @@ Our backend is a work-in-progress Application programming interface that emulate
 | `/api/v2/parcels`|`POST`| Create a parcel delivery order - client |
 | `/api/v2/parcels/<int:parcel_id>/destination`|`PUT`| Update destination of parcel delivery order-client |
 | `/api/v2/parcels/<int:parcel_id>/presentLocation`|`PUT`| Update present location of parcel delivery order-client/admin |
-<<<<<<< HEAD
 | `/api/v2/users/<int:user_id>/parcels`|`GET`| Get parcel delivery orders by user - admin|
 
 #### SAMPLE DATA FOR THE BODY ENDPOINTS
@@ -166,6 +165,3 @@ Our backend is a work-in-progress Application programming interface that emulate
             "password":"doNot2114"
         }
     ```
-=======
-| `/api/v2/users/<int:user_id>/parcels`|`GET`| Get parcel delivery orders by user - admin|
->>>>>>> ft-view-all-users-162150102
