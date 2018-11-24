@@ -111,7 +111,7 @@ Our backend is a work-in-progress Application programming interface that emulate
             "password":"andyfofofo2"
         }
     ```
-####### NB:
+######## NB:
 
 *   Copy the access token on user login 
 
@@ -151,11 +151,11 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ##### FOR EDITING A PARCEL PRESENT LOCATION - admin only
 
-    ```
+    
         {
             "status":"pending"
         }
-    ```
+    
 
 ##### FOR ADMIN LOGIN
 
