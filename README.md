@@ -110,7 +110,7 @@ Our backend is a work-in-progress Application programming interface that emulate
             "password":"andyfofofo2"
         }
     
-######## NB:
+NB:
 
 *   Copy the access token on user login 
 
