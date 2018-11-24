@@ -102,7 +102,7 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ###### FOR LOGIN 
 
-* As a user You can only login after signup except for admin
+* As a user You can only login after signup
 
    
         {
