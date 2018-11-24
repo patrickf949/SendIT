@@ -194,6 +194,8 @@ class Validation():
     def validate_get_parcel_by_id(self, username,parcel_id):
         """
         Get parcels by id
+        params: username, parcel id
+        return: parcel
         """
         user_is_admin = self.is_admin(username)
         print(user_is_admin)
