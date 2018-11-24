@@ -92,25 +92,24 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ###### FOR SIGNUP
 
-    ```
         {
             "username":"meltodsfdsdslo8989e",
             "email":"anoioisdioi@oorewgmdsail.com",
             "password":"andyfofofo2",
             "contact":"vtbuyiguoijpk,l"
         } 
-    ```
+
 
 ###### FOR LOGIN 
 
 * As a user You can only login after signup except for admin
 
-    ```
+   
         {
             "username":"meltodsfdsdslo8989e",
             "password":"andyfofofo2"
         }
-    ```
+    
 ######## NB:
 
 *   Copy the access token on user login 
@@ -123,7 +122,6 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ###### FOR CREATING PARCEL
 
-    ```
         {
             "parcel_description":"Beerbongs",
             "recipient":"Mama Rhoda",
@@ -131,23 +129,23 @@ Our backend is a work-in-progress Application programming interface that emulate
             "pickup_location":"Kawempe",
             "destination":"Kwagala, Kivumbo side"
         }
-    ```
+    
 
 ###### FOR EDITING A PARCEL DESTINATION - client
 
-    ```
+   
         {
             "destination":"Kwagala, Kivumbo side"
         }
-    ```
+   
 
 ##### FOR EDITING A PARCEL STATUS - admin only
 
-    ```
+    
         {
             "status":"pending"
         }
-    ```
+    
 
 ##### FOR EDITING A PARCEL PRESENT LOCATION - admin only
 
@@ -159,9 +157,9 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ##### FOR ADMIN LOGIN
 
-    ```
+    
         {
             "username":"Admin1",
             "password":"doNot2114"
         }
-    ```
+    
