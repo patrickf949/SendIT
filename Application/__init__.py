@@ -2,7 +2,7 @@ import datetime
 from flask import jsonify, Flask, request
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
-    get_jwt_identity,
+    get_jwt_identity, get_raw_jwt
     )
 from Application.controllers.validate import Validation
 
@@ -11,9 +11,13 @@ def create_app(config):
 
     app = Flask(__name__)
     app.config['JWT_SECRET_KEY'] = 'Don-t-you-test-125'
+    app.config['JWT_BLACKLIST_ENABLED'] = True
+    app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
     Validation.dbname = config.dbname
 
     jwt = JWTManager(app)
+    blacklist = set()
+
     @app.route("/")
     def kingslanding():
         return jsonify([
@@ -37,13 +41,21 @@ def create_app(config):
 
 
     @app.route("/api/v2/logout", methods=['POST'])
+    @jwt_required
     def logout():
         """
         logout user and dismiss refresh token
         """
         response = jsonify({'logged out':True})
-
+        unique_identifier = get_raw_jwt()['jti']
+        blacklist.add(unique_identifier)
         return response, 200
+
+
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        unique_identifier = decrypted_token['jti']
+        return unique_identifier in blacklist
 
 
     @app.route('/api/v2/auth/signup', methods=['POST'])

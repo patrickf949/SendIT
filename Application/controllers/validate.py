@@ -1,11 +1,11 @@
 """
 Handles all validation as well as manipulation
 """
+import datetime
 from json import dumps
 from flask import jsonify
 from Application.models.users import Users
 from Application.models.parcels import Parcels
-import datetime
 from .database import Database
 
 class Validation():
@@ -32,22 +32,18 @@ class Validation():
         )
         
         valid_data =self.validate_userdata(temp_user.copy())
-        print(valid_data)
+
         if valid_data!=True:
             return valid_data
 
         user = temp_user
         user['admin'] = admin
-        if not admin:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Account has been created. Please login',
-            }), 200
-        else:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Admin Account has been created. Please login',
-            }), 200
+
+        self.database.add_user(user)
+        return jsonify({
+            'message': 'hello! '+user['username']+' Your Account has been created. Please login',
+        }), 200
+
 
 
     def validate_userdata(self, temp_dict):
@@ -57,16 +53,16 @@ class Validation():
         returns: bool or informative message
         """
         i=0
-        print(temp_dict)
+    
         for key,value in temp_dict.items():
-            print(i) 
+
             if type(value)!=str:
                 return jsonify({
                 'message':'sorry! '+key+' field must be sequence of characters'
             }), 400
             
             if not value or value.isspace():
-                print(i,'me')
+
                 return jsonify({
                 'message':'sorry! your '+key+' is required and can not be an empty string'
             }), 400
@@ -181,7 +177,7 @@ class Validation():
         
         temp_parcel['username'] = username
         added_parcel = dict(self.database.add_parcel(temp_parcel))
-        print(added_parcel)
+
         
         if type(added_parcel)==dict:
             return jsonify({
@@ -198,12 +194,14 @@ class Validation():
     def validate_get_parcel_by_id(self, username,parcel_id):
         """
         Get parcels by id
+        params: username, parcel id
+        return: parcel
         """
         user_is_admin = self.is_admin(username)
-        
-        if user_is_admin!=True:
+        print(user_is_admin)
+        if not user_is_admin:
             return jsonify({
-                'Message':'@'+username+' you do not have authorization'
+                'Message': ' you do not have authorization'
             }), 400
 
         exists = self.check_if_parcel_id_exists(parcel_id)
