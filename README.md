@@ -19,15 +19,15 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 ### SETTING UP APPLICATION
 
-1. Clone the repository
+1.  Clone the repository
 
 ` $ git clone https://github.com/patrickf949/SendIT.git `
 
-2. Set up virutal environment
+2.  Set up virutal environment
 
 ` $ virtualenv venv`
 
-3. Activate virtual environment
+3.  Activate virtual environment
 
     FOR LINUX
 
@@ -37,14 +37,13 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 ` $ .\venv\Scripts\activate `
 
-4. Inside the application folder, install all the requirements
+4.  Inside the application folder, install all the requirements
 
 ` $ pip install -r requirements.txt`
 
-5. Run Application
+5.  Run Application
 
 ` $ python run.py`
-
 
 ## Front End
 
@@ -60,18 +59,18 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ### Features of application
 
-* Client can add a parcel delivery order providing details, such a
+*   Client can add a parcel delivery order providing details, such a
   * parcel description
   * recipient
   * recipient's contact
   * pickup location
   * destination
-* Client can cancel a delivery order
-* Admin can provide further details for a parcel delivery order such as,
+*   Client can cancel a delivery order
+*   Admin can provide further details for a parcel delivery order such as,
   * weight, which automatically generates the price of parcel delivery order
   * status of parcel, whether pending, in transit, or delivered
-* Admin can view all parcel delivery orders of all clients
-* Admin can view a specific parcel delivery order
+*   Admin can view all parcel delivery orders of all clients
+*   Admin can view a specific parcel delivery order
 
 ### Endpoints
 
@@ -105,7 +104,7 @@ Our backend is a work-in-progress Application programming interface that emulate
 
 ###### FOR LOGIN 
 
-* As a user You can only login after signup
+*   As a user You can only login after signup
 
    
         {
