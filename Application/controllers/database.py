@@ -156,7 +156,6 @@ class Database():
         self.cursor.execute(sql_command)
 
         added_parcel = self.execute_query(sql_command1)
-        print(added_parcel)
 
         new_parcel = dict(added_parcel[0])
 
@@ -185,7 +184,7 @@ class Database():
         self.cursor.execute(sql_command)
 
         user_added = self.check_availability_of_userdetails('username',user['username'])
-        print(user_added[0]['exists'])
+
         return user_added[0]['exists']
 
 
@@ -229,7 +228,8 @@ class Database():
         SELECT {column} FROM users where username='{username}';
         """.format(username=username, column=column)
         db_value = self.execute_query(sql_command)
-
+        if not db_value:
+            return False
         return db_value[0][column]
 
 

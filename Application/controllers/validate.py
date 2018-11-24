@@ -1,11 +1,11 @@
 """
 Handles all validation as well as manipulation
 """
+import datetime
 from json import dumps
 from flask import jsonify
 from Application.models.users import Users
 from Application.models.parcels import Parcels
-import datetime
 from .database import Database
 
 class Validation():
@@ -38,16 +38,12 @@ class Validation():
 
         user = temp_user
         user['admin'] = admin
-        if not admin:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Account has been created. Please login',
-            }), 200
-        else:
-            self.database.add_user(user)
-            return jsonify({
-                'message': 'hello! '+user['username']+' Your Admin Account has been created. Please login',
-            }), 200
+
+        self.database.add_user(user)
+        return jsonify({
+            'message': 'hello! '+user['username']+' Your Account has been created. Please login',
+        }), 200
+
 
 
     def validate_userdata(self, temp_dict):
@@ -113,9 +109,35 @@ class Validation():
     def validate_parcels_by_user(self, username, user_id):
         """
         Validate get parcels by user
+        params:username and id
+        returns:
         """
-        pass
+        user_id1 = self.get_user_id(username)
+        user_admin = self.is_admin(username)
+        if not user_admin:            
+            if not user_id1 or user_id1!=user_id:
+                return jsonify({
+                    'Message' : '@'+username+' You have no authorization.'
+                }), 400
+        return self.get_parcels_by_user_id(user_id)
     
+    def get_parcels_by_user_id(self,user_id):
+        """
+        Get parcels by user id
+        """
+        sql_command="""
+        SELECT * FROM parcels where user_id={user_id};
+        """.format(user_id=user_id)
+        rows = self.database.execute_query(sql_command)
+        if not rows:
+            return jsonify({
+                'Message': 'no parcel delivery orders from specified user'
+            }), 400
+        rows = self.tostring_for_date_time(rows)
+
+        return jsonify({
+            'parcels by user' : rows
+        }), 200
 
     
     def validate_parcel_addition(self, username, data):
@@ -173,7 +195,27 @@ class Validation():
         """
         Get parcels by id
         """
-        pass
+        user_is_admin = self.is_admin(username)
+        
+        if user_is_admin!=True:
+            return jsonify({
+                'Message': ' you do not have authorization'
+            }), 400
+
+        exists = self.check_if_parcel_id_exists(parcel_id)
+        if exists!=True:
+            return exists
+        
+        sql_command = """
+        SELECT * FROM parcels where parcel_id={};
+        """.format(parcel_id)
+        rows = self.database.execute_query(sql_command)
+        
+        rows = self.tostring_for_date_time(rows)
+
+        return jsonify({
+            'Parcel' : rows
+        }), 200
     
 
     def validate_get_all_parcels(self, username):
@@ -200,7 +242,7 @@ class Validation():
         """
         return self.get_all(username,'users')
 
-    def get_all(self,username,table):
+    def get_all(self, username, table):
         is_user_admin = self.is_admin(username)
         if not is_user_admin:
             return jsonify({
@@ -214,13 +256,21 @@ class Validation():
             return jsonify({
                 'Users':'No '+table+' in system'
             }), 400
-        for element in all_elements:
-            for key,value in element.items():
-                if key == 'date_created' or key == 'date_to_be_delivered':
-                    value == str(value)
+        all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
             'All '+table+'': all_elements
             }), 200
+
+
+    def tostring_for_date_time(self, parcels):
+        """
+        Convert datetime to string for easy jsonification
+        """
+        for element in parcels:
+            for key,value in element.items():
+                if key == 'date_created' or key == 'date_to_be_delivered':
+                    value == str(value)
+        return parcels
 
 
     def check_if_parcel_id_exists(self,parcel_id):
@@ -257,6 +307,9 @@ class Validation():
 
 
     def update_parcel_by_admin(self, username, parcel_id, data, column):
+        """
+        Update parcel by admin only
+        """
         if self.is_admin(username)!=True:
             return jsonify({
                 'message':'@'+username+' You are not authorized to do this'
