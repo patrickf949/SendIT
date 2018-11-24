@@ -32,7 +32,7 @@ class Validation():
         )
         
         valid_data =self.validate_userdata(temp_user.copy())
-        print(valid_data)
+
         if valid_data!=True:
             return valid_data
 
@@ -53,16 +53,16 @@ class Validation():
         returns: bool or informative message
         """
         i=0
-        print(temp_dict)
+    
         for key,value in temp_dict.items():
-            print(i) 
+
             if type(value)!=str:
                 return jsonify({
                 'message':'sorry! '+key+' field must be sequence of characters'
             }), 400
             
             if not value or value.isspace():
-                print(i,'me')
+
                 return jsonify({
                 'message':'sorry! your '+key+' is required and can not be an empty string'
             }), 400
@@ -177,7 +177,7 @@ class Validation():
         
         temp_parcel['username'] = username
         added_parcel = dict(self.database.add_parcel(temp_parcel))
-        print(added_parcel)
+
         
         if type(added_parcel)==dict:
             return jsonify({
@@ -196,8 +196,8 @@ class Validation():
         Get parcels by id
         """
         user_is_admin = self.is_admin(username)
-        
-        if user_is_admin!=True:
+        print(user_is_admin)
+        if not user_is_admin:
             return jsonify({
                 'Message': ' you do not have authorization'
             }), 400

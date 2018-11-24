@@ -18,7 +18,7 @@ def getParcel(parcel_id):
     params: parcel id	
     returns: specified parcel
     """
-    current_user = get_jwt_identity
+    current_user = get_jwt_identity()
     return response.validate_get_parcel_by_id(current_user, parcel_id)
 
 

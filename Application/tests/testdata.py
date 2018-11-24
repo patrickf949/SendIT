@@ -58,7 +58,7 @@ class TestData():
 
     }
     valid_admin_login={
-        "email":'Admin1',
+        "email":"Admin1",
         "password":"doNot2114"
     }
     invalid_admin_login={
