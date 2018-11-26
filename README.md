@@ -60,15 +60,15 @@ Our backend is a work-in-progress Application programming interface that emulate
 ### Features of application
 
 *   Client can add a parcel delivery order providing details, such a
-  *   parcel description
-  *   recipient
-  *   recipient's contact
-  *   pickup location
-  *   destination
+    *   parcel description
+    *   recipient
+    *   recipient's contact
+    *   pickup location
+    *   destination
 *   Client can cancel a delivery order
 *   Admin can provide further details for a parcel delivery order such as,
-  *   weight, which automatically generates the price of parcel delivery order
-  *   status of parcel, whether pending, in transit, or delivered
+    *   weight, which automatically generates the price of parcel delivery order
+    *   status of parcel, whether pending, in transit, or delivered
 *   Admin can view all parcel delivery orders of all clients
 *   Admin can view a specific parcel delivery order
 
