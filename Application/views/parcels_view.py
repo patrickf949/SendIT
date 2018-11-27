@@ -1,12 +1,11 @@
-from flask import jsonify,Flask,request, Blueprint
+from flask import request, Blueprint
 from Application.models.parcels import Parcels
-import Application
 from Application.models.users import Users
 from Application.controllers.validate import Validation
-from flask_jwt_extended import jwt_required,get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
-blue_print = Blueprint("Parcels",__name__)
+blue_print = Blueprint("Parcels", __name__)
 
 response = Validation()
 
@@ -33,7 +32,7 @@ def addParcel():
     current_user = get_jwt_identity()
     if request.method == 'POST':
         data = request.get_json()
-        return response.validate_parcel_addition(current_user,data)
+        return response.validate_parcel_addition(current_user, data)
     elif request.method == 'GET':
         if not response.is_admin(current_user):
             user_id = response.get_user_id(current_user)
@@ -50,7 +49,7 @@ def get_parcels_by_userId(user_id):
     returns: specified user's parcels
     """
     current_user = get_jwt_identity()
-    return response.validate_parcels_by_user(current_user,user_id)
+    return response.validate_parcels_by_user(current_user, user_id)
 
 
 @blue_print.route('/api/v2/users')
@@ -80,7 +79,7 @@ def change_destination(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.validate_change_destination(current_user,parcel_id,data)
+    return response.validate_change_destination(current_user, parcel_id, data)
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>/presentLocation', methods=['PUT'])
 @jwt_required
@@ -90,7 +89,7 @@ def change_presentlocation(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.validate_change_present_location(current_user,parcel_id,data)
+    return response.validate_change_present_location(current_user, parcel_id, data)
 
 @blue_print.route('/api/v2/parcels/<int:parcel_id>/status', methods=['PUT'])
 @jwt_required
@@ -102,4 +101,4 @@ def change_status(parcel_id):
     """
     current_user = get_jwt_identity()
     data = request.get_json()
-    return response.validate_change_status(current_user,parcel_id,data)
+    return response.validate_change_status(current_user, parcel_id, data)
