@@ -58,7 +58,7 @@ class TestData():
 
     }
     valid_admin_login={
-        "email":"Admin1",
+        "username":"Admin1",
         "password":"doNot2114"
     }
     invalid_admin_login={
@@ -72,7 +72,7 @@ class TestData():
         "password":"andyfofofo"
     }
     valid_user_login={
-        "email":"Kwage",
+        "username":"Kwage",
         "password":"andyfofofo"
     }
     invalid_user_login={

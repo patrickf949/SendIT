@@ -35,7 +35,9 @@ class TestSendIT(unittest.TestCase):
         message = json.loads(response.data.decode)
         self.assertEqual(message.status_code,200)
         
-    
+    def get_user_token(self, token):
+        self.usertoken = 
+
     def test_get_all_parcels(self):
         response = self.test_client.get(
             '/api/v2/parcels',
