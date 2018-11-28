@@ -73,8 +73,13 @@ class TestData():
     }
     valid_user_login={
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         "username":"Kwage",
         "password":"andyfofofo"
+=======
+        "username":"TestUser",
+        "password":"ddwoNot2114"
+>>>>>>> Stashed changes
 =======
         "username":"TestUser",
         "password":"ddwoNot2114"
