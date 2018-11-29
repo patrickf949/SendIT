@@ -315,7 +315,7 @@ class Validation():
         if self.is_admin(username)!=True:
             return jsonify({
                 'message':'@'+username+' You are not authorized to do this'
-            }), 400
+            }), 403
         column_data = data.get(column)
         if not column_data or column_data.isspace():
             return jsonify({
@@ -335,7 +335,7 @@ class Validation():
         return jsonify({
             'Message' : 'Update successful',
             'Updated fields' : updated_fields
-        })
+        }), 200
 
 
     def validate_change_status(self, username, parcel_id, data):
@@ -357,7 +357,7 @@ class Validation():
         destination = data.get('destination')
         if not destination or destination.isspace():
             return jsonify({
-                'Messsage' : ''
+                'Messsage' : 'Destination has to be a sequence of characters and cannot be a blank space'
         }), 400
         user_id = self.get_user_id(username)
         if type(user_id)==tuple:
@@ -365,7 +365,7 @@ class Validation():
         if self.check_user_created_parcel(user_id, parcel_id)!=True:
             return jsonify({
                 'message' : 'You did not create the parcel'
-            })
+            }), 403
             
         updated_fields = self.database.change_status('destination', destination, parcel_id)
         if not updated_fields:
