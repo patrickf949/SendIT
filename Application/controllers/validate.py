@@ -18,7 +18,11 @@ class Validation():
 
 
     def validate_signup(self, data, admin=False):
-
+        """
+        Validate user details during signup
+        params: user information(dict)
+        returns: tuple (json, status code)
+        """
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
