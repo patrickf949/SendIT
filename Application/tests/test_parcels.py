@@ -22,26 +22,11 @@ class TestSendIT(unittest.TestCase):
         self.table_drop = Database(self.env.dbname)
         self.usertoken=''
         self.admintoken=''
+        self.user_logsin()
     
     
     def test_istestdata_instance(self):
         assert isinstance(self.testdata, TestData)
-
-
-    def change_session(self, token):
-        """
-        Set the authorization header
-        """
-        request.headers.set('Authorisation',f'Bearer {token}')
-        
-
-    def auser_signup(self, email, password):
-        response = self.test_client.post(
-            'api/v2/auth/signup',
-            data=json.dumps(self.testdata.valid_admin_signup),
-        content_type='application/json')
-        message = response.get_json()
-        self.assertEqual(message.status_code,200)
         
     
     def test_get_all_parcels(self):
@@ -122,6 +107,16 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+    def user_logsin(self):
+        response = self.test_client.post(
+            '/api/v2/auth/login',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_user_login)
+        )
+        message = response.get_json()
+        # print(message)
+        self.usertoken = message['Access_token']
+        self.assertEqual(response.status_code, 200)
 
     def test_auser_login(self):
         
@@ -131,7 +126,7 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.valid_user_login)
         )
         message = response.get_json()
-        print(message)
+        # print(message)
         self.usertoken = message['Access_token']
         self.assertEqual(response.status_code, 200)
         self.assertEqual(message.get('message'), 'Hello TestUser you are logged into SendIT')
@@ -140,23 +135,25 @@ class TestSendIT(unittest.TestCase):
 
     def test_valid_parcel_addition(self):
         # self.change_session(self.usertoken)
+        print(self.usertoken)
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.valid_parcel)
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         
         message = response.get_json()
-        self.assertEqual(message.get('msg'),'Missing Authorization Header')
+        
+        self.assertEqual(response.status_code,200)
 
-        self.assertEqual(response.status_code,401)
 
-    
     def test_invalid_parcel_addition(self):
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.invalid_parcel_less_params)
+            data=json.dumps(self.testdata.invalid_parcel_less_params),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         # message = response.get_json()
         self.assertEqual(response.status_code, 401)
@@ -166,7 +163,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.invalid_recipient_parcel)
+            data=json.dumps(self.testdata.invalid_recipient_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code, 401)
     
@@ -176,7 +174,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.invalid_recipient_parcel)
+            data=json.dumps(self.testdata.invalid_recipient_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
     
@@ -186,7 +185,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.invalid_parcel_less_params)
+            data=json.dumps(self.testdata.invalid_parcel_less_params),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
     
@@ -196,7 +196,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.post(
             '/api/v2/parcels',
             content_type='application/json',
-            data=json.dumps(self.testdata.empty)
+            data=json.dumps(self.testdata.empty),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -204,7 +205,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.put(
             '/api/v2/parcels/1/destination',
             content_type='application/json',
-            data=json.dumps(self.testdata.empty)
+            data=json.dumps(self.testdata.empty),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
     
@@ -212,7 +214,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.put(
             '/api/v2/parcels/1/destination',
             content_type='application/json',
-            data=json.dumps(self.testdata.valid_parcel)
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -220,7 +223,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.put(
             '/api/v2/parcels/1/destination',
             content_type='application/json',
-            data=json.dumps(self.testdata.invalid_parcel_less_params)
+            data=json.dumps(self.testdata.invalid_parcel_less_params),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -230,7 +234,8 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.put(
             '/api/v2/parcels/1/status',
             content_type='application/json',
-            data=json.dumps(self.testdata.valid_admin_login)
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
     
@@ -239,7 +244,9 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.put(
             '/api/v2/parcels/1/presentLocation',
             content_type='application/json',
-            data=json.dumps(self.testdata.valid_admin_login)
+            data=json.dumps(self.testdata.valid_admin_login),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+
         )
         self.assertEqual(response.status_code,401)
 
@@ -249,6 +256,7 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.get(
             '/api/v2/parcels/1/cancel',
             content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -258,6 +266,7 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.get(
             '/api/v2/parcels/43/cancel',
             content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
     
@@ -267,7 +276,8 @@ class TestSendIT(unittest.TestCase):
         
         response = self.test_client.get(
             '/api/v2/parcels/3',
-            content_type='application/json'
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -276,7 +286,8 @@ class TestSendIT(unittest.TestCase):
 
         response = self.test_client.get(
             '/api/v2/parcels/43',
-            content_type='application/json'
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -285,7 +296,8 @@ class TestSendIT(unittest.TestCase):
  
         response = self.test_client.get(
             '/api/v2/parcels/43',
-            content_type='application/json'
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         self.assertEqual(response.status_code,401)
 
@@ -293,7 +305,8 @@ class TestSendIT(unittest.TestCase):
 
         response = self.test_client.get(
             '/api/v2/users',
-            content_type='application/json'
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
         )
         message = response.get_json()
         self.assertEqual(message.get('msg'),'Missing Authorization Header')
