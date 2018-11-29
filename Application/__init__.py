@@ -1,5 +1,5 @@
 import datetime
-from flask import jsonify, Flask, request, Response
+from flask import jsonify, Flask, request, Response, render_template
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
@@ -38,7 +38,7 @@ def create_app(config):
                 "/api/v2/parcels/<int:parcelId>/presentLocation | PUT" : "Update the present location of a parcel delivery order",
                 "/api/v2/parcels/<int:parcelId>/status | PUT" : "Update the status of a parel delivery order's destination",
             }
-        ])
+        ]), 200
 
 
     @app.route("/api/v2/logout", methods=['POST'])
