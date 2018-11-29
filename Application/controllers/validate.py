@@ -249,7 +249,7 @@ class Validation():
         if not is_user_admin:
             return jsonify({
                 'Message': '@'+username+', you are not authorized to view this.'
-            }), 400
+            }), 403
         sql_command="""
         SELECT * FROM {};
         """.format(table)
@@ -257,7 +257,7 @@ class Validation():
         if not all_elements:
             return jsonify({
                 'Users':'No '+table+' in system'
-            }), 400
+            }), 404
         all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
             'All '+table+'': all_elements
@@ -298,7 +298,7 @@ class Validation():
         return jsonify({
             '@'+username : 'Here are our available weight categories',
             'Categories' : categories
-        })
+        }), 200
 
 
     def validate_change_present_location(self, username, parcel_id ,data):
