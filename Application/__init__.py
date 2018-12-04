@@ -4,6 +4,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
     )
+from flask_cors import CORS
 from Application.controllers.validate import Validation
 
 
@@ -16,6 +17,8 @@ def create_app(config):
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
     Validation.dbname = config.dbname
+
+    CORS(app)
     jwt = JWTManager(app)
     blacklist = set()
 
