@@ -87,7 +87,7 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.valid_user_signup)
         )
         
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
     
     def test_user_signup_invalid_params(self):
 
@@ -145,7 +145,7 @@ class TestSendIT(unittest.TestCase):
         
         message = response.get_json()
         
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code,201)
 
 
     def test_invalid_parcel_addition(self):
@@ -188,7 +188,9 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.invalid_parcel_less_params),
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
-        self.assertEqual(response.status_code,401)
+        message = response.get_json()
+        self.assertEqual(message['Message'], 'Some sht')
+        self.assertEqual(response.status_code,403)
     
     
     def test_parcel_addition_empty(self):
@@ -210,14 +212,14 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,401)
     
-    def test_parcel_update_valid(self):
+    def test_parcel_update_invalid_user(self):
         response = self.test_client.put(
             '/api/v2/parcels/1/destination',
             content_type='application/json',
             data=json.dumps(self.testdata.valid_parcel),
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
-        self.assertEqual(response.status_code,401)
+        self.assertEqual(response.status_code,403)
 
     def test_parcel_update_lessparams(self):
         response = self.test_client.put(
@@ -229,7 +231,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,401)
 
 
-    def test_parcel_update_passuserdetails(self):
+    def test_parcel_update_status(self):
 
         response = self.test_client.put(
             '/api/v2/parcels/1/status',
@@ -237,9 +239,11 @@ class TestSendIT(unittest.TestCase):
             data=json.dumps(self.testdata.valid_parcel),
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
+        message = response.get_json()
+        self.assertEqual(message['Message'],'Invalid user')
         self.assertEqual(response.status_code,401)
     
-    def test_parcel_update_presentlocation(self):
+    def test_parcel_update_presentlocation_invalid_data(self):
 
         response = self.test_client.put(
             '/api/v2/parcels/1/presentLocation',
@@ -248,7 +252,7 @@ class TestSendIT(unittest.TestCase):
             headers={"Authorization":f"Bearer {self.usertoken}"}
 
         )
-        self.assertEqual(response.status_code,401)
+        self.assertEqual(response.status_code,400)
 
     @pytest.mark.skip(reason="no way of currently testing this")
     def test_cancel_parcel_delivery_order(self):
