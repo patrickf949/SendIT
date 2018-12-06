@@ -26,14 +26,13 @@ function signUp(){
         .then(data => {
             if(data.message === "hello! "+username+" Your Account has been created. Please login"){
                 alert(data.message);
-                focusLogin();
+
             }else{
                 reply = data.message;
                 document.getElementById("api_reply").innerHTML = reply;
             }
         }).catch(error => {
             console.log(error);
-            handleError(error);
         })
 
     
