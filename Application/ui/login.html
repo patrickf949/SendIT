@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body background="assets/images/ba.jpg">
 	<div class="alldivs">
@@ -25,9 +26,9 @@
 			<form action="dashboard.html">
 			<div>
 				<h3>
-					Email: 
+					Username: 
 				</h3>					
-				<input type="email" name="email" required>
+				<input type="text" name="username" required>
 			</div>
 			<div>
 				<h3>
@@ -36,19 +37,10 @@
 				<input type="password" name="password" required>
 			</div>
 			<div class="buttons">
-				<button>Login</button>
+				<button onclick="login(); result">Login</button>
 				</form>
 				
 			</div>
-			<div>
-				<a href="admin_dashboard.html">
-				<button>Login As Admin</button>
-				</a>
-
-			</div>
-			
-			
-			
 			<div>
 				<a href="signup.html">
 					<button >Sign Up</button>
