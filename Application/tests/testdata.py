@@ -46,12 +46,6 @@ class TestData():
         "destination":"Aweber Clicks international"
 
     }
-    valid_admin_signup={
-        "username":"Andrew",
-        "email":"andrew@gmail.com",
-        "contact":"0758688174",
-        "password":"andyfofofo"
-    }
     invalid_admin_signup={
         "username":"bumbelidaha",
         "books":"na"
@@ -75,8 +69,3 @@ class TestData():
         "username":"TestUser",
         "password":"ddwoNot2114"
     }
-    invalid_user_login={
-        "email":"kwage@gmail.com",
-        "password":"andyfofofo"
-    }
-    

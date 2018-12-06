@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -20,42 +21,55 @@
 		</div>
 		
 		<div class="logindiv">
-			<form action="dashboard.html">
+			<form>
 			<div>&nbsp</div>
+			<div id="api_reply">
+				
+			</div>
 			<div>
 				<h3>
 					Username:
 				</h3>			
-				<input type="text" name="username" required>
+				<input type="text" name="username" id="username" required>
 			</div>
-			<div>
+			<!-- <div>
 				<h3>
 					First Name: 
 				</h3>		
-				<input type="text" name="first" required>
+				<input type="text" name="first" id="first_name" required>
 			</div>
 			<div>
 				<h3>
 					Other Names:
 				</h3>					
-				<input type="text" name="others" required>
+				<input type="text" name="others" id="other_names" required>
+			</div> -->
+			<div>
+				<h3>
+					Contact: 
+				</h3>					
+				<input type="number" name="Contact" id="contact" required>
 			</div>
 			<div>
 				<h3>
 					Email: 
 				</h3>					
-				<input type="email" name="email" required>
+				<input type="email" name="email" id="email" required>
 			</div>
 			<div>
 				<h3>
 					Password: 
 				</h3>
-				<input type="password" name="password" required>
+				<input type="password" name="password" id="password" required>
 			</div>
 			<div>
-				<button>Sign Up</button>
+				<button onclick="signUp();">Sign Up</button>
 			</div>
 		</form>
+			<div>
+				<a href="login.html">
+					<button>Log In</button>
+				</a>
 				<a href="index.html"><button>Cancel</button></a>
 			</div>
 		</div>			

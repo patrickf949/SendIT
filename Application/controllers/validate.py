@@ -93,7 +93,7 @@ class Validation():
         if userdont_exist!=True:
             check_password = self.database.validate_password(username,password)
             return check_password
-        return jsonify({'message':'Non existent user, please sign up'}), 401
+        return jsonify({'message':'Non existent user, please sign up'}), 400
 
 
 
