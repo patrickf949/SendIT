@@ -23,24 +23,26 @@
 		<div class="logindiv">
 			
 			<div>&nbsp</div>
-			<form action="dashboard.html">
-			<div>
-				<h3>
-					Username: 
-				</h3>					
-				<input type="text" name="username" required>
-			</div>
-			<div>
-				<h3>
-					Password: 
-				</h3>
-				<input type="password" name="password" required>
-			</div>
-			<div class="buttons">
-				<button onclick="login(); result">Login</button>
-				</form>
-				
-			</div>
+			<form>
+				<div id="api_reply">
+					
+				</div>
+				<div>
+					<h3>
+						Username: 
+					</h3>					
+					<input type="text" name="username" id="username" required>
+				</div>
+				<div>
+					<h3>
+						Password: 
+					</h3>
+					<input type="password" name="password" id="password" required>
+				</div>
+				<div>
+					<button onclick="loginUser();">Login</button>				
+				</div>
+			</form>
 			<div>
 				<a href="signup.html">
 					<button >Sign Up</button>

@@ -10,8 +10,8 @@
 	margin-top: 5px;
 }
 html {
-  /* background: url(assets/images/ba.jpg); */
-  background-size: 300px 100px; 
+  background: url(../images/ba.jpg);
+ 
 }
 .left img{
 	width: 20px;
@@ -26,7 +26,6 @@ html {
 	position: fixed;
 	    left: 0;
 	    top: 0;
-	/*border-bottom-color: rgb(0,0,139)*/
 }
 
 .right{
