@@ -84,11 +84,16 @@ def create_app(config):
                 identity=username, 
                 expires_delta=datetime.timedelta(days=1)
             )
-            response = jsonify({'login':True})
+
+            if not response.is_admin(username):
+                return jsonify({
+                    'message':'Hello '+username+' you are logged into SendIT',
+                    'Access_token':access_token
+                    }), 200
             return jsonify({
-                'message':'Hello '+username+' you are logged into SendIT',
-                'Access_token':access_token
-                }), 200
+                    'message':'Hello '+username+' you are logged into SendIT as admin',
+                    'Access_token':access_token
+                    }), 200
         return logged_in
 
     from Application.views import parcels_view
