@@ -1,20 +1,24 @@
 import datetime
-from flask import jsonify, Flask, request
+from flask import jsonify, Flask, request, Response, render_template
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity, get_raw_jwt
     )
+from flask_cors import CORS
 from Application.controllers.validate import Validation
 
 
 def create_app(config):
 
     app = Flask(__name__)
+    app.config.from_object(config)
     app.config['JWT_SECRET_KEY'] = 'Don-t-you-test-125'
     app.config['JWT_BLACKLIST_ENABLED'] = True
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+
     Validation.dbname = config.dbname
 
+    CORS(app)
     jwt = JWTManager(app)
     blacklist = set()
 
@@ -37,7 +41,7 @@ def create_app(config):
                 "/api/v2/parcels/<int:parcelId>/presentLocation | PUT" : "Update the present location of a parcel delivery order",
                 "/api/v2/parcels/<int:parcelId>/status | PUT" : "Update the status of a parel delivery order's destination",
             }
-        ])
+        ]), 200
 
 
     @app.route("/api/v2/logout", methods=['POST'])
@@ -67,12 +71,15 @@ def create_app(config):
 
     @app.route('/api/v2/auth/login', methods=['POST'])
     def login():
+        """
+        User logsin
+        """
         response = Validation()
         data = request.get_json()
         logged_in = response.validate_user_login(data)
         if logged_in == True:
             username = data.get('username')
-            is_admin = response.is_admin(username)
+            
             access_token = create_access_token(
                 identity=username, 
                 expires_delta=datetime.timedelta(days=1)

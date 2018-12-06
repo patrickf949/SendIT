@@ -18,7 +18,11 @@ class Validation():
 
 
     def validate_signup(self, data, admin=False):
-
+        """
+        Validate user details during signup
+        params: user information(dict)
+        returns: tuple (json, status code)
+        """
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
@@ -42,7 +46,7 @@ class Validation():
         self.database.add_user(user)
         return jsonify({
             'message': 'hello! '+user['username']+' Your Account has been created. Please login',
-        }), 200
+        }), 201
 
 
 
@@ -89,7 +93,7 @@ class Validation():
         if userdont_exist!=True:
             check_password = self.database.validate_password(username,password)
             return check_password
-        return jsonify({'message':'Non existent user, please sign up'}), 400
+        return jsonify({'message':'Non existent user, please sign up'}), 401
 
 
 
@@ -118,7 +122,7 @@ class Validation():
             if not user_id1 or user_id1!=user_id:
                 return jsonify({
                     'Message' : '@'+username+' You have no authorization.'
-                }), 400
+                }), 403
         return self.get_parcels_by_user_id(user_id)
     
     def get_parcels_by_user_id(self,user_id):
@@ -132,7 +136,7 @@ class Validation():
         if not rows:
             return jsonify({
                 'Message': 'no parcel delivery orders from specified user'
-            }), 400
+            }), 404
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
@@ -162,7 +166,7 @@ class Validation():
         if invalid_user == True:
             return jsonify({
                 'Message':'@'+username+' Lets make things official. Please signup'
-            }), 400
+            }), 401
 
         for key,value in temp_parcel.items():
             if type(value)!=str:
@@ -183,7 +187,7 @@ class Validation():
             return jsonify({
                 'message' : 'hello! '+username+' Your Parcel Delivery order has been placed',
                 'Parcel': added_parcel
-            }), 200
+            }), 201
         
         return jsonify({
             'message' : '@'+username+' your parcel has not been added'
@@ -235,7 +239,7 @@ class Validation():
         if not user_id:
             return jsonify({
                 'Message' : '@'+username+' lets make things official. Sign up with send it'
-            }), 400
+            }), 401
         return user_id
 
     def validate_get_all_users(self,username):
@@ -249,7 +253,7 @@ class Validation():
         if not is_user_admin:
             return jsonify({
                 'Message': '@'+username+', you are not authorized to view this.'
-            }), 400
+            }), 403
         sql_command="""
         SELECT * FROM {};
         """.format(table)
@@ -257,7 +261,7 @@ class Validation():
         if not all_elements:
             return jsonify({
                 'Users':'No '+table+' in system'
-            }), 400
+            }), 404
         all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
             'All '+table+'': all_elements
@@ -280,7 +284,7 @@ class Validation():
         if id_exists == False:
             return jsonify({
                 'message' : 'Invalid parcel'
-            }), 400
+            }), 404
 
         return True
 
@@ -298,7 +302,7 @@ class Validation():
         return jsonify({
             '@'+username : 'Here are our available weight categories',
             'Categories' : categories
-        })
+        }), 200
 
 
     def validate_change_present_location(self, username, parcel_id ,data):
@@ -315,7 +319,7 @@ class Validation():
         if self.is_admin(username)!=True:
             return jsonify({
                 'message':'@'+username+' You are not authorized to do this'
-            }), 400
+            }), 403
         column_data = data.get(column)
         if not column_data or column_data.isspace():
             return jsonify({
@@ -335,7 +339,7 @@ class Validation():
         return jsonify({
             'Message' : 'Update successful',
             'Updated fields' : updated_fields
-        })
+        }), 200
 
 
     def validate_change_status(self, username, parcel_id, data):
@@ -347,7 +351,7 @@ class Validation():
             return self.update_parcel_by_admin(username, parcel_id, data, 'status')
         return jsonify({
             'Message' : 'Status has to be pending, or in transit, or canceled, or delivered'
-        }), 200
+        }), 400
 
 
     def validate_change_destination(self,username,parcel_id, data):
@@ -357,7 +361,7 @@ class Validation():
         destination = data.get('destination')
         if not destination or destination.isspace():
             return jsonify({
-                'Messsage' : ''
+                'Messsage' : 'Destination has to be a sequence of characters and cannot be a blank space'
         }), 400
         user_id = self.get_user_id(username)
         if type(user_id)==tuple:
@@ -365,7 +369,7 @@ class Validation():
         if self.check_user_created_parcel(user_id, parcel_id)!=True:
             return jsonify({
                 'message' : 'You did not create the parcel'
-            })
+            }), 403
             
         updated_fields = self.database.change_status('destination', destination, parcel_id)
         if not updated_fields:

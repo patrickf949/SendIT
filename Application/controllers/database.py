@@ -118,6 +118,8 @@ class Database():
         sql_command = """
         INSERT INTO users (username,email,contact,password,date_created,admin) 
         values ('Admin1','i-sendit@gmail.com','07888392838','doNot2114',now(),'t');
+        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        values ('TestUser','meKendit@gmail.com','07888392838','ddwoNot2114',now(),'t');
         """
         sql_command1 = """
         SELECT EXISTS(SELECT TRUE FROM users where admin='true');

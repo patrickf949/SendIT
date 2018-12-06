@@ -12,7 +12,7 @@ before_script:
 script:
   - pytest -v
   - pytest --cov
-  - python3 -m pytest --cov Application.views --cov-report term-missing
+  - python3 -m pytest --cov Application --cov-report term-missing
 
 after_success:
   - coveralls
