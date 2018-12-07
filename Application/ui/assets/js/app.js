@@ -48,7 +48,8 @@ function loginUser(){
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"POST"
         },
         body:JSON.stringify(userdetails)
     })

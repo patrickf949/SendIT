@@ -12,7 +12,7 @@ class Database():
     Handle database connections
     """
     
-    def __init__(self, dbname='senditdb'):
+    def __init__(self,hostname,dbname='senditdb'):
         """
         initialise database connection
         """
