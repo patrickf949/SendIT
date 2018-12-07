@@ -5,7 +5,7 @@ Congigure different environments
 import os
 class Config():
     DEBUG = False
-    dbname = 'senditdb'
+    dbname = 'dd63hj5clrnj1s'
 
 class DevelopmentConfig(Config):
     DEBUG =  True

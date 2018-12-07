@@ -17,11 +17,11 @@ class Database():
         initialise database connection
         """
         credentials = """
-        user='senditdb'
+        user='mqqwsehaxujqpe'
         dbname={}
-        password='s3ndIt2m3'
+        password='60047dace9902c69d34dbc380525f9551a34d17442f648a37ccc253d760cb5e2'
         port=5432
-        host='localhost'
+        host='ec2-54-225-196-122.compute-1.amazonaws.com'
         """.format(dbname)
 
         connection = psycopg2.connect(credentials)
