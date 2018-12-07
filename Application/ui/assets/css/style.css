@@ -91,7 +91,7 @@ a{
 	text-align: left;
 	margin-top: 10px
 }
-.table{
+table{
 	width: 90%;
 	margin: auto;
 }
@@ -244,6 +244,9 @@ option{
 
 @media only screen and (max-width: 650px){
 
+	.right div{
+		width: 100px
+	}
 	.logindiv{
 		width: 80%
 	}
@@ -253,22 +256,14 @@ option{
 	.right{
 		width: 70%;
 	}
-	.not{
-		visibility:hidden;
-		display: none;
-	}
-	.status{
-		
-	}
 
 	.right div{
 		width: 100px
 	}
-
 }
 
 @media (max-resolution: 1dppx) and (max-width: 500px) {
-		.logindiv{
+	.logindiv{
 		width: 80%
 	}
 	.left{
