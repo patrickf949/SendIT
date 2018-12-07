@@ -1,4 +1,6 @@
-function signUp(){
+function signUp(event){
+
+    event.preventDefault()
     let username = document.getElementById("username").value;
     let email = String(document.getElementById("email").value);
     let contact = String(document.getElementById("contact").value);
@@ -11,7 +13,7 @@ function signUp(){
         "password":password
     }
 
-    fetch('http://127.0.0.1:5000/api/v2/auth/signup',{
+    fetch('http://i-sendit.herokuapp.com//api/v2/auth/signup',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -21,11 +23,12 @@ function signUp(){
     })
     .then(response => response.json())
     .then(data => {
+        reply = data.message;
         if(data.message === "hello! "+username+" Your Account has been created. Please login"){
             
             document.getElementById("api_reply").innerHTML = reply;
         }else{
-            reply = data.message;
+            
             document.getElementById("api_reply").innerHTML = reply;
         }
     }).catch(error => {
@@ -35,7 +38,8 @@ function signUp(){
     
 }
 
-function loginUser(){
+function loginUser(event){
+    event.preventDefault()
     let username = document.getElementById("username").value;
     let password = String(document.getElementById("password").value);
 
@@ -44,7 +48,7 @@ function loginUser(){
         "password":password
     }
 
-    fetch('http://127.0.0.1:5000/api/v2/auth/login',{
+    fetch('http://i-sendit.herokuapp.com/api/v2/auth/login',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -55,7 +59,7 @@ function loginUser(){
     })
     .then(response => response.json())
     .then(data => {
-        if(data.message === "hello! "+username+" You Account has been created. Please login"){
+        if(data.message === "hello! "+username+" You have "){
 
             document.getElementById("api_reply").innerHTML = reply;
         }else{
