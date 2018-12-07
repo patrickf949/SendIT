@@ -21,7 +21,6 @@ def create_app(config):
     CORS(app)
     jwt = JWTManager(app)
     blacklist = set()
-
     @app.route("/")
     def kingslanding():
         return jsonify([
@@ -43,6 +42,7 @@ def create_app(config):
             }
         ]), 200
 
+    
 
     @app.route("/api/v2/logout", methods=['POST'])
     @jwt_required
@@ -62,41 +62,9 @@ def create_app(config):
         return unique_identifier in blacklist
 
 
-    @app.route('/api/v2/auth/signup', methods=['POST'])
-    def signup():
-        data = request.get_json()
-        response = Validation()
-        return response.validate_signup(data)
+    from Application.views import parcels_view,users_view
 
-
-    @app.route('/api/v2/auth/login', methods=['POST'])
-    def login():
-        """
-        User logsin
-        """
-        response = Validation()
-        data = request.get_json()
-        logged_in = response.validate_user_login(data)
-        if logged_in == True:
-            username = data.get('username')
-            
-            access_token = create_access_token(
-                identity=username, 
-                expires_delta=datetime.timedelta(days=1)
-            )
-
-            if not response.is_admin(username):
-                return jsonify({
-                    'message':'Hello '+username+' you are logged into SendIT',
-                    'Access_token':access_token
-                    }), 200
-            return jsonify({
-                    'message':'Hello '+username+' you are logged into SendIT as admin',
-                    'Access_token':access_token
-                    }), 200
-        return logged_in
-
-    from Application.views import parcels_view
     app.register_blueprint(parcels_view.blue_print)
+    app.register_blueprint(users_view.blue_print)
 
     return app
