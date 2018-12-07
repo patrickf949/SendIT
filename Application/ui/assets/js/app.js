@@ -59,7 +59,7 @@ function loginUser(event){
     })
     .then(response => response.json())
     .then(data => {
-        if(data.message === "hello! "+username+" You have "){
+        if(data.message === "hello! "+username+" You are successfully logged into Sendit"){
 
             document.getElementById("api_reply").innerHTML = reply;
         }else{
