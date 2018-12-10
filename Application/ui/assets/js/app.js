@@ -194,7 +194,7 @@ function updateParcel(event){
     
 }
 
-function viewParcels(event){
+function viewParcelsUser(event){
     event.preventDefault()
     
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
@@ -211,24 +211,78 @@ function viewParcels(event){
         reply = data.message;
         if(data.message.includes("all available")===true){
             document.getElementById("api_reply").innerHTML = reply;
-            let no = 0
-            let parcels = ''
+            let no = 0;
+            let allparcels = '';
             data.parcels.forEach(parcel => {
-                no++
-                parcels += `
+                no++;
+                allparcels += `
                 <tr onclick="viewParcel(event,parcelId)" class="${color}">			
                             <td>${no}</td>
+                            <td>${parcel.parcel_description}</td>
                             <td>${parcel.recipient}</td>
                             <td>${parcel.price}</td>
                             <td>${parcel.status}</td>		
-                            <td>${parcel.parcel_id}</td>
-                            <td><button>Edit/view</button></td>
+                            <td><button onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
                 </tr>
                 `
             });
             
             
-            document.getElementById("tbody").innerHTML = parceldata;
+            document.getElementById("tbody").innerHTML = allparcels;
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply;
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })  
+    
+}
+
+function viewParcelsAdmin(event){
+    event.preventDefault()
+    
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        if(data.message.includes("all available")===true){
+            document.getElementById("api_reply").innerHTML = reply;
+            let no = 0;
+            let allparcels = '';
+            data.parcels.forEach(parcel => {
+                no++;
+                allparcels += `
+                <tr onclick="viewParcel(event,parcelId)" class="${color}">			                      
+                            
+                        <td>${no}</td>
+						<td class="not">${parcel.recipient}</td>
+						<td>${parcel.parcel_description}</td>
+						<td class="not">${parcel.pickup_location}</td>
+						<td>${parcel.destination}</td>
+						<td>${parcel.current_location}</td>
+						<td class="not">${parcel.price}</td><td class="not">2</td>		
+                        <td class="status">${parcel.status}</td>
+                        
+                        <td><button onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
+					</tr>
+					
+				</tbody>
+                </tr>
+                `
+            });
+            
+            
+            document.getElementById("tbody").innerHTML = allparcels;
        
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -242,6 +296,8 @@ function viewParcels(event){
 
 function viewParcel(event,parcel_id){
     event.preventDefault();
+
+
 }
 
 function openTable(event){
