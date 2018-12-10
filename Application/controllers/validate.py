@@ -136,7 +136,7 @@ class Validation():
         rows = self.database.execute_query(sql_command)
         if not rows:
             return jsonify({
-                'Message': 'no parcel delivery orders from specified user'
+                'message': 'no parcel delivery orders from specified user'
             }), 404
         rows = self.tostring_for_date_time(rows)
 

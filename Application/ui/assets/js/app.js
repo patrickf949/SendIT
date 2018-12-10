@@ -99,6 +99,8 @@ function logout(event){
     .then(response => response.json())
     .then(data => {
         localStorage.setItem("usertoken","");
+        location.href = "index.html"
+
     }).catch(error => {
         console.log(error);
     })
@@ -207,7 +209,7 @@ function viewParcels(event){
     .then(response => response.json())
     .then(data => {
         reply = data.message;
-        if(data.message.includes("")===true){
+        if(data.message.includes("all available")===true){
             document.getElementById("api_reply").innerHTML = reply;
             
             location.href = "dashboard.html"
