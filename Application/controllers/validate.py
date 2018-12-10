@@ -216,8 +216,7 @@ class Validation():
 
         
         exists = self.check_if_parcel_id_exists(parcel_id)
-        if exists!=True:
-            return exists
+        
         sql_command = """
         SELECT * FROM parcels where parcel_id={};
         """.format(parcel_id)
