@@ -300,7 +300,7 @@ class TestSendIT(unittest.TestCase):
     def test_get_invalid_parcel_by_id(self):
 
         response = self.test_client.get(
-            '/api/v2/parcels/43',
+            '/api/v2/parcels/431211',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.admintoken}"}
         )
