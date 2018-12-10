@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -20,45 +21,58 @@
 		</div>
 		
 		<div class="logindiv">
-			<form action="dashboard.html">
+			<form method="POST">
 			<div>&nbsp</div>
+			<div id="api_reply">
+
+			</div>
 			<div>
 				<h3>
 					Parcel Description:
 				</h3>			
-				<input type="text" name="product" required>
+				<input type="text" name="product" id="parcel" required>
 			</div>
 			<div>
 				<h3>
 					Recipient:
 				</h3>		
-				<input type="text" name="name" required>
+				<input type="text" name="name" id="recipient" required>
 			</div>
 			<div>
 				<h3>
 					Recipient Contact:
 				</h3>					
-				<input type="number" name="ontact" required>
+				<input type="number" name="contact" id="contact" required>
 			</div>
 			<div>
 				<h3>
 					Pick Up Location: 
 				</h3>					
-				<input type="Location" name="location" required>
+				<input type="text" name="location" id="pickuplocation" required>
 			</div>
 			<div>
 				<h3>
 					Destination: 
 				</h3>
-				<input type="password" name="password" required>
+				<input type="text" name="destination" id="destination" required>
 			</div>
 			<div>
-				<button>Create Order</button>
+				<button type="button" onclick="addParcel(event)">Create Order</button>
 				</div>
 			</form>
 			<a href="dashboard.html">
 				<button>Cancel</button>
 			</a>
+		</div>
+		<div class="footer">
+		
+			<div class="stats">
+				<span>TOTAL orders:&nbsp;</span>
+				<span id="total_orders_for_client">14&nbsp;</span>
+				<span>Delivered:&nbsp;</span>
+				<span class="total_delivered_for_client">0</span>
+			</div>
+			
 		</div>			
 	</div>
 </body>
