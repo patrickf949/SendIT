@@ -141,7 +141,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
-            'parcels by user' : rows
+            'parcels' : rows
         }), 200
 
     
@@ -266,12 +266,12 @@ class Validation():
         if not all_elements:
             return jsonify({
                 'message':'@'+username+' nada in this',
-                'Users':'No '+table+' in system'
+                table:'No '+table+' in system'
             }), 404
         all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
             'message' : '@'+username+' all available',
-            'All '+table+'': all_elements
+            table : all_elements
             }), 200
 
 
