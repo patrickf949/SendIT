@@ -194,6 +194,7 @@ function updateParcel(event){
 
 function viewParcels(event){
     event.preventDefault()
+    
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
         headers:{
@@ -201,13 +202,12 @@ function viewParcels(event){
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"GET",
             "Authorization":"Bearer "+localStorage.getItem("usertoken")
-        },
-        body:JSON.stringify(parcel_description)
+        }
     })
     .then(response => response.json())
     .then(data => {
         reply = data.message;
-        if(data.message.includes("Your Parcel Delivery order has been placed")===true){
+        if(data.message.includes("")===true){
             document.getElementById("api_reply").innerHTML = reply;
             
             location.href = "dashboard.html"
@@ -224,8 +224,10 @@ function viewParcels(event){
 
 function viewParcel(event,parcel_id){
     event.preventDefault();
-    document.getElementsByClassName(parcel_id).style.display='block'
-    
+}
+
+function openTable(event){
+    document.getElementsByClassName("client_table").style.display='block'
 }
 
 function viewUsers(event){

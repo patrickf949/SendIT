@@ -141,6 +141,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
+            'message':'@'+username+' all available',
             'parcels' : rows
         }), 200
 
