@@ -8,4 +8,4 @@ Config = app_config['production']
 APP = create_app(Config)
 
 if __name__ == '__main__':
-    APP.run(debug=True)
+    APP.run(debug=Config.DEBUG)

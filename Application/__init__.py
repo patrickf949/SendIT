@@ -17,6 +17,7 @@ def create_app(config):
     app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
     Validation.dbname = config.dbname
+    Validation.hostname = config.hostname
 
     CORS(app)
     jwt = JWTManager(app)

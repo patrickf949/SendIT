@@ -19,7 +19,7 @@ class TestSendIT(unittest.TestCase):
   
         Database.dbname = self.env.dbname
         self.testdata = TestData()
-        self.table_drop = Database(self.env.dbname)
+        self.table_drop = Database(self.env.hostname,self.env.dbname)
         self.admintoken = self.user_logsin(self.testdata.valid_admin_login)
         self.usertoken = self.user_logsin(self.testdata.valid_user_login)
         self.user_adds_parcel(self.usertoken)
