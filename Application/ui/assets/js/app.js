@@ -182,7 +182,7 @@ function updateParcel(event){
         reply = data.message;
         if(data.message.includes("Your Parcel Delivery order has been placed")===true){
             document.getElementById("api_reply").innerHTML = reply;
-            location.href = "dashboard.html"
+            
        
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -211,13 +211,29 @@ function viewParcels(event){
         reply = data.message;
         if(data.message.includes("all available")===true){
             document.getElementById("api_reply").innerHTML = reply;
+            let no = 0
+            let parcels = ''
+            data.parcels.forEach(parcel => {
+                no++
+                parcels += `
+                <tr onclick="viewParcel(event,parcelId)" class="${color}">			
+                            <td>${no}</td>
+                            <td>${parcel.recipient}</td>
+                            <td>${parcel.price}</td>
+                            <td>${parcel.status}</td>		
+                            <td>${parcel.parcel_id}</td>
+                            <td><button>Edit/view</button></td>
+                </tr>
+                `
+            });
             
-            location.href = "dashboard.html"
+            
+            document.getElementById("tbody").innerHTML = parceldata;
        
         }else{
             document.getElementById("api_reply").innerHTML = reply;
         }
-        // document.getElementById("api_reply").innerHTML = reply;
+        
     }).catch(error => {
         console.log(error);
     })  
