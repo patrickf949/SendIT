@@ -32,11 +32,8 @@
 			</div>
 			
 			<div>
-				<button>Mark as Pending</button>
-				<button>Unmark</button>
-				<button>Delete Selected</button>
-				<button>Delete all</button>
-
+				<button type="button" onclick="view">View All Users</button>
+				<button>View All Parcels</button>
 			</div>
 			<hr>
 			<table>
@@ -55,7 +52,7 @@
 				</thead>
 
 				<tbody>
-					<tr onclick="window.location='admin_edit_parcel.html'" class="light">
+					<tr onclick="viewParcel(event,)" class="light">
 						<td>1</td>
 						<td class="not">Andy</td>
 						<td>Books</td>

@@ -149,14 +149,84 @@ function addParcel(event){
 
 }
 
-function updateParcel(){
+function updateParcel(event){
+    event.preventDefault()
+    let parcel = document.getElementById("parcel").value;
+    let recipient = String(document.getElementById("recipient").value);
+    let contact = String(document.getElementById("contact").value);
+    let pickuplocation = String(document.getElementById("pickuplocation").value);
+    let destination = String(document.getElementById("destination").value);
+
+    let parcel_description = {
+        "parcel_description":parcel,
+        "recipient":recipient,
+        "contact":contact,
+        "pickup_location":pickuplocation,
+        "destination":destination
+    };
+
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'PUT',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"POST",
+            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+        },
+        body:JSON.stringify(parcel_description)
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        if(data.message.includes("Your Parcel Delivery order has been placed")===true){
+            document.getElementById("api_reply").innerHTML = reply;
+            location.href = "dashboard.html"
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply;
+        }
+        // document.getElementById("api_reply").innerHTML = reply;
+    }).catch(error => {
+        console.log(error);
+    })  
     
 }
 
-function viewParcels(){
+function viewParcels(event){
+    event.preventDefault()
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+        },
+        body:JSON.stringify(parcel_description)
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        if(data.message.includes("Your Parcel Delivery order has been placed")===true){
+            document.getElementById("api_reply").innerHTML = reply;
+            
+            location.href = "dashboard.html"
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply;
+        }
+        // document.getElementById("api_reply").innerHTML = reply;
+    }).catch(error => {
+        console.log(error);
+    })  
     
 }
 
-function viewParcel(){
+function viewParcel(event,){
+    event.preventDefault();
+    document.getElementsByClassName("client_table").style.display='block'
+}
+
+function viewUsers(event){
 
 }

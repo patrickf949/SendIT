@@ -96,7 +96,7 @@ table{
 	margin: auto;
 }
 .client_table{
-
+	display: none
 }
 .buttons{
 	text-align: center;
