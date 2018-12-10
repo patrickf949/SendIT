@@ -114,14 +114,13 @@ function addParcel(event){
     let pickuplocation = String(document.getElementById("pickuplocation").value);
     let destination = String(document.getElementById("destination").value);
 
-
-    let parceldetails = {
+    let parcel_description = {
         "parcel_description":parcel,
         "recipient":recipient,
         "contact":contact,
         "pickup_location":pickuplocation,
         "destination":destination
-    }
+    };
 
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'POST',
@@ -131,14 +130,14 @@ function addParcel(event){
             "Access-Control-Allow-Methods":"POST",
             "Authorization":"Bearer "+localStorage.getItem("usertoken")
         },
-        body:JSON.stringify(userdetails)
+        body:JSON.stringify(parcel_description)
     })
     .then(response => response.json())
     .then(data => {
         reply = data.message;
         if(data.message.includes("Your Parcel Delivery order has been placed")===true){
             document.getElementById("api_reply").innerHTML = reply;
-            // location.href = "dashboard.html"
+            location.href = "dashboard.html"
        
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -151,7 +150,7 @@ function addParcel(event){
 }
 
 function updateParcel(){
-
+    
 }
 
 function viewParcels(){
