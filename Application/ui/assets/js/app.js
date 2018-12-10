@@ -222,9 +222,10 @@ function viewParcels(event){
     
 }
 
-function viewParcel(event,){
+function viewParcel(event,parcel_id){
     event.preventDefault();
-    document.getElementsByClassName("client_table").style.display='block'
+    document.getElementsByClassName(parcel_id).style.display='block'
+    
 }
 
 function viewUsers(event){
