@@ -154,7 +154,7 @@ function updateParcel(){
 }
 
 function viewParcels(){
-
+    
 }
 
 function viewParcel(){
