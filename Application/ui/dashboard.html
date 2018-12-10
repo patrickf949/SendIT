@@ -5,6 +5,7 @@
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -28,7 +29,7 @@
 				<p>To Create a new parcel delivery order click the button below</p>
 				<a href="add_parcel.html">
 				<button>Create an Order</button></a>
-				<button onclick="viewParcels">View All Orders</button>
+				<button type="button" onclick="viewParcels(event)">View All Orders</button>
 				<p>Take a look at your parcel delivery orders</p>
 				<p>Click individual parcel delivery orders to view their current location and/ or edit them</p>
 			</div>
