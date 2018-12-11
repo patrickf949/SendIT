@@ -63,14 +63,16 @@ function loginUser(event){
         reply = data.message;
         if(data.message === "Hello "+username+" you are logged into SendIT as admin"){
             localStorage.setItem("usertoken",(data).Access_token);
-            Console.log(localStorage.getItem("usertoken"));
+            console.log(localStorage.getItem("usertoken"));
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "admin_dashboard.html";
+            closeTable();
             
         }else if(data.message === "Hello "+username+" you are logged into SendIT"){
             localStorage.setItem("usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "dashboard.html"
+            close(closeTable);
             
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -81,6 +83,9 @@ function loginUser(event){
     })
 
     
+}
+function closeTable(){
+    document.getElementById("client_table").style.display='none'
 }
 
 function logout(event){
@@ -209,8 +214,9 @@ function viewParcelsUser(event){
     .then(response => response.json())
     .then(data => {
         reply = data.message;
+        openTable(event);
         if(data.message.includes("all available")===true){
-            document.getElementById("api_reply").innerHTML = reply;
+            document.getElementById("api_reply").innerHTML = reply+"shut up";
             let no = 0;
             let allparcels = '';
             data.parcels.forEach(parcel => {
@@ -222,16 +228,16 @@ function viewParcelsUser(event){
                             <td>${parcel.recipient}</td>
                             <td>${parcel.price}</td>
                             <td>${parcel.status}</td>		
-                            <td><button onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
+                            <td><button type="button" onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
                 </tr>
                 `
             });
             
             
-            document.getElementById("tbody").innerHTML = allparcels;
+            document.querySelector("tbody").innerHTML = allparcels;
        
         }else{
-            document.getElementById("api_reply").innerHTML = reply;
+            document.getElementById("api_reply").innerHTML = reply+" NOt";
         }
         
     }).catch(error => {
@@ -241,7 +247,7 @@ function viewParcelsUser(event){
 }
 
 function viewParcelsAdmin(event){
-    event.preventDefault()
+    event.preventDefault();
     
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
@@ -255,31 +261,67 @@ function viewParcelsAdmin(event){
     .then(response => response.json())
     .then(data => {
         reply = data.message;
+        if((data).message.includes("all available")===true){
+            openTable();
+            document.getElementById("api_reply").innerHTML = reply+"NIvgsa";
+            let no = 0;
+            let allparcels = '';
+            let color=''
+            data.parcels.forEach(parcel => {
+                if((no%2)==0){
+                    color="light";
+                }else{
+                    color="dark";
+                }
+                no++;
+                s= String(no)
+                allparcels += `
+                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})>
+                    <td>${s}</td>
+                    <td class="not">${parcel.recipient}</td>
+                    <td>${parcel.parcel_description}</td>
+                    <td class="not">${parcel.pickup_location}</td>
+                    <td>${parcel.destination}</td>
+                    <td>${parcel.current_location}</td>
+                    <td class="not">${parcel.price}</td><td class="not">2</td>		
+                    <td class="status">${parcel.status}</td>
+                </tr>
+                `
+                
+            });
+            
+            
+            document.querySelector("tbody").innerHTML = allparcels;
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply+" Not";
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })  
+    
+}
+
+function viewParcel(event,parcel_id){
+    event.preventDefault();
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
         if(data.message.includes("all available")===true){
+            
             document.getElementById("api_reply").innerHTML = reply;
             let no = 0;
             let allparcels = '';
-            data.parcels.forEach(parcel => {
-                no++;
-                allparcels += `
-                <tr onclick="viewParcel(event,parcelId)" class="${color}">			                      
-                            
-                        <td>${no}</td>
-						<td class="not">${parcel.recipient}</td>
-						<td>${parcel.parcel_description}</td>
-						<td class="not">${parcel.pickup_location}</td>
-						<td>${parcel.destination}</td>
-						<td>${parcel.current_location}</td>
-						<td class="not">${parcel.price}</td><td class="not">2</td>		
-                        <td class="status">${parcel.status}</td>
-                        
-                        <td><button onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
-					</tr>
-					
-				</tbody>
-                </tr>
-                `
-            });
             
             
             document.getElementById("tbody").innerHTML = allparcels;
@@ -292,18 +334,20 @@ function viewParcelsAdmin(event){
         console.log(error);
     })  
     
-}
-
-function viewParcel(event,parcel_id){
-    event.preventDefault();
-
 
 }
 
-function openTable(event){
-    document.getElementsByClassName("client_table").style.display='block'
+function openTable(){
+    
+    document.getElementById("client_table").style.display='block'
 }
 
 function viewUsers(event){
+    event.preventDefault()
+
+}
+
+function viewParcelAdmin(event){
+    event.preventDefault();
 
 }

@@ -5,6 +5,7 @@
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -32,11 +33,14 @@
 			</div>
 			
 			<div>
-				<button type="button" onclick="view">View All Users</button>
-				<button>View All Parcels</button>
+				<button type="button" onclick="viewUsers(event);">View All Users</button>
+				<button type="button" onclick="viewParcelsAdmin(event);">View All Parcels</button>
 			</div>
 			<hr>
-			<table class="client_table">
+			<div id="api_reply">
+
+			</div>
+			<table id="client_table">
 				<thead>
 					<tr>
 						<td >No.</td>
@@ -52,17 +56,6 @@
 				</thead>
 
 				<tbody>
-					<tr onclick="viewParcel(event,)" class="light">
-						<td>1</td>
-						<td class="not">Andy</td>
-						<td>Books</td>
-						<td class="not">Naalya, Quality Shopping Village</td>
-						<td>Andela Uganda, Kira Road</td>
-						<td>Tuskys Ntinda</td>
-						<td class="not">2000</td><td class="not">2</td>		
-						<td class="status">Pending</td>
-						<td><input type="checkbox" name="name1" /></td>
-					</tr>
 					
 				</tbody>
 			</table>

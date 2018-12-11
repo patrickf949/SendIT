@@ -101,6 +101,11 @@ table{
 .buttons{
 	text-align: center;
 }
+tr{
+	border-bottom:1pt solid gold;
+	
+
+}
 
 .logindiv{
 	width: 40%;
@@ -149,26 +154,6 @@ input{
 
 	width: 100%;
 }
-.tables div div{
-	text-align: center;
-	border-width: thin;
-	margin-top: 10px;
-	width: 100%;
-
-}
-
-.tables div div div{
-	width: auto;
-	float: left;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	
-}
-admin div div div{
-	width: 12%
-}
-
 .light{
 	width: 100%;
 	background-color : rgb(0,0,255);
