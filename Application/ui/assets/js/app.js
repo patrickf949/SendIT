@@ -23,7 +23,7 @@ function signUp(event){
         body:JSON.stringify(userdetails)
     })
     .then(response => response.json())
-    .then(data => {
+    .then(data => {client_table
         reply = data.message;
         if(data.message === "hello! "+username+" Your Account has been created. Please login"){
             
@@ -62,14 +62,13 @@ function loginUser(event){
     .then(data => {
         reply = data.message;
         if(data.message === "Hello "+username+" you are logged into SendIT as admin"){
-            localStorage.setItem("usertoken",(data).Access_token);
-            console.log(localStorage.getItem("usertoken"));
+            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "admin_dashboard.html";
             closeTable();
             
         }else if(data.message === "Hello "+username+" you are logged into SendIT"){
-            localStorage.setItem("usertoken",(data).Access_token);
+            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "dashboard.html"
             close(closeTable);
@@ -97,13 +96,13 @@ function logout(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"POST",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(userdetails)
     })
     .then(response => response.json())
     .then(data => {
-        localStorage.setItem("usertoken","");
+        sessionStorage.setItem("s3nd21usertoken","");
         location.href = "index.html"
 
     }).catch(error => {
@@ -135,7 +134,7 @@ function addParcel(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"POST",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(parcel_description)
     })
@@ -178,7 +177,7 @@ function updateParcel(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"POST",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(parcel_description)
     })
@@ -208,7 +207,7 @@ function viewParcelsUser(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         }
     })
     .then(response => response.json())
@@ -223,11 +222,11 @@ function viewParcelsUser(event){
                 no++;
                 allparcels += `
                 <tr onclick="viewParcel(event,${parcel.parcel_id}}" class="${color}">			
-                            <td>${no}</td>
-                            <td>${parcel.parcel_description}</td>
-                            <td>${parcel.recipient}</td>
-                            <td>${parcel.price}</td>
-                            <td>${parcel.status}</td>		
+                    <td>${no}</td>
+                    <td>${parcel.parcel_description}</td>
+                    <td>${parcel.recipient}</td>
+                    <td>${parcel.price}</td>
+                    <td>${parcel.status}</td>		
                 </tr>
                 `
             });
@@ -254,7 +253,7 @@ function viewParcelsAdmin(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         }
     })
     .then(response => response.json())
@@ -262,7 +261,7 @@ function viewParcelsAdmin(event){
         reply = data.message;
         if((data).message.includes("all available")===true){
             openTable();
-            document.getElementById("api_reply").innerHTML = reply+"NIvgsa";
+            // document.getElementById("api_reply").innerHTML = reply+"NIvgsa";
             let no = 0;
             let allparcels = '';
             let color=''
@@ -282,7 +281,8 @@ function viewParcelsAdmin(event){
                     <td class="not">${parcel.pickup_location}</td>
                     <td>${parcel.destination}</td>
                     <td>${parcel.current_location}</td>
-                    <td class="not">${parcel.price}</td><td class="not">2</td>		
+                    <td class="not">${parcel.price}</td>
+                    <td class="not">${parcel.weight_kgs}</td>		
                     <td class="status">${parcel.status}</td>
                 </tr>
                 `
@@ -310,7 +310,7 @@ function viewParcel(event,parcel_id){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         }
     })
     .then(response => response.json())
@@ -320,10 +320,10 @@ function viewParcel(event,parcel_id){
             
             document.getElementById("api_reply").innerHTML = reply;
             let no = 0;
-            let allparcels = '';
+            let selectedparcels = '';
             
             
-            document.getElementById("tbody").innerHTML = allparcels;
+            document.getElementById("tbody").innerHTML = selectedparcels;
        
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -337,7 +337,6 @@ function viewParcel(event,parcel_id){
 }
 
 function openTable(){
-    
     document.getElementById("client_table").style.display='block'
 }
 
