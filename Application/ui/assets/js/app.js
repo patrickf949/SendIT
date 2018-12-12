@@ -276,7 +276,7 @@ function viewParcelsAdmin(event){
                 no++;
                 s= String(no)
                 allparcels += `
-                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})>
+                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})">
                     <td>${s}</td>
                     <td class="not">${parcel.recipient}</td>
                     <td>${parcel.parcel_description}</td>
