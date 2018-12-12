@@ -102,7 +102,7 @@ function logout(event){
     })
     .then(response => response.json())
     .then(data => {
-        sessionStorage.setItem("s3nd21usertoken","");
+        sessionStorage.clear();
         location.href = "index.html"
 
     }).catch(error => {
@@ -181,7 +181,7 @@ function updateParcel(event){
         },
         body:JSON.stringify(parcel_description)
     })
-    .then(response => response.json())
+    .then( response => response.json())
     .then(data => {
         reply = data.message;
         if(data.message.includes("Your Parcel Delivery order has been placed")===true){
