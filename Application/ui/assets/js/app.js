@@ -84,9 +84,9 @@ function loginUser(event){
 
     
 }
-function closeTable(){
+(function closeTable(){
     document.getElementById("client_table").style.display='none'
-}
+})();
 
 function logout(event){
     event.preventDefault()
@@ -222,13 +222,12 @@ function viewParcelsUser(event){
             data.parcels.forEach(parcel => {
                 no++;
                 allparcels += `
-                <tr onclick="viewParcel(event,parcelId)" class="${color}">			
+                <tr onclick="viewParcel(event,${parcel.parcel_id}}" class="${color}">			
                             <td>${no}</td>
                             <td>${parcel.parcel_description}</td>
                             <td>${parcel.recipient}</td>
                             <td>${parcel.price}</td>
                             <td>${parcel.status}</td>		
-                            <td><button type="button" onclick="viewParcel(event,${parcel.parcel_id}})">Edit/view</button></td>
                 </tr>
                 `
             });
