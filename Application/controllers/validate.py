@@ -141,7 +141,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
-            'message':'@'+username+' all available',
+            'message':'all available',
             'parcels' : rows
         }), 200
 
@@ -226,6 +226,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
+            'message':'@'+username+' here is the specified parcel.',
             'Parcel' : rows
         }), 200
     
