@@ -23,7 +23,7 @@ function signUp(event){
         body:JSON.stringify(userdetails)
     })
     .then(response => response.json())
-    .then(data => {client_table
+    .then(data => {
         reply = data.message;
         if(data.message === "hello! "+username+" Your Account has been created. Please login"){
             
@@ -359,22 +359,41 @@ function viewParcelAdmin(event,parcel_id){
     })
     .then(response => response.json())
     .then(data => {
-        reply = data.message;
-        if(data.message.includes("all available")===true){
-            location.href = "admin_edit_parcel.html";
-            document.getElementById("id").innerHTML = "";
-            document.getElementById("name")
-            let no = 0;
-            let selectedparcels = '';
+        if(data.Parcel===null){
+            document.getElementById("api_reply").innerHTML = reply;   
+        }
+        else{
+            openModal();
+            data.Parcel.forEach(parcel => {
+                document.getElementById("parcel").value = parcel.parcel_description;
+                document.getElementById("recipient").value = parcel.recipient;
+                document.getElementById("contact").value = parcel.recipient_contact;
+                document.getElementById("pickup").value = parcel.pickup_location;
+                document.getElementById("current").value = parcel.current_location;
+                document.getElementById("weight").value = parcel.weight_kgs;
+                document.getElementById("price").value = parcel.price;
+                document.getElementById("statusOptions").value = parcel.status;
+                document.getElementById("destination").value = parcel.destination;
+            });
             
             
             document.getElementById("tbody").innerHTML = selectedparcels;
        
-        }else{
-            document.getElementById("api_reply").innerHTML = reply;
         }
         
     }).catch(error => {
         console.log(error);
     })
+}
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+  
+window.onclick = function(event) {
+    if (event.target == modal) {
+        document.getElementById("modal").style.display = "none";
+    }
+}
+function openModal(){
+    document.getElementById("modal").style.display = "inline";
 }

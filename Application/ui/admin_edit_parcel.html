@@ -20,68 +20,62 @@
 			</div>
 		</div>
 		
-		<div class="logindiv">
-			<form action="admin_dashboard.html">
+		<div class="logindiv modal">
 			<div>&nbsp</div>
-			<div>
-				<h3>
-					Parcel Description:
-				</h3>			
-				<input type="text" name="product" id="parcel" required>
-			</div>
-			<div>
-				<h3>
-					Recipient:
-				</h3>		
-				<input type="text" name="name" id="name" required>
-			</div>
-			<div>
-				<h3>
-					Recipient Contact:
-				</h3>					
-				<input type="number" name="contact" id="contact" required>
-			</div>
-			<div>
-				<h3>
-					Pick Up Location: 
-				</h3>					
-				<input type="text" name="location" id="location" required>
-			</div>
-			<div>
-				<h3>
-					Current Location: 
-				</h3>
-				<input type="text" name="location" id="currentLocation" required>
-			</div>
-			<div>
-				<h3>
-					Destination: 
-				</h3>
-				<input type="text" name="location" id="destination" required>
-			</div>
-			<div>
-				<h3>
-					Status: 
-				</h3>
+			<form>
 				
-				<select id="statusOptions">
-					<option id="pending">pending</option>
-					<option id="delivered">delivered</option>
-					<option id="moving">in transit</option>
-					<option id="canceled">canceled</option>
-				</select>
-			</div>
-			<div>
-				<button>Edit Order</button>
-		</div>
+				<div>
+					<h3>
+						Parcel Description:
+					</h3>			
+					<input type="text" name="product" id="parcel" required>
+				</div>
+				<div>
+					<h3>
+						Recipient:
+					</h3>		
+					<input type="text" name="name" id="name" required>
+				</div>
+				<div>
+					<h3>
+						Recipient Contact:
+					</h3>					
+					<input type="number" name="contact" id="contact" required>
+				</div>
+				<div>
+					<h3>
+						Pick Up Location: 
+					</h3>					
+					<input type="text" name="location" id="pickup" required>
+				</div>
+				<div>
+					<h3>
+						Current Location: 
+					</h3>
+					<input type="text" name="location" id="current" required>
+				</div>
+				<div>
+					<h3>
+						Destination: 
+					</h3>
+					<input type="text" name="location" id="destination" required>
+				</div>
+				<div>
+					<h3>
+						Status: 
+					</h3>
+					
+					<select id="statusOptions">
+						<option id="pending">pending</option>
+						<option id="delivered">delivered</option>
+						<option id="moving">in transit</option>
+						<option id="canceled">canceled</option>
+					</select>
+				</div>
+				<div>
+					<button>Edit Order</button> <button>Back to home</button>
+				</div>
 			</form>
-			<div>
-				<a href="admin_dashboard.html">
-					<button>Back to home</button>
-				</a>
-			</div>	
-			
-		</div>
 		<div class="footer">
 			
 			<div class="stats">

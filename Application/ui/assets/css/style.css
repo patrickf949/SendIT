@@ -1,8 +1,16 @@
-
+#modal{
+	display:none;
+	background:rgba(0,0,0,0.9);
+}
+#api_reply{
+	background:gold;
+	border-radius: 3pt;
+	color:black
+}
 .left{
 	
 	float: left;
-	width: 100px;
+	width:30%;
 	text-align: center;
 	color:white;
 	height: 100%;
@@ -42,6 +50,29 @@ html {
 
 
 }
+.leftform{
+	float:left;
+	width: 40%;
+}
+.leftform div{
+	float: right;
+	width:90%;
+	text-align: center;
+	height: 100%;
+	margin:auto;
+}
+.rightform{
+	float:right;
+	width: 40%;
+}
+.rightform div{
+	float: right;
+	width:90%;
+	text-align: center;
+	height: 100%;
+	margin:auto;
+}
+
 .content{
 	background-color: rgba(0,0,139,0.9);
 	width: 90%;
@@ -69,14 +100,24 @@ button{
 	width: 150px;
 
 }
+.leftform div input{
+	width: 60%;
+	height: 20px;
+	border-radius: 3em;
+}
+.rightform div input{
+	height: 20px;
+	width: 60%;
+	border-radius: 3em;
+}
 a{
 	text-decoration: none;
 	color: white
 }
-.logindiv div input{
+.logindiv form div input{
 	width: 100%;
 	border-radius:30px;
-	margin-top:10px;
+	
 	height: 30px;
 	border-style: none;
 }
@@ -87,14 +128,13 @@ a{
 	margin-right: auto;
 	margin-left: auto
 }
-.logindiv div h3{
+.logindiv form div h3{
 	text-align: left;
-	margin-top: 10px
 }
 
 #client_table{
 	display: none;
-	width: 90%;
+	width: 100%;
 	margin: auto;
 }
 .buttons{
@@ -176,7 +216,7 @@ hr{
 	width: 150px;
 
 }
-select{
+#statusOptions{
 	background: white;
 	color: rgb(0,0,139);
 	border-style: none;
@@ -185,9 +225,11 @@ select{
 	height: 30px;
 	width: 100%;
 }
-option{
+#statusOptions select{
+	width: 100%;
 	text-align: center;
 }
+
 
 @media only screen and (max-width: 480px){
 	.content{
@@ -210,6 +252,7 @@ option{
 	.not{
 		width: 0px;
 	}
+	
 
 }
 @media only screen and (max-width: 720px){
