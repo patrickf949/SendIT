@@ -27,7 +27,7 @@
 				<h3>
 					Parcel Description:
 				</h3>			
-				<input type="text" name="product" required>
+				<input type="text" name="product" id="parcel" required>
 			</div>
 			<div>
 				<h3>
@@ -45,19 +45,19 @@
 				<h3>
 					Pick Up Location: 
 				</h3>					
-				<input type="Location" name="location" required>
+				<input type="Location" name="location" id="location" required>
 			</div>
 			<div>
 				<h3>
 					Current Location: 
 				</h3>
-				<input type="text" name="location" required>
+				<input type="text" name="location" id="currentLocation" required>
 			</div>
 			<div>
 				<h3>
 					Destination: 
 				</h3>
-				<input type="text" name="location" required>
+				<input type="text" name="location" id="destination" required>
 			</div>
 			<div>
 				<h3>
@@ -65,10 +65,10 @@
 				</h3>
 				
 				<select>
-					<option>pending</option>
-					<option>delivered</option>
-					<option>in transit</option>
-					<option>canceled</option>
+					<option id="pending">pending</option>
+					<option id="delivered">delivered</option>
+					<option id="moving">in transit</option>
+					<option id="canceled">canceled</option>
 				</select>
 
 			</div>
