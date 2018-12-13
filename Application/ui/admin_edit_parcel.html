@@ -45,7 +45,7 @@
 				<h3>
 					Pick Up Location: 
 				</h3>					
-				<input type="Location" name="location" id="location" required>
+				<input type="text" name="location" id="location" required>
 			</div>
 			<div>
 				<h3>
@@ -64,13 +64,12 @@
 					Status: 
 				</h3>
 				
-				<select>
+				<select id="statusOptions">
 					<option id="pending">pending</option>
 					<option id="delivered">delivered</option>
 					<option id="moving">in transit</option>
 					<option id="canceled">canceled</option>
 				</select>
-
 			</div>
 			<div>
 				<button>Edit Order</button>

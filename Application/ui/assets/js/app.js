@@ -102,8 +102,9 @@ function logout(event){
     })
     .then(response => response.json())
     .then(data => {
-        sessionStorage.clear();
+        sessionStorage.removeItem('s3nd21usertoken');
         location.href = "index.html"
+
 
     }).catch(error => {
         console.log(error);
@@ -361,7 +362,8 @@ function viewParcelAdmin(event,parcel_id){
         reply = data.message;
         if(data.message.includes("all available")===true){
             location.href = "admin_edit_parcel.html";
-            document.getElementById("").innerHTML = "";
+            document.getElementById("id").innerHTML = "";
+            document.getElementById("name")
             let no = 0;
             let selectedparcels = '';
             
@@ -374,9 +376,5 @@ function viewParcelAdmin(event,parcel_id){
         
     }).catch(error => {
         console.log(error);
-    })  
-    
-
-
-
+    })
 }
