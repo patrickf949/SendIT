@@ -22,48 +22,49 @@
 		
 		<div class="logindiv">
 			<div>&nbsp</div>
-			<form method="POST">
+			<form>
 				
 				<div id="api_reply">
 
 				</div>
 				<div>
-					<h3>
+					<h4>
 						Parcel Description:
-					</h3>			
+					</h4>			
 					<input type="text" name="product" id="parcel" required>
 				</div>
 				<div>
-					<h3>
+					<h4>
 						Recipient:
-					</h3>		
+					</h4>		
 					<input type="text" name="name" id="recipient" required>
 				</div>
 				<div>
-					<h3>
+					<h4>
 						Recipient Contact:
-					</h3>					
+					</h4>					
 					<input type="number" name="contact" id="contact" required>
 				</div>
 				<div>
-					<h3>
+					<h4>
 						Pick Up Location: 
-					</h3>					
+					</h4>					
 					<input type="text" name="location" id="pickuplocation" required>
 				</div>
 				<div>
-					<h3>
+					<h4>
 						Destination: 
-					</h3>
+					</h4>
 					<input type="text" name="destination" id="destination" required>
 				</div>
 				<div>
-					<button type="button" onclick="addParcel(event)">Create Order</button>
+					<button type="submit" onclick="addParcel(event)">Create Order</button>
 					<a href="dashboard.html">
-							<button>Cancel</button>
+						<button type="button">Cancel</button>
 					</a>
 				</div>
 			</form>
+			<div>&nbsp;</div>
 			
 		</div>
 		<div class="footer">
