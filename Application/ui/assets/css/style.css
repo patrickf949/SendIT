@@ -10,7 +10,7 @@
 .left{
 	
 	float: left;
-	width:30%;
+	width:15%;
 	text-align: center;
 	color:white;
 	height: 100%;
@@ -18,7 +18,7 @@
 	margin-top: 5px;
 }
 html {
-  background: url(../images/ba.jpg);
+  background: url(../images/ba.jpg) no-repeat fixed;
  
 }
 .left img{
@@ -98,17 +98,20 @@ button{
 	margin:10px;
 	height: 30px;
 	width: 150px;
+	cursor: pointer
 
 }
 .leftform div input{
 	width: 60%;
 	height: 20px;
 	border-radius: 3em;
+	border-style: none
 }
 .rightform div input{
 	height: 20px;
 	width: 60%;
 	border-radius: 3em;
+	border-style: none
 }
 a{
 	text-decoration: none;
@@ -116,9 +119,9 @@ a{
 }
 .logindiv form div input{
 	width: 100%;
-	border-radius:30px;
+	border-radius:20px;
 	
-	height: 30px;
+	height: 20px;
 	border-style: none;
 }
 .logindiv div{
@@ -268,7 +271,7 @@ hr{
 	}
 
 	.right div{
-		width: 100px
+		width: 30%
 	}
 	.not1{
 		visibility:hidden;
@@ -292,7 +295,7 @@ hr{
 	}
 
 	.right div{
-		width: 100px
+		width: 30%;
 	}
 	.not{
 		visibility:hidden;
@@ -317,7 +320,7 @@ hr{
 	}
 
 	.right div{
-		width: 100px
+		width:30%;
 	}
 	.not1{
 		visibility:hidden;
