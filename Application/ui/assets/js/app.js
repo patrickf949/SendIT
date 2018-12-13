@@ -364,6 +364,11 @@ function viewParcelAdmin(event,parcel_id){
         }
         else{
             openModal();
+            let bodyDivs = document.getElementsByClassName("content");
+            let arrayLength = bodyDivs.length;
+            for (var i=0; i<arrayLength;i++){
+                bodyDivs[i].style.display ='none';
+            }
             data.Parcel.forEach(parcel => {
                 document.getElementById("parcel").value = parcel.parcel_description;
                 document.getElementById("recipient").value = parcel.recipient;
@@ -390,7 +395,7 @@ function closeModal() {
 }
   
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target == document.getElementById("modal")) {
         document.getElementById("modal").style.display = "none";
     }
 }
