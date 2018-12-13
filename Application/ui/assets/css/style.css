@@ -61,7 +61,7 @@ html {
 
 button{
 	background: white;
-	color: rgb(0,0,139);
+	color: black;
 	border-style: none;
 	border-radius: 30px;
 	margin:10px;
@@ -91,12 +91,11 @@ a{
 	text-align: left;
 	margin-top: 10px
 }
-table{
+
+#client_table{
+	display: none;
 	width: 90%;
 	margin: auto;
-}
-.client_table{
-	display: none
 }
 .buttons{
 	text-align: center;
@@ -149,9 +148,12 @@ input{
 	text-align: center;
 }
 
-.thead{
+thead{
 	color: gold;
 
+	width: 100%;
+}
+tbody{
 	width: 100%;
 }
 .light{
@@ -225,6 +227,10 @@ option{
 	.right div{
 		width: 100px
 	}
+	.not1{
+		visibility:hidden;
+		display: none;
+	}
 }
 
 @media only screen and (max-width: 650px){
@@ -245,6 +251,11 @@ option{
 	.right div{
 		width: 100px
 	}
+	.not{
+		visibility:hidden;
+		display: none;
+	}
+	
 }
 
 @media (max-resolution: 1dppx) and (max-width: 500px) {
@@ -257,16 +268,17 @@ option{
 	.right{
 		width: 70%;
 	}
-	.not{
-		visibility:hidden;
-		display: none;
-	}
+	
 	.status{
 		
 	}
 
 	.right div{
 		width: 100px
+	}
+	.not1{
+		visibility:hidden;
+		display: none;
 	}
 	
 }
