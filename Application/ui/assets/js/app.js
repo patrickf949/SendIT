@@ -276,13 +276,13 @@ function viewParcelsAdmin(event){
                 allparcels += `
                 <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})">
                     <td>${s}</td>
-                    <td class="not">${parcel.recipient}</td>
+                    <td class="not1">${parcel.recipient}</td>
                     <td>${parcel.parcel_description}</td>
                     <td class="not">${parcel.pickup_location}</td>
                     <td>${parcel.destination}</td>
                     <td>${parcel.current_location}</td>
                     <td class="not">${parcel.price}</td>
-                    <td class="not">${parcel.weight_kgs}</td>		
+                    <td class="not1">${parcel.weight_kgs}</td>		
                     <td class="status">${parcel.status}</td>
                 </tr>
                 `
@@ -337,7 +337,7 @@ function viewParcel(event,parcel_id){
 }
 
 function openTable(){
-    document.getElementById("client_table").style.display='block'
+    document.getElementById("client_table").style.display='inline'
 }
 
 function viewUsers(event){
@@ -345,7 +345,38 @@ function viewUsers(event){
 
 }
 
-function viewParcelAdmin(event){
+function viewParcelAdmin(event,parcel_id){
     event.preventDefault();
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        if(data.message.includes("all available")===true){
+            location.href = "admin_edit_parcel.html";
+            document.getElementById("").innerHTML = "";
+            let no = 0;
+            let selectedparcels = '';
+            
+            
+            document.getElementById("tbody").innerHTML = selectedparcels;
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply;
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })  
+    
+
+
 
 }
