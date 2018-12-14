@@ -62,15 +62,16 @@ function loginUser(event){
     .then(data => {
         reply = data.message;
         if(data.message === "Hello "+username+" you are logged into SendIT as admin"){
-            localStorage.setItem("usertoken",(data).Access_token);
-            Console.log(localStorage.getItem("usertoken"));
+            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "admin_dashboard.html";
+            closeTable();
             
         }else if(data.message === "Hello "+username+" you are logged into SendIT"){
-            localStorage.setItem("usertoken",(data).Access_token);
+            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "dashboard.html"
+            close(closeTable);
             
         }else{
             document.getElementById("api_reply").innerHTML = reply;
@@ -82,6 +83,9 @@ function loginUser(event){
 
     
 }
+(function closeTable(){
+    document.getElementById("client_table").style.display='none'
+})();
 
 function logout(event){
     event.preventDefault()
@@ -92,13 +96,16 @@ function logout(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"POST",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(userdetails)
     })
     .then(response => response.json())
     .then(data => {
-        localStorage.setItem("usertoken","");
+        sessionStorage.removeItem('s3nd21usertoken');
+        location.href = "index.html"
+
+
     }).catch(error => {
         console.log(error);
     })
@@ -128,7 +135,7 @@ function addParcel(event){
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods":"POST",
-            "Authorization":"Bearer "+localStorage.getItem("usertoken")
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(parcel_description)
     })
@@ -149,14 +156,298 @@ function addParcel(event){
 
 }
 
-function updateParcel(){
+function updateParcel(event){
+    event.preventDefault()
+    let parcel = document.getElementById("parcel").value;
+    let recipient = String(document.getElementById("recipient").value);
+    let contact = String(document.getElementById("contact").value);
+    let pickuplocation = String(document.getElementById("pickuplocation").value);
+    let destination = String(document.getElementById("destination").value);
+
+    let parcel_description = {
+        "parcel_description":parcel,
+        "recipient":recipient,
+        "contact":contact,
+        "pickup_location":pickuplocation,
+        "destination":destination
+    };
+
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'PUT',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"POST",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        },
+        body:JSON.stringify(parcel_description)
+    })
+    .then( response => response.json())
+    .then(data => {
+        reply = data.message;
+        if(data.message.includes("Your Parcel Delivery order has been placed")===true){
+            document.getElementById("api_reply").innerHTML = reply;
+            
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply;
+        }
+        // document.getElementById("api_reply").innerHTML = reply;
+    }).catch(error => {
+        console.log(error);
+    })  
     
 }
 
-function viewParcels(){
+function viewParcelsUser(event){
+    event.preventDefault()
+    
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        openTable(event);
+        if(data.message.includes("all available")===true){
+            document.getElementById("api_reply").innerHTML = reply+"shut up";
+            let no = 0;
+            let allparcels = '';
+            data.parcels.forEach(parcel => {
+                no++;
+                allparcels += `
+                <tr onclick="viewParcel(event,${parcel.parcel_id}}" class="${color}">			
+                    <td>${no}</td>
+                    <td>${parcel.parcel_description}</td>
+                    <td>${parcel.recipient}</td>
+                    <td>${parcel.price}</td>
+                    <td>${parcel.status}</td>		
+                </tr>
+                `
+            });
+            
+            
+            document.querySelector("tbody").innerHTML = allparcels;
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply+" NOt";
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })  
+    
+}
+
+function viewParcelsAdmin(event){
+    event.preventDefault();
+    
+    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.message;
+        if((data).message.includes("all available")===true){
+            openTable();
+            // document.getElementById("api_reply").innerHTML = reply+"NIvgsa";
+            let no = 0;
+            let allparcels = '';
+            let color=''
+            data.parcels.forEach(parcel => {
+                if((no%2)==0){
+                    color="light";
+                }else{
+                    color="dark";
+                }
+                no++;
+                s= String(no)
+                allparcels += `
+                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})">
+                    <td>${s}</td>
+                    <td class="not1">${parcel.recipient}</td>
+                    <td>${parcel.parcel_description}</td>
+                    <td class="not">${parcel.pickup_location}</td>
+                    <td>${parcel.destination}</td>
+                    <td>${parcel.current_location}</td>
+                    <td class="not">${parcel.price}</td>
+                    <td class="not1">${parcel.weight_kgs}</td>		
+                    <td class="status">${parcel.status}</td>
+                </tr>
+                `
+                
+            });
+            
+            
+            document.querySelector("tbody").innerHTML = allparcels;
+       
+        }else{
+            document.getElementById("api_reply").innerHTML = reply+" Not";
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })  
+    
+}
+
+function viewParcel(event,parcel_id){
+    event.preventDefault();
+    prepareParcelUpdate(parcel_id);
+    document.getElementById("destination").onblur = updateParcel(event,parcel_id,"destination",document.getElementById("destination").value);
+}
+
+function openTable(){
+    document.getElementById("client_table").style.display='inline'
+}
+
+function viewUsers(event){
+    event.preventDefault()
 
 }
 
-function viewParcel(){
-
+function viewParcelAdmin(event,parcel_id){
+    event.preventDefault();
+    prepareParcelUpdate(parcel_id);
+    let weight=document.getElementById("weight").value;
+    if (weight>0){
+        document.getElementById("weight").onblur = updateParcel(event,parcel_id,"weight",document.getElementById("weight").value);    
+        document.getElementById("current").onblur = updateParcel(event,parcel_id,"presentLocation",document.getElementById("current").value);
+        document.getElementById("statusOptions1").onblur = updateParcel(event,parcel_id,"status",document.getElementById("statusOptions1").value);
+    }   
 }
+
+
+
+function prepareParcelUpdate(parcel_id){
+    
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
+        method: 'GET',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"GET",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.Parcel===null){
+            document.getElementById("api_reply").innerHTML = reply;   
+        }
+        else{
+            openModal();
+            let bodyDivs = document.getElementsByClassName("content");
+            let arrayLength = bodyDivs.length;
+            for (var i=0; i<arrayLength;i++){
+                bodyDivs[i].style.display ='none';
+            }
+            data.Parcel.forEach(parcel => {
+                document.getElementById("parcel").value = parcel.parcel_description;
+                document.getElementById("recipient").value = parcel.recipient;
+                document.getElementById("contact").value = parcel.recipient_contact;
+                document.getElementById("pickup").value = parcel.pickup_location;
+                document.getElementById("current").value = parcel.current_location;
+                document.getElementById("weight").value = parcel.weight_kgs;
+                document.getElementById("price").value = parcel.price;
+                document.getElementById("statusOptions1").value = parcel.status;
+                document.getElementById("destination").value = parcel.destination;
+                
+            });
+       
+        }
+        
+    }).catch(error => {
+        console.log(error);
+    })
+}
+
+
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+  
+window.onclick = function(event) {
+    if (event.target == document.getElementById("modal")) {
+        document.getElementById("modal").style.display = "none";
+    }
+}
+function openModal(){
+    document.getElementById("modal").style.display = "inline";
+}
+
+function updateParcel(event, parcel_id, column, updatedvalue){
+    event.preventDefault();
+    let newvalue = '';
+
+    if(column==="weight"){
+        newvalue = updatedvalue
+    }else{
+        newvalue = String(updatedvalue)
+    }
+    let updatedParcelDetail = updateDictionary(column, newvalue)
+
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id+'/'+column,{
+        method: 'PUT',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        },
+        body:JSON.stringify(updatedParcelDetail)
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.Message;
+        if(data.Message==="Update successful"){
+            document.getElementById("api_reply").innerHTML = reply;   
+        }
+        else{
+            
+        
+        }
+    }).catch(error => {
+        console.log(error);
+        console.log(data);
+    })
+    
+}
+
+function updateDictionary(column, value){
+    if(column==="destination"){
+        return {
+            "destination":value
+        }
+    }else if(column==="status"){
+        return {
+            "status":value
+        }
+    }else if(column==="weight"){
+        return {
+            "weight":value
+        }
+    }else if(column==="presentLocation"){
+        return {
+            "current_location":value
+        }
+    }else{
+        return {
+            "message":"Please be epic"
+        }
+    }
+}
+

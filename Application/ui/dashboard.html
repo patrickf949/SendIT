@@ -5,6 +5,7 @@
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -28,12 +29,15 @@
 				<p>To Create a new parcel delivery order click the button below</p>
 				<a href="add_parcel.html">
 				<button>Create an Order</button></a>
+				<button onclick="viewParcelsUser(event)">View All Orders</button>
 				<p>Take a look at your parcel delivery orders</p>
 				<p>Click individual parcel delivery orders to view their current location and/ or edit them</p>
 			</div>
 			<hr>
-			
-			<table class="client_table">
+			<div id="api_reply">
+
+			</div>
+			<table id="client_table">
 				<thead>
 					<tr>
 						<td>No.</td>
@@ -44,16 +48,8 @@
 					</tr>
 				</thead>
 				
-				<tbody>
-					<tr onclick="window.location='edit_parcel.html'" class="light">
-						
-						<td>1</td>
-						<td>Books</td>
-						<td>Joshua</td>
-						<td>2000</td>		
-						<td>Pending</td>
-						<td><button>Edit/view</button></td>
-					</tr>
+				<tbody id="tbody">
+					
 				</tbody>
 			</table>
 			<div>&nbsp;</div>	
@@ -67,6 +63,85 @@
 			</div>
 			
 		</div>
+	</div>
+	<div id="modal">
+		<div>&nbsp</div>
+		<form>
+			<div class="leftform">
+				<div>
+					<h5>
+						Parcel Description:
+					</h3>			
+					<input type="text" name="product" id="parcel" required readonly>
+				</div>
+				<div>
+					<h5>
+						Recipient:
+					</h3>		
+					<input type="text" name="name" id="recipient" required readonly>
+				</div>
+				<div>
+					<h5>
+						Recipient Contact:
+					</h5>					
+					<input type="number" name="contact" id="contact" required readonly>
+				</div>
+				<div>
+					<h5>
+						Pick Up Location: 
+					</h5>					
+					<input type="text" name="location" id="pickup" required readonly>
+				</div>
+				<div>
+					<h5>
+						Current Location: 
+					</h5>
+					<input type="text" name="location" id="current" required readonly>
+				</div>
+				<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+			</div>
+
+			<div class="rightform">
+				<div>
+					<h5>
+						Destination: 
+					</h5>
+					<input type="text" name="location" id="destination" required>
+				</div>
+				<div>
+					<h5>
+						Status: 
+					</h5>
+					
+					<select id="statusOptions1" readonly>
+						<option id="pending">pending</option>
+						<option id="delivered">delivered</option>
+						<option id="moving">in transit</option>
+						<option id="canceled">canceled</option>
+					</select>
+				</div>
+				<div>
+					<h5>
+						Weight In Kgs: 
+					</h5>
+					<input type="number" name="weight" id="weight" readonly>
+				</div>
+				
+				<div>
+					<h5>
+						Price (UGX): 
+					</h5>
+					<input type="number" name="location" id="price" readonly>
+				</div>
+				<div>
+					<button type="submit">Edit Order</button>
+					<button type="button" >Back</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

@@ -279,7 +279,7 @@ class TestSendIT(unittest.TestCase):
     def test_cancel_invalid_parcel_delivery_ordedr(self):
         
         response = self.test_client.get(
-            '/api/v2/parcels/43/cancel',
+            '/api/v2/parcels/6321/cancel',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
@@ -300,7 +300,7 @@ class TestSendIT(unittest.TestCase):
     def test_get_invalid_parcel_by_id(self):
 
         response = self.test_client.get(
-            '/api/v2/parcels/43',
+            '/api/v2/parcels/431211',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.admintoken}"}
         )
@@ -310,11 +310,11 @@ class TestSendIT(unittest.TestCase):
     def test_get_parcels_by_user_id(self):
  
         response = self.test_client.get(
-            '/api/v2/parcels/43',
+            '/api/v2/parcels/43342',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
-        self.assertEqual(response.status_code,400)
+        self.assertEqual(response.status_code,404)
 
     def test_get_all_users(self):
 

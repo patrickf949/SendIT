@@ -136,12 +136,13 @@ class Validation():
         rows = self.database.execute_query(sql_command)
         if not rows:
             return jsonify({
-                'Message': 'no parcel delivery orders from specified user'
+                'message': 'no parcel delivery orders from specified user'
             }), 404
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
-            'parcels by user' : rows
+            'message':'all available',
+            'parcels' : rows
         }), 200
 
     
@@ -205,14 +206,18 @@ class Validation():
         user_is_admin = self.is_admin(username)
         print(user_is_admin)
         if not user_is_admin:
-            return jsonify({
-                'Message': ' you do not have authorization'
-            }), 400
+            exists = self.check_if_parcel_id_exists(parcel_id)
+            if exists!=True:
+                return exists
+            user_id = self.get_user_id(username)
+            if self.check_user_created_parcel(user_id, parcel_id)!=True:
+                return jsonify({
+                    'Message': ' you do not have authorization'
+                }), 400
 
         exists = self.check_if_parcel_id_exists(parcel_id)
         if exists!=True:
             return exists
-        
         sql_command = """
         SELECT * FROM parcels where parcel_id={};
         """.format(parcel_id)
@@ -221,6 +226,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
+            'message':'@'+username+' here is the specified parcel.',
             'Parcel' : rows
         }), 200
     
@@ -239,7 +245,7 @@ class Validation():
         user_id = self.database.get_from_users('user_id', username)
         if not user_id:
             return jsonify({
-                'Message' : '@'+username+' lets make things official. Sign up with send it'
+                'message' : '@'+username+' lets make things official. Sign up with send it'
             }), 401
         return user_id
 
@@ -261,11 +267,13 @@ class Validation():
         all_elements = self.database.execute_query(sql_command)
         if not all_elements:
             return jsonify({
-                'Users':'No '+table+' in system'
+                'message':'@'+username+' nada in this',
+                table:'No '+table+' in system'
             }), 404
         all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
-            'All '+table+'': all_elements
+            'message' : '@'+username+' all available',
+            table : all_elements
             }), 200
 
 

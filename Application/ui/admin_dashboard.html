@@ -5,6 +5,7 @@
 	<link rel="shortcut icon" href="assets/images/sendIt.png" />
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=KoHo" rel="stylesheet">
+	<script src="assets/js/app.js"></script>
 </head>
 <body>
 	<div class="alldivs">
@@ -32,40 +33,29 @@
 			</div>
 			
 			<div>
-				<button>Mark as Pending</button>
-				<button>Unmark</button>
-				<button>Delete Selected</button>
-				<button>Delete all</button>
-
+				<button type="button" onclick="viewUsers(event);">View All Users</button>
+				<button type="button" onclick="viewParcelsAdmin(event);">View All Parcels</button>
 			</div>
 			<hr>
-			<table>
+			<div id="api_reply">
+
+			</div>
+			<table id="client_table">
 				<thead>
 					<tr>
 						<td >No.</td>
-						<td class="not">User</td>
+						<td class="not1">Recipient</td>
 						<td>Product</td>
 						<td class="not">PickUp Location</td>
 						<td class="status">Destination</td>
 						<td>Location</td>
 						<td class="not">Price(UGX)</td>
-						<td class="not">Weight(kg)</td>
+						<td class="not1">Weight(kg)</td>
 						<td>Status</td>
 					</tr>
 				</thead>
 
 				<tbody>
-					<tr onclick="window.location='admin_edit_parcel.html'" class="light">
-						<td>1</td>
-						<td class="not">Andy</td>
-						<td>Books</td>
-						<td class="not">Naalya, Quality Shopping Village</td>
-						<td>Andela Uganda, Kira Road</td>
-						<td>Tuskys Ntinda</td>
-						<td class="not">2000</td><td class="not">2</td>		
-						<td class="status">Pending</td>
-						<td><input type="checkbox" name="name1" /></td>
-					</tr>
 					
 				</tbody>
 			</table>
@@ -81,6 +71,86 @@
 				<span>14</span>
 			</div>
 		</div>
+	</div>
+	<div id="modal">
+		<div>&nbsp</div>
+		<form>
+			<div class="leftform">
+				<div>
+					<h5>
+						Parcel Description:
+					</h3>			
+					<input type="text" name="product" id="parcel" required readonly>
+				</div>
+				<div>
+					<h5>
+						Recipient:
+					</h3>		
+					<input type="text" name="name" id="recipient" required readonly>
+				</div>
+				<div>
+					<h5>
+						Recipient Contact:
+					</h5>					
+					<input type="number" name="contact" id="contact" required readonly>
+				</div>
+				<div>
+					<h5>
+						Pick Up Location: 
+					</h5>					
+					<input type="text" name="location" id="pickup" required readonly>
+				</div>
+				<div>
+					<h5>
+						Current Location: 
+					</h5>
+					<input type="text" name="location" id="current" required >
+				</div>
+				<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+			</div>
+
+			<div class="rightform">
+				<div>
+					<h5>
+						Destination: 
+					</h5>
+					<input type="text" name="location" id="destination" required readonly>
+				</div>
+				<div>
+					<h5>
+						Status: 
+					</h5>
+					
+					<select id="statusOptions1">
+						<option id="pending">pending</option>
+						<option id="delivered">delivered</option>
+						<option id="moving">in transit</option>
+						<option id="canceled">canceled</option>
+					</select>
+				</div>
+				<div>
+					<h5>
+						Weight: 
+					</h5>
+					<input type="number" name="location" id="weight" required>
+				</div>
+				
+				<div>
+					<h5>
+						Price: 
+					</h5>
+					<input type="number" name="location" id="price" readonly>
+				</div>
+				<div>
+					<button type="submit">Edit Order</button>
+					<button type="button" >Back</button>
+				</div>
+			</div>
+		</form>
+		    
 	</div>
 </body>
 </html>
