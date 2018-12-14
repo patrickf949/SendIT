@@ -305,36 +305,8 @@ function viewParcelsAdmin(event){
 
 function viewParcel(event,parcel_id){
     event.preventDefault();
-    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
-        method: 'GET',
-        headers:{
-            "Content-Type":"application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        reply = data.message;
-        if(data.message.includes("all available")===true){
-            
-            document.getElementById("api_reply").innerHTML = reply;
-            let no = 0;
-            let selectedparcels = '';
-            
-            
-            document.getElementById("tbody").innerHTML = selectedparcels;
-       
-        }else{
-            document.getElementById("api_reply").innerHTML = reply;
-        }
-        
-    }).catch(error => {
-        console.log(error);
-    })  
-    
-
+    prepareParcelUpdate(parcel_id);
+    document.getElementById("destination").onblur = updateParcel(event,parcel_id,"destination",document.getElementById("destination").value);
 }
 
 function openTable(){
@@ -348,6 +320,19 @@ function viewUsers(event){
 
 function viewParcelAdmin(event,parcel_id){
     event.preventDefault();
+    prepareParcelUpdate(parcel_id);
+    let weight=document.getElementById("weight").value;
+    if (weight>0){
+        document.getElementById("weight").onblur = updateParcel(event,parcel_id,"weight",document.getElementById("weight").value);    
+        document.getElementById("current").onblur = updateParcel(event,parcel_id,"presentLocation",document.getElementById("current").value);
+        document.getElementById("statusOptions1").onblur = updateParcel(event,parcel_id,"status",document.getElementById("statusOptions1").value);
+    }   
+}
+
+
+
+function prepareParcelUpdate(parcel_id){
+    
     fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
         method: 'GET',
         headers:{
@@ -377,12 +362,10 @@ function viewParcelAdmin(event,parcel_id){
                 document.getElementById("current").value = parcel.current_location;
                 document.getElementById("weight").value = parcel.weight_kgs;
                 document.getElementById("price").value = parcel.price;
-                document.getElementById("statusOptions").value = parcel.status;
+                document.getElementById("statusOptions1").value = parcel.status;
                 document.getElementById("destination").value = parcel.destination;
+                
             });
-            
-            
-            document.getElementById("tbody").innerHTML = selectedparcels;
        
         }
         
@@ -390,6 +373,9 @@ function viewParcelAdmin(event,parcel_id){
         console.log(error);
     })
 }
+
+
+
 function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
@@ -402,3 +388,66 @@ window.onclick = function(event) {
 function openModal(){
     document.getElementById("modal").style.display = "inline";
 }
+
+function updateParcel(event, parcel_id, column, updatedvalue){
+    event.preventDefault();
+    let newvalue = '';
+
+    if(column==="weight"){
+        newvalue = updatedvalue
+    }else{
+        newvalue = String(updatedvalue)
+    }
+    let updatedParcelDetail = updateDictionary(column, newvalue)
+
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id+'/'+column,{
+        method: 'PUT',
+        headers:{
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
+        },
+        body:JSON.stringify(updatedParcelDetail)
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        reply = data.Message;
+        if(data.Message==="Update successful"){
+            document.getElementById("api_reply").innerHTML = reply;   
+        }
+        else{
+            
+        
+        }
+    }).catch(error => {
+        console.log(error);
+        console.log(data);
+    })
+    
+}
+
+function updateDictionary(column, value){
+    if(column==="destination"){
+        return {
+            "destination":value
+        }
+    }else if(column==="status"){
+        return {
+            "status":value
+        }
+    }else if(column==="weight"){
+        return {
+            "weight":value
+        }
+    }else if(column==="presentLocation"){
+        return {
+            "current_location":value
+        }
+    }else{
+        return {
+            "message":"Please be epic"
+        }
+    }
+}
+
