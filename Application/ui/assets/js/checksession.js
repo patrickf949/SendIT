@@ -1,7 +1,7 @@
 
 (function checkSession(){
     if (sessionStorage.getItem("s3nd21usertoken")!==null){
-        fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
+        fetch('https://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
         headers:{
             "Content-Type":"application/json",
@@ -12,6 +12,10 @@
         })
         .then(response => response.json())
         .then(data => {
+            reply = data.message;
+            if(data.message.includes("")){
+
+            }
         }).catch(error => {
             console.log(error)
         })
