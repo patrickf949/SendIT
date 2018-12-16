@@ -283,7 +283,7 @@ class Validation():
         """
         for element in parcels:
             for key,value in element.items():
-                if key == 'date_created' or key == 'date_to_be_delivered':
+                if key == 'date_created' or key == 'date_to_be_delivered' or key == 'weight_kgs':
                     value == str(value)
         return parcels
 
@@ -339,19 +339,18 @@ class Validation():
         if exists != True:
             return exists
         
+        weight = format(weight,'.4f')
         sql_command = """UPDATE parcels
-            SET weight={weight},
-            price=(select price from (
-            select price,(weight_kgs @> {weight}) 
-            as parcel_weight 
-            from weight_categories
-            )
-            as b where parcel_weight=true)
-            WHERE 
-            parcel_id={parcel_id} 
-            RETURNING parcel_id,parcel_description,weight_kgs,price;
+             set 
+             weight_kgs = {weight},
+             price=
+             (select price from (select price,(weight_kgs @> {weight}) as thing 
+             from weight_categories) as b where thing=true) 
+             where parcel_id={parcel_id} 
+             returning parcel_id,parcel_description,weight_kgs,price;
             """.format(weight=weight,parcel_id=parcel_id)
         updated_fields = self.database.execute_query(sql_command)
+        updated_fields = self.tostring_for_date_time(updated_fields)
         if not updated_fields:
             return jsonify({
                 'Message' : 'Update weight failed'
