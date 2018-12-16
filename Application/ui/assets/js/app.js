@@ -203,52 +203,16 @@ function updateParcel(event){
 function viewParcelsUser(event){
     event.preventDefault()
 
-    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
-        method: 'GET',
-        headers:{
-            "Content-Type":"application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        reply = data.message;
-        openTable(event);
-        if(data.message.includes("all available")===true){
-            document.getElementById("api_reply").innerHTML = reply+"shut up";
-            let no = 0;
-            let allparcels = '';
-            data.parcels.forEach(parcel => {
-                no++;
-                allparcels += `
-                <tr onclick="viewParcel(event,${parcel.parcel_id}}" class="${color}">
-                    <td>${no}</td>
-                    <td>${parcel.parcel_description}</td>
-                    <td>${parcel.recipient}</td>
-                    <td>${parcel.price}</td>
-                    <td>${parcel.status}</td>
-                </tr>
-                `
-            });
-
-
-            document.querySelector("tbody").innerHTML = allparcels;
-
-        }else{
-            document.getElementById("api_reply").innerHTML = reply+" NOt";
-        }
-
-    }).catch(error => {
-        console.log(error);
-    })
-
+    viewParcels("viewParcelUser")
 }
 
 function viewParcelsAdmin(event){
     event.preventDefault();
+    viewParcels("viewParcelAdmin")
+    
+}
 
+function viewParcels(action){
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
         headers:{
@@ -276,7 +240,7 @@ function viewParcelsAdmin(event){
                 no++;
                 s= String(no)
                 allparcels += `
-                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})">
+                <tr class="${color}" onclick="${action}(event,${parcel.parcel_id})">
                     <td>${s}</td>
                     <td class="not1">${parcel.recipient}</td>
                     <td>${parcel.parcel_description}</td>
@@ -295,7 +259,7 @@ function viewParcelsAdmin(event){
             document.querySelector("tbody").innerHTML = allparcels;
 
         }else{
-            document.getElementById("api_reply").innerHTML = reply+" Not";
+            document.getElementById("api_reply").innerHTML = reply;
         }
 
     }).catch(error => {
@@ -304,7 +268,7 @@ function viewParcelsAdmin(event){
 
 }
 
-function viewParcel(event,parcel_id){
+function viewParcelUser(event,parcel_id){
     event.preventDefault();
     prepareParcelUpdate(parcel_id,"editParcelUser");
     document.getElementById("update").onclick = editParcelUser(event,parcel_id);
