@@ -353,7 +353,7 @@ class TestSendIT(unittest.TestCase):
     def test_get_all_weight_categories(self):
         self.table_drop = Database(self.env.hostname,self.env.dbname)
         response = self.test_client.get(
-            '/api/v2/categories',
+            '/api/v2/parcel/categories',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
