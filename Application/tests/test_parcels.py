@@ -48,7 +48,7 @@ class TestSendIT(unittest.TestCase):
         assert isinstance(self.testdata, TestData)
         
     
-    def test_get_all_parcels_on_add(self):
+    def test_get_all_parcels_without_auth(self):
         response = self.test_client.get(
             '/api/v2/parcels',
             content_type='application/json',
@@ -330,10 +330,10 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    def test_get_parcels_by_user_id(self):
+    def test_get_parcels_by_invalid_user_id(self):
  
         response = self.test_client.get(
-            '/api/v2/parcels/43342',
+            '/api/v2/users/43342/parcels',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
@@ -349,6 +349,33 @@ class TestSendIT(unittest.TestCase):
         message = response.get_json()
         self.assertEqual(message.get('Message'),'@TestUser, you are not authorized to view this.')
         self.assertEqual(response.status_code,403)
+
+    def test_get_all_weight_categories(self):
+        response = self.test_client.get(
+            '/api/v2/parcels/43342',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+
+
+    def test_get_parcels_by_user(self):
+        response = self.test_client.get(
+            '/api/v2/parcels/2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+    
+
+
+    def test_get_parcels_authenticated(self):
+        response = self.test_client.get(
+            '/api/v2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+        )
+        self.assertEqual(response.status_code,200)
 
 
     def tearDown(self):
