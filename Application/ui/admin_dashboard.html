@@ -72,8 +72,10 @@
 			</div>
 		</div>
 	</div>
+
 	<div id="modal">
 		<div>&nbsp</div>
+		<div id="api_reply1"></div>
 		<form>
 			<div class="leftform">
 				<div>
@@ -145,8 +147,8 @@
 					<input type="number" name="location" id="price" readonly>
 				</div>
 				<div>
-					<button type="submit">Edit Order</button>
-					<button type="button" >Back</button>
+					<button id="update" type="button">Edit Order</button>
+					<button type="button" onclick="backToTable(event)">Back</button>
 				</div>
 			</div>
 		</form>
