@@ -321,6 +321,49 @@ class Validation():
         return self.update_parcel_by_admin(username, parcel_id, data, 'current_location')
 
 
+    def validate_change_weight(self,username, parcel_id,data):
+        """
+        Change the parcel weight
+        """
+        if self.is_admin(username)!=True:
+            return jsonify({
+                'message':'@'+username+' You are not authorized to do this'
+            }), 403
+        weight = data.get("weight")
+        if not weight and not(isinstance(type(weight),float)):
+            return jsonify({
+                'message': 'weight of a parcel should be a number and should be between 0 and 2000'
+            }), 400
+        
+        exists = self.check_if_parcel_id_exists(parcel_id)
+        if exists != True:
+            return exists
+        
+        sql_command = """UPDATE parcels
+            SET weight={weight},
+            price=(select price from (
+            select price,(weight_kgs @> {weight}) 
+            as parcel_weight 
+            from weight_categories
+            )
+            as b where parcel_weight=true)
+            WHERE 
+            parcel_id={parcel_id} 
+            RETURNING parcel_id,parcel_description,weight_kgs,price;
+            """.format(weight=weight,parcel_id=parcel_id)
+        updated_fields = self.database.execute_query(sql_command)
+        if not updated_fields:
+            return jsonify({
+                'Message' : 'Update weight failed'
+            }), 400
+        
+        return jsonify({
+            'Message' : 'Update successful',
+            'Updated fields' : updated_fields[0]
+        }), 200
+        
+        
+
     def update_parcel_by_admin(self, username, parcel_id, data, column):
         """
         Update parcel by admin only
