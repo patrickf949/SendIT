@@ -102,3 +102,16 @@ def change_status(parcel_id):
     current_user = get_jwt_identity()
     data = request.get_json()
     return response.validate_change_status(current_user, parcel_id, data)
+
+
+@blue_print.route('/api/v2/parcels/<int:parcel_id>/weight', methods=['PUT'])
+@jwt_required
+def change_weight(parcel_id):
+    """
+    Change status of a parcel delivery order-admin
+    params:parcel id
+    returns: edited parcel
+    """
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    return response.validate_change_weight(current_user, parcel_id, data)
