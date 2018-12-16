@@ -10,7 +10,8 @@ class TestData():
             "recipient":"Carol",
             "contact":"0756372818",
             "pickup_location":"Kawempe, industrial area",
-            "destination":"Jinja town council"
+            "destination":"Jinja town council",
+            "weight":3
         }
     valid_parcel1 ={
             "client":"Kwage",

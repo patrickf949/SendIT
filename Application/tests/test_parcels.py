@@ -265,6 +265,29 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,403)
 
+    def test_parcel_update_weight_valid_data(self):
+
+        response = self.test_client.put(
+            '/api/v2/parcels/1/weight',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+
+        )
+        self.assertEqual(response.status_code,200)
+    
+
+    def test_parcel_update_weight_non_admin(self):
+
+        response = self.test_client.put(
+            '/api/v2/parcels/1/weight',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+
+        )
+        self.assertEqual(response.status_code,403)
+
     @pytest.mark.skip(reason="no way of currently testing this")
     def test_cancel_parcel_delivery_order(self):
         
