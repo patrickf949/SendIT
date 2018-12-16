@@ -25,18 +25,19 @@ function signUp(event){
     .then(response => response.json())
     .then(data => {
         reply = data.message;
-        if(data.message === "hello! "+username+" Your Account has been created. Please login"){
-            
+        if(data.message === "hello! "+username+" Your Account has been created."
+          +"Please login"){
+
             document.getElementById("api_reply").innerHTML = reply;
         }else{
-            
+
             document.getElementById("api_reply").innerHTML = reply;
         }
     }).catch(error => {
         console.log(error);
     })
 
-    
+
 }
 
 function loginUser(event){
@@ -66,13 +67,13 @@ function loginUser(event){
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "admin_dashboard.html";
             closeTable();
-            
+
         }else if(data.message === "Hello "+username+" you are logged into SendIT"){
             sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "dashboard.html"
-            close(closeTable);
-            
+            closeTable();
+
         }else{
             document.getElementById("api_reply").innerHTML = reply;
         }
@@ -81,15 +82,15 @@ function loginUser(event){
         console.log(error);
     })
 
-    
+
 }
-(function closeTable(){
+function closeTable(){
     document.getElementById("client_table").style.display='none'
-})();
+}
 
 function logout(event){
     event.preventDefault()
-    
+
     fetch('http://i-sendit.herokuapp.com/api/v2/auth/logout',{
         method: 'POST',
         headers:{
@@ -110,7 +111,7 @@ function logout(event){
         console.log(error);
     })
 
-    
+
 }
 
 function addParcel(event){
@@ -145,14 +146,14 @@ function addParcel(event){
         if(data.message.includes("Your Parcel Delivery order has been placed")===true){
             document.getElementById("api_reply").innerHTML = reply;
             location.href = "dashboard.html"
-       
+
         }else{
             document.getElementById("api_reply").innerHTML = reply;
         }
         // document.getElementById("api_reply").innerHTML = reply;
     }).catch(error => {
         console.log(error);
-    })    
+    })
 
 }
 
@@ -187,67 +188,31 @@ function updateParcel(event){
         reply = data.message;
         if(data.message.includes("Your Parcel Delivery order has been placed")===true){
             document.getElementById("api_reply").innerHTML = reply;
-            
-       
+
+
         }else{
             document.getElementById("api_reply").innerHTML = reply;
         }
         // document.getElementById("api_reply").innerHTML = reply;
     }).catch(error => {
         console.log(error);
-    })  
-    
+    })
+
 }
 
 function viewParcelsUser(event){
     event.preventDefault()
-    
-    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
-        method: 'GET',
-        headers:{
-            "Content-Type":"application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods":"GET",
-            "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        reply = data.message;
-        openTable(event);
-        if(data.message.includes("all available")===true){
-            document.getElementById("api_reply").innerHTML = reply+"shut up";
-            let no = 0;
-            let allparcels = '';
-            data.parcels.forEach(parcel => {
-                no++;
-                allparcels += `
-                <tr onclick="viewParcel(event,${parcel.parcel_id}}" class="${color}">			
-                    <td>${no}</td>
-                    <td>${parcel.parcel_description}</td>
-                    <td>${parcel.recipient}</td>
-                    <td>${parcel.price}</td>
-                    <td>${parcel.status}</td>		
-                </tr>
-                `
-            });
-            
-            
-            document.querySelector("tbody").innerHTML = allparcels;
-       
-        }else{
-            document.getElementById("api_reply").innerHTML = reply+" NOt";
-        }
-        
-    }).catch(error => {
-        console.log(error);
-    })  
-    
+
+    viewParcels("viewParcelUser")
 }
 
 function viewParcelsAdmin(event){
     event.preventDefault();
+    viewParcels("viewParcelAdmin")
     
+}
+
+function viewParcels(action){
     fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
         headers:{
@@ -275,7 +240,7 @@ function viewParcelsAdmin(event){
                 no++;
                 s= String(no)
                 allparcels += `
-                <tr class="${color}" onclick="viewParcelAdmin(event,${parcel.parcel_id})">
+                <tr class="${color}" onclick="${action}(event,${parcel.parcel_id})">
                     <td>${s}</td>
                     <td class="not1">${parcel.recipient}</td>
                     <td>${parcel.parcel_description}</td>
@@ -283,30 +248,30 @@ function viewParcelsAdmin(event){
                     <td>${parcel.destination}</td>
                     <td>${parcel.current_location}</td>
                     <td class="not">${parcel.price}</td>
-                    <td class="not1">${parcel.weight_kgs}</td>		
+                    <td class="not1">${parcel.weight_kgs}</td>
                     <td class="status">${parcel.status}</td>
                 </tr>
                 `
-                
+
             });
-            
-            
+
+
             document.querySelector("tbody").innerHTML = allparcels;
-       
+
         }else{
-            document.getElementById("api_reply").innerHTML = reply+" Not";
+            document.getElementById("api_reply").innerHTML = reply;
         }
-        
+
     }).catch(error => {
         console.log(error);
-    })  
-    
+    })
+
 }
 
-function viewParcel(event,parcel_id){
+function viewParcelUser(event,parcel_id){
     event.preventDefault();
-    prepareParcelUpdate(parcel_id);
-    document.getElementById("destination").onblur = updateParcel(event,parcel_id,"destination",document.getElementById("destination").value);
+    prepareParcelUpdate(parcel_id,"editParcelUser");
+    document.getElementById("update").onclick = editParcelUser(event,parcel_id);
 }
 
 function openTable(){
@@ -321,18 +286,13 @@ function viewUsers(event){
 function viewParcelAdmin(event,parcel_id){
     event.preventDefault();
     prepareParcelUpdate(parcel_id);
-    let weight=document.getElementById("weight").value;
-    if (weight>0){
-        document.getElementById("weight").onblur = updateParcel(event,parcel_id,"weight",document.getElementById("weight").value);    
-        document.getElementById("current").onblur = updateParcel(event,parcel_id,"presentLocation",document.getElementById("current").value);
-        document.getElementById("statusOptions1").onblur = updateParcel(event,parcel_id,"status",document.getElementById("statusOptions1").value);
-    }   
+    document.getElementById("update").onclick = editParcelAdmin(event,parcel_id);
 }
 
 
 
 function prepareParcelUpdate(parcel_id){
-    
+
     fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
         method: 'GET',
         headers:{
@@ -345,7 +305,7 @@ function prepareParcelUpdate(parcel_id){
     .then(response => response.json())
     .then(data => {
         if(data.Parcel===null){
-            document.getElementById("api_reply").innerHTML = reply;   
+            document.getElementById("api_reply").innerHTML = reply;
         }
         else{
             openModal();
@@ -364,22 +324,45 @@ function prepareParcelUpdate(parcel_id){
                 document.getElementById("price").value = parcel.price;
                 document.getElementById("statusOptions1").value = parcel.status;
                 document.getElementById("destination").value = parcel.destination;
-                
+
             });
-       
         }
-        
+
     }).catch(error => {
         console.log(error);
     })
 }
 
+let currentParcel = 0;
 
+function editParcelAdmin(event, parcel_id){
+    event.preventDefault();
+    let weight = String(document.getElementById("weight").value);
+    if(weight!==null){
+        updateParcel(event,parcel_id,"weight",weight);
+        updateParcel(event,parcel_id,"presentLocation",String(document.getElementById("current").value));
+        updateParcel(event,parcel_id,"status",String(document.getElementById("statusOptions1").value));
+    }else{
+        document.getElementById("api_reply1").value = "You cannot edit present location or status of parcel before editing the weight";
+    }
+}
+
+function editParcelUser(event, parcel_id){
+    event.preventDefault();
+    let destination = String(document.getElementById("destination").value);
+
+    if(destination!=null && (document.getElementById("status"))==="pending"){
+        updateParcel(event, parcel_id,"destination",destination)
+    }else{
+        document.getElementById("api_reply1").value = "You can only update a parcel thats still pending"
+    }
+
+}
 
 function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
-  
+
 window.onclick = function(event) {
     if (event.target == document.getElementById("modal")) {
         document.getElementById("modal").style.display = "none";
@@ -398,6 +381,7 @@ function updateParcel(event, parcel_id, column, updatedvalue){
     }else{
         newvalue = String(updatedvalue)
     }
+    console.log(newvalue)
     let updatedParcelDetail = updateDictionary(column, newvalue)
 
     fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id+'/'+column,{
@@ -405,6 +389,7 @@ function updateParcel(event, parcel_id, column, updatedvalue){
         headers:{
             "Content-Type":"application/json",
             "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods":"PUT",
             "Authorization":"Bearer "+sessionStorage.getItem("s3nd21usertoken")
         },
         body:JSON.stringify(updatedParcelDetail)
@@ -414,20 +399,29 @@ function updateParcel(event, parcel_id, column, updatedvalue){
     .then(data => {
         reply = data.Message;
         if(data.Message==="Update successful"){
-            document.getElementById("api_reply").innerHTML = reply;   
+            document.getElementById("api_reply1").innerHTML = reply;
         }
         else{
-            
-        
+            document.getElementById("api_reply1").innerHTML = reply;
+
         }
     }).catch(error => {
         console.log(error);
-        console.log(data);
+
     })
-    
+
+}
+
+function backToTable(event){
+    event.preventDefault()
+    document.getElementById("modal").style.display = 'none';
+    document.getElementsByClassName("content")[0].style.display ='block';
+    closeTable();
 }
 
 function updateDictionary(column, value){
+    console.log("Column: "+column);
+    console.log("Value: "+value);
     if(column==="destination"){
         return {
             "destination":value
@@ -450,4 +444,3 @@ function updateDictionary(column, value){
         }
     }
 }
-

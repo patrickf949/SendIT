@@ -21,7 +21,7 @@ class Database():
         dbname='{dbname}'
         password='60047dace9902c69d34dbc380525f9551a34d17442f648a37ccc253d760cb5e2'
         port=5432
-        host='{hostname}'
+        host={hostname}
         """.format(
             dbname=dbname,
             hostname=hostname
@@ -53,7 +53,7 @@ class Database():
                 parcel_id SERIAL PRIMARY KEY,
                 user_id INT NOT NULL,
                 parcel_description VARCHAR (50) NOT NULL,
-                weight_kgs INT NULL,
+                weight_kgs FLOAT NULL,
                 price INT NULL,
                 recipient VARCHAR (250) NOT NULL,
                 recipient_contact VARCHAR (250) NOT NULL,

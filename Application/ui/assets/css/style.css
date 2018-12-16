@@ -3,9 +3,11 @@
 	background:rgba(0,0,0,0.9);
 }
 #api_reply{
-	background:gold;
+	background:black;
 	border-radius: 3pt;
-	color:black
+	color:white;
+	width: auto;
+	margin: auto;
 }
 .left{
 	

@@ -48,7 +48,7 @@ class TestSendIT(unittest.TestCase):
         assert isinstance(self.testdata, TestData)
         
     
-    def test_get_all_parcels_on_add(self):
+    def test_get_all_parcels_without_auth(self):
         response = self.test_client.get(
             '/api/v2/parcels',
             content_type='application/json',
@@ -265,6 +265,29 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,403)
 
+    def test_parcel_update_weight_valid_data(self):
+
+        response = self.test_client.put(
+            '/api/v2/parcels/1/weight',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+
+        )
+        self.assertEqual(response.status_code,200)
+    
+
+    def test_parcel_update_weight_non_admin(self):
+
+        response = self.test_client.put(
+            '/api/v2/parcels/1/weight',
+            content_type='application/json',
+            data=json.dumps(self.testdata.valid_parcel),
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+
+        )
+        self.assertEqual(response.status_code,403)
+
     @pytest.mark.skip(reason="no way of currently testing this")
     def test_cancel_parcel_delivery_order(self):
         
@@ -307,12 +330,12 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    def test_get_parcels_by_user_id(self):
+    def test_get_parcels_by_invalid_user_id(self):
  
         response = self.test_client.get(
-            '/api/v2/parcels/43342',
+            '/api/v2/users/43342/parcels',
             content_type='application/json',
-            headers={"Authorization":f"Bearer {self.usertoken}"}
+            headers={"Authorization":f"Bearer {self.admintoken}"}
         )
         self.assertEqual(response.status_code,404)
 
@@ -326,6 +349,42 @@ class TestSendIT(unittest.TestCase):
         message = response.get_json()
         self.assertEqual(message.get('Message'),'@TestUser, you are not authorized to view this.')
         self.assertEqual(response.status_code,403)
+
+    def test_get_all_weight_categories(self):
+        self.table_drop = Database(self.env.hostname,self.env.dbname)
+        response = self.test_client.get(
+            '/api/v2/parcel/categories',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+
+
+    def test_get_parcels_by_user(self):
+        response = self.test_client.get(
+            '/api/v2/users/2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+    
+    def test_get_parcels_as_non_admin(self):
+        response = self.test_client.get(
+            '/api/v2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+    
+
+
+    def test_get_parcels_authenticated(self):
+        response = self.test_client.get(
+            '/api/v2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.admintoken}"}
+        )
+        self.assertEqual(response.status_code,200)
 
 
     def tearDown(self):
