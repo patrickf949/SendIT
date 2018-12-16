@@ -5,7 +5,9 @@
 #api_reply{
 	background:black;
 	border-radius: 3pt;
-	color:gold
+	color:white;
+	width: auto;
+	margin: auto;
 }
 .left{
 	
