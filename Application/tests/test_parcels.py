@@ -368,6 +368,14 @@ class TestSendIT(unittest.TestCase):
         )
         self.assertEqual(response.status_code,200)
     
+    def test_get_parcels_as_non_admin(self):
+        response = self.test_client.get(
+            '/api/v2/parcels',
+            content_type='application/json',
+            headers={"Authorization":f"Bearer {self.usertoken}"}
+        )
+        self.assertEqual(response.status_code,200)
+    
 
 
     def test_get_parcels_authenticated(self):
