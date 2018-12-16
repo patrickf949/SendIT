@@ -352,7 +352,7 @@ class TestSendIT(unittest.TestCase):
 
     def test_get_all_weight_categories(self):
         response = self.test_client.get(
-            '/api/v2/parcels/43342',
+            '/api/v2/categories',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.usertoken}"}
         )
@@ -361,7 +361,7 @@ class TestSendIT(unittest.TestCase):
 
     def test_get_parcels_by_user(self):
         response = self.test_client.get(
-            '/api/v2/parcels/2/parcels',
+            '/api/v2/users/2/parcels',
             content_type='application/json',
             headers={"Authorization":f"Bearer {self.admintoken}"}
         )
