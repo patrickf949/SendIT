@@ -1,8 +1,18 @@
-
+#modal{
+	display:none;
+	background:rgba(0,0,0,0.9);
+}
+#api_reply{
+	background:black;
+	border-radius: 3pt;
+	color:white;
+	width: auto;
+	margin: auto;
+}
 .left{
 	
 	float: left;
-	width: 100px;
+	width:15%;
 	text-align: center;
 	color:white;
 	height: 100%;
@@ -10,7 +20,7 @@
 	margin-top: 5px;
 }
 html {
-  background: url(../images/ba.jpg);
+  background: url(../images/ba.jpg) fixed;
  
 }
 .left img{
@@ -42,6 +52,31 @@ html {
 
 
 }
+.leftform{
+	background:rgba(0,0,0,0.7);
+	float:left;
+	width: 40%;
+}
+.leftform div{
+	float: right;
+	width:90%;
+	text-align: center;
+	height: 100%;
+	margin:auto;
+}
+.rightform{
+	background:rgba(0,0,0,0.7);
+	float:right;
+	width: 40%;
+}
+.rightform div{
+	float: right;
+	width:90%;
+	text-align: center;
+	height: 100%;
+	margin:auto;
+}
+
 .content{
 	background-color: rgba(0,0,139,0.9);
 	width: 90%;
@@ -61,23 +96,42 @@ html {
 
 button{
 	background: white;
-	color: rgb(0,0,139);
+	color: black;
 	border-style: none;
 	border-radius: 30px;
 	margin:10px;
 	height: 30px;
 	width: 150px;
+	cursor: pointer
 
+}
+.leftform div input{
+	width: 60%;
+	height: 20px;
+	border-radius: 3em;
+	border-style: none
+}
+.rightform div input{
+	height: 20px;
+	width: 60%;
+	border-radius: 3em;
+	border-style: none
+}
+.rightform div select{
+	height: 20px;
+	width: 60%;
+	border-radius: 3em;
+	border-style: none
 }
 a{
 	text-decoration: none;
 	color: white
 }
-.logindiv div input{
+.logindiv form div input{
 	width: 100%;
-	border-radius:30px;
-	margin-top:10px;
-	height: 30px;
+	border-radius:20px;
+	
+	height: 20px;
 	border-style: none;
 }
 .logindiv div{
@@ -87,19 +141,22 @@ a{
 	margin-right: auto;
 	margin-left: auto
 }
-.logindiv div h3{
+.logindiv form div h3{
 	text-align: left;
-	margin-top: 10px
 }
-table{
-	width: 90%;
-	margin: auto;
-}
-.client_table{
 
+#client_table{
+	display: none;
+	width: 100%;
+	margin: auto;
 }
 .buttons{
 	text-align: center;
+}
+tr{
+	border-bottom:1pt solid gold;
+	width: 100%
+
 }
 
 .logindiv{
@@ -144,31 +201,14 @@ input{
 	text-align: center;
 }
 
-.thead{
+thead{
 	color: gold;
 
 	width: 100%;
 }
-.tables div div{
-	text-align: center;
-	border-width: thin;
-	margin-top: 10px;
+tbody{
 	width: 100%;
-
 }
-
-.tables div div div{
-	width: auto;
-	float: left;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	
-}
-admin div div div{
-	width: 12%
-}
-
 .light{
 	width: 100%;
 	background-color : rgb(0,0,255);
@@ -189,7 +229,7 @@ hr{
 	width: 150px;
 
 }
-select{
+#statusOptions{
 	background: white;
 	color: rgb(0,0,139);
 	border-style: none;
@@ -198,8 +238,16 @@ select{
 	height: 30px;
 	width: 100%;
 }
-option{
+#statusOptions1{
+	background: white;
+	color: rgb(0,0,139);
+	border-style: none;
+	border-radius: 30px;
 	text-align: center;
+	height: 20px;
+	width: 50%;
+	margin:auto;
+
 }
 
 @media only screen and (max-width: 480px){
@@ -223,6 +271,7 @@ option{
 	.not{
 		width: 0px;
 	}
+	
 
 }
 @media only screen and (max-width: 720px){
@@ -238,7 +287,11 @@ option{
 	}
 
 	.right div{
-		width: 100px
+		width: 30%
+	}
+	.not1{
+		visibility:hidden;
+		display: none;
 	}
 }
 
@@ -258,8 +311,13 @@ option{
 	}
 
 	.right div{
-		width: 100px
+		width: 30%;
 	}
+	.not{
+		visibility:hidden;
+		display: none;
+	}
+	
 }
 
 @media (max-resolution: 1dppx) and (max-width: 500px) {
@@ -272,16 +330,17 @@ option{
 	.right{
 		width: 70%;
 	}
-	.not{
-		visibility:hidden;
-		display: none;
-	}
+	
 	.status{
 		
 	}
 
 	.right div{
-		width: 100px
+		width:30%;
+	}
+	.not1{
+		visibility:hidden;
+		display: none;
 	}
 	
 }

@@ -136,12 +136,13 @@ class Validation():
         rows = self.database.execute_query(sql_command)
         if not rows:
             return jsonify({
-                'Message': 'no parcel delivery orders from specified user'
+                'message': 'no parcel delivery orders from specified user'
             }), 404
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
-            'parcels by user' : rows
+            'message':'all available',
+            'parcels' : rows
         }), 200
 
     
@@ -205,14 +206,18 @@ class Validation():
         user_is_admin = self.is_admin(username)
         print(user_is_admin)
         if not user_is_admin:
-            return jsonify({
-                'Message': ' you do not have authorization'
-            }), 400
+            exists = self.check_if_parcel_id_exists(parcel_id)
+            if exists!=True:
+                return exists
+            user_id = self.get_user_id(username)
+            if self.check_user_created_parcel(user_id, parcel_id)!=True:
+                return jsonify({
+                    'Message': ' you do not have authorization'
+                }), 400
 
         exists = self.check_if_parcel_id_exists(parcel_id)
         if exists!=True:
             return exists
-        
         sql_command = """
         SELECT * FROM parcels where parcel_id={};
         """.format(parcel_id)
@@ -221,6 +226,7 @@ class Validation():
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
+            'message':'@'+username+' here is the specified parcel.',
             'Parcel' : rows
         }), 200
     
@@ -239,7 +245,7 @@ class Validation():
         user_id = self.database.get_from_users('user_id', username)
         if not user_id:
             return jsonify({
-                'Message' : '@'+username+' lets make things official. Sign up with send it'
+                'message' : '@'+username+' lets make things official. Sign up with send it'
             }), 401
         return user_id
 
@@ -261,11 +267,13 @@ class Validation():
         all_elements = self.database.execute_query(sql_command)
         if not all_elements:
             return jsonify({
-                'Users':'No '+table+' in system'
+                'message':'@'+username+' nada in this',
+                table:'No '+table+' in system'
             }), 404
         all_elements = self.tostring_for_date_time(all_elements)
         return jsonify({
-            'All '+table+'': all_elements
+            'message' : '@'+username+' all available',
+            table : all_elements
             }), 200
 
 
@@ -275,7 +283,7 @@ class Validation():
         """
         for element in parcels:
             for key,value in element.items():
-                if key == 'date_created' or key == 'date_to_be_delivered':
+                if key == 'date_created' or key == 'date_to_be_delivered' or key == 'weight_kgs':
                     value == str(value)
         return parcels
 
@@ -312,6 +320,48 @@ class Validation():
         """
         return self.update_parcel_by_admin(username, parcel_id, data, 'current_location')
 
+
+    def validate_change_weight(self,username, parcel_id,data):
+        """
+        Change the parcel weight
+        """
+        if self.is_admin(username)!=True:
+            return jsonify({
+                'message':'@'+username+' You are not authorized to do this'
+            }), 403
+        weight = data.get("weight")
+        if not weight and not(isinstance(type(weight),float)):
+            return jsonify({
+                'message': 'weight of a parcel should be a number and should be between 0 and 2000'
+            }), 400
+        
+        exists = self.check_if_parcel_id_exists(parcel_id)
+        if exists != True:
+            return exists
+        
+        weight = format(weight,'.4f')
+        sql_command = """UPDATE parcels
+             set 
+             weight_kgs = {weight},
+             price=
+             (select price from (select price,(weight_kgs @> {weight}) as thing 
+             from weight_categories) as b where thing=true) 
+             where parcel_id={parcel_id} 
+             returning parcel_id,parcel_description,weight_kgs,price;
+            """.format(weight=weight,parcel_id=parcel_id)
+        updated_fields = self.database.execute_query(sql_command)
+        updated_fields = self.tostring_for_date_time(updated_fields)
+        if not updated_fields:
+            return jsonify({
+                'Message' : 'Update weight failed'
+            }), 400
+        
+        return jsonify({
+            'Message' : 'Update successful',
+            'Updated fields' : updated_fields[0]
+        }), 200
+        
+        
 
     def update_parcel_by_admin(self, username, parcel_id, data, column):
         """
