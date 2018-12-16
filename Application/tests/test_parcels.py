@@ -335,7 +335,7 @@ class TestSendIT(unittest.TestCase):
         response = self.test_client.get(
             '/api/v2/users/43342/parcels',
             content_type='application/json',
-            headers={"Authorization":f"Bearer {self.usertoken}"}
+            headers={"Authorization":f"Bearer {self.admintoken}"}
         )
         self.assertEqual(response.status_code,404)
 
@@ -351,6 +351,7 @@ class TestSendIT(unittest.TestCase):
         self.assertEqual(response.status_code,403)
 
     def test_get_all_weight_categories(self):
+        self.table_drop = Database(self.env.hostname,self.env.dbname)
         response = self.test_client.get(
             '/api/v2/categories',
             content_type='application/json',
