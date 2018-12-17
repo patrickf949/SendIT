@@ -21,7 +21,7 @@ class Database():
         dbname='{dbname}'
         password='60047dace9902c69d34dbc380525f9551a34d17442f648a37ccc253d760cb5e2'
         port=5432
-        host={hostname}
+        host='{hostname}'
         """.format(
             dbname=dbname,
             hostname=hostname

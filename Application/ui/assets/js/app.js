@@ -12,8 +12,8 @@ function signUp(event){
         "contact":contact,
         "password":password
     }
-
-    fetch('http://i-sendit.herokuapp.com//api/v2/auth/signup',{
+    if ((/[\w-]+@([\w-]+\.)+[\w-]+/.test(email))===true){
+        fetch('http://i-sendit.herokuapp.com//api/v2/auth/signup',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -21,23 +21,26 @@ function signUp(event){
             "Access-Control-Allow-Methods":"POST"
         },
         body:JSON.stringify(userdetails)
-    })
-    .then(response => response.json())
-    .then(data => {
-        reply = data.message;
-        if(data.message === "hello! "+username+" Your Account has been created."
-          +"Please login"){
+        })
+        .then(response => response.json())
+        .then(data => {
+            reply = data.message;
+            if(data.message === "hello! "+username+" Your Account has been created."
+            +"Please login"){
 
-            document.getElementById("api_reply").innerHTML = reply;
-        }else{
+                document.getElementById("api_reply").innerHTML = reply;
+            }else{
 
-            document.getElementById("api_reply").innerHTML = reply;
-        }
-    }).catch(error => {
-        console.log(error);
-    })
-
-
+                document.getElementById("api_reply").innerHTML = reply;
+            }
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+    else{
+        document.getElementById("api_reply").innerHTML = "Please enter a valid email address";
+    }
+    
 }
 
 function loginUser(event){
@@ -271,7 +274,12 @@ function viewParcels(action){
 function viewParcelUser(event,parcel_id){
     event.preventDefault();
     prepareParcelUpdate(parcel_id,"editParcelUser");
-    document.getElementById("update").onclick = editParcelUser(event,parcel_id);
+    
+    document.getElementById("btns").innerHTML = `
+                    <button type="submit" onclick="editParcelUser(event,${parcel_id})">Edit Order</button>
+					<button type="button" onclick="backToTable(event)">Back</button>
+					<button type="reset" id="resetbtn">r</button>
+    `;
 }
 
 function openTable(){
@@ -286,13 +294,18 @@ function viewUsers(event){
 function viewParcelAdmin(event,parcel_id){
     event.preventDefault();
     prepareParcelUpdate(parcel_id);
-    document.getElementById("update").onclick = editParcelAdmin(event,parcel_id);
+    document.getElementById("btns").innerHTML = `
+                    <button type="submit" onclick="editParcelAdmin(event,${parcel_id})">Edit Order</button>
+					<button type="button" onclick="backToTable(event)">Back</button>
+					<button type="reset" id="resetbtn">r</button>
+    `;
+    
 }
 
 
 
 function prepareParcelUpdate(parcel_id){
-
+    document.getElementById("api_reply1").value = null;
     fetch('https://i-sendit.herokuapp.com/api/v2/parcels/'+parcel_id,{
         method: 'GET',
         headers:{
@@ -351,7 +364,7 @@ function editParcelUser(event, parcel_id){
     event.preventDefault();
     let destination = String(document.getElementById("destination").value);
 
-    if(destination!=null && (document.getElementById("status"))==="pending"){
+    if(destination!==null && (document.getElementById("status"))==="pending"){
         updateParcel(event, parcel_id,"destination",destination)
     }else{
         document.getElementById("api_reply1").value = "You can only update a parcel thats still pending"
@@ -377,7 +390,7 @@ function updateParcel(event, parcel_id, column, updatedvalue){
     let newvalue = '';
 
     if(column==="weight"){
-        newvalue = updatedvalue
+        newvalue = parseFloat(updatedvalue)
     }else{
         newvalue = String(updatedvalue)
     }
