@@ -1,6 +1,11 @@
 #modal{
 	display:none;
 	background:rgba(0,0,0,0.9);
+	margin-top: 100px;
+	margin-bottom: 60px;
+}
+#resetbtn{
+	display: none
 }
 #api_reply{
 	background:black;
