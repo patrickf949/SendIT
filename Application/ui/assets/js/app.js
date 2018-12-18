@@ -66,17 +66,10 @@ function loginUser(event){
     .then(data => {
         reply = data.message;
         if(data.message === "Hello "+username+" you are logged into SendIT as admin"){
-            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
-            document.getElementById("api_reply").innerHTML = reply;
-            location.href = "admin_dashboard.html";
-            closeTable();
+            setUpUserDashboards(username,(data).Access_token,"admin_dashboard.html")
 
         }else if(data.message === "Hello "+username+" you are logged into SendIT"){
-            sessionStorage.setItem("s3nd21usertoken",(data).Access_token);
-            document.getElementById("api_reply").innerHTML = reply;
-            location.href = "dashboard.html"
-            closeTable();
-
+            setUpUserDashboards(username,(data).Access_token,"dashboard.html")
         }else{
             document.getElementById("api_reply").innerHTML = reply;
         }
@@ -86,6 +79,13 @@ function loginUser(event){
     })
 
 
+}
+function setUpUserDashboards(username,token,dashboard){
+    sessionStorage.setItem("s3nd21usertoken",token);
+    sessionStorage.setItem("s3nd21username",username)
+    document.getElementById("api_reply").innerHTML = reply;
+    location.href = dashboard;
+    closeTable();
 }
 function closeTable(){
     document.getElementById("client_table").style.display='none'
@@ -107,6 +107,7 @@ function logout(event){
     .then(response => response.json())
     .then(data => {
         sessionStorage.removeItem('s3nd21usertoken');
+        sessionStorage.removeItem('s3nd21username');
         location.href = "index.html"
 
 
@@ -364,7 +365,7 @@ function editParcelUser(event, parcel_id){
     event.preventDefault();
     let destination = String(document.getElementById("destination").value);
 
-    if(destination!==null && (document.getElementById("status"))==="pending"){
+    if(destination!==null && (document.getElementById("statusOptions1").value)==="pending"){
         updateParcel(event, parcel_id,"destination",destination)
     }else{
         document.getElementById("api_reply1").value = "You can only update a parcel thats still pending"
@@ -410,8 +411,8 @@ function updateParcel(event, parcel_id, column, updatedvalue){
     })
     .then(response => response.json())
     .then(data => {
-        reply = data.Message;
-        if(data.Message==="Update successful"){
+        reply = data.message;
+        if(data.message==="Update successful" || data.message.includes("Updated")){
             document.getElementById("api_reply1").innerHTML = reply;
         }
         else{
