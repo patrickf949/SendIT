@@ -353,6 +353,11 @@ function editParcelAdmin(event, parcel_id){
     event.preventDefault();
     let weight = String(document.getElementById("weight").value);
     if(weight!==null){
+        let location1 = document.getElementById("current").value;
+        let location2 = document.getElementById("pickup").value;
+        if (location1===location2){
+            updateParcel(event,parcel_id,"weight",weight);    
+        }
         updateParcel(event,parcel_id,"weight",weight);
         updateParcel(event,parcel_id,"presentLocation",String(document.getElementById("current").value));
         updateParcel(event,parcel_id,"status",String(document.getElementById("statusOptions1").value));

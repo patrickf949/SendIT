@@ -1,4 +1,5 @@
 function activatePlacesSearch(){
+    getUserName();
     let inputs = [document.getElementById("pickuplocation"),
                 document.getElementById("destination"),
                 document.getElementById("current"),
@@ -12,4 +13,9 @@ function activatePlacesSearch(){
         let autocomplete = new google.maps.places.Autocomplete(input);
     }
     
+}
+function getUserName(){
+    let username = sessionStorage.getItem("s3nd21username");
+    document.getElementById("usernametag").innerHTML+= username;
+    console.log(username);
 }
