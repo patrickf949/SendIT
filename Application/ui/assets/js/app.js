@@ -13,7 +13,7 @@ function signUp(event){
         "password":password
     }
     if ((/[\w-]+@([\w-]+\.)+[\w-]+/.test(email))===true){
-        fetch('http://i-sendit.herokuapp.com//api/v2/auth/signup',{
+        fetch('https://i-sendit.herokuapp.com//api/v2/auth/signup',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -53,7 +53,7 @@ function loginUser(event){
         "password":password
     }
 
-    fetch('http://i-sendit.herokuapp.com/api/v2/auth/login',{
+    fetch('https://i-sendit.herokuapp.com/api/v2/auth/login',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -94,7 +94,7 @@ function closeTable(){
 function logout(event){
     event.preventDefault()
 
-    fetch('http://i-sendit.herokuapp.com/api/v2/auth/logout',{
+    fetch('https://i-sendit.herokuapp.com/api/v2/auth/logout',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -134,7 +134,7 @@ function addParcel(event){
         "destination":destination
     };
 
-    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -177,7 +177,7 @@ function updateParcel(event){
         "destination":destination
     };
 
-    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'PUT',
         headers:{
             "Content-Type":"application/json",
@@ -217,7 +217,7 @@ function viewParcelsAdmin(event){
 }
 
 function viewParcels(action){
-    fetch('http://i-sendit.herokuapp.com/api/v2/parcels',{
+    fetch('https://i-sendit.herokuapp.com/api/v2/parcels',{
         method: 'GET',
         headers:{
             "Content-Type":"application/json",
