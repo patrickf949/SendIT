@@ -11,8 +11,8 @@ class Database():
     """
     Handle database connections
     """
-    
-    def __init__(self,hostname,dbname='senditdb'):
+
+    def __init__(self, hostname, dbname='senditdb'):
         """
         initialise database connection
         """
@@ -97,12 +97,12 @@ class Database():
                (200000,'[200, 500)'),
                (700000,'[500, 1000)');
         """
-        sql_command1="""
+        sql_command1 = """
         SELECT EXISTS(SELECT TRUE FROM weight_categories WHERE price=3000);
         """
-        self.populate_default_data(sql_command1,sql_command)
-    
-    def populate_default_data(self,sql_command1,sql_command2):
+        self.populate_default_data(sql_command1, sql_command)
+
+    def populate_default_data(self, sql_command1, sql_command2):
         """
         Enter Default data to database
         """
@@ -119,15 +119,15 @@ class Database():
         returns:n/a
         """
         sql_command = """
-        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        INSERT INTO users (username,email,contact,password,date_created,admin)
         values ('Admin1','i-sendit@gmail.com','07888392838','doNot2114',now(),'t');
-        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        INSERT INTO users (username,email,contact,password,date_created,admin)
         values ('TestUser','meKendit@gmail.com','07888392838','ddwoNot2114',now(),'f');
         """
         sql_command1 = """
         SELECT EXISTS(SELECT TRUE FROM users where admin='true');
         """
-        self.populate_default_data(sql_command1,sql_command)
+        self.populate_default_data(sql_command1, sql_command)
 
 
     def add_parcel(self, parcel):
@@ -138,7 +138,7 @@ class Database():
         """
         user_id = self.get_from_users('user_id', parcel['username'])
         sql_command = """
-        INSERT INTO parcels 
+        INSERT INTO parcels
         (user_id, parcel_description, recipient, recipient_contact,
         pickup_location, current_location, destination, date_created,date_to_be_delivered)
         values ({user_id},'{parcel_description}','{recipient}','{contact}','{pickup_location}',
@@ -152,7 +152,7 @@ class Database():
             current_location=parcel['pickup_location'],
             destination=parcel['destination']
         )
-        sql_command1="""
+        sql_command1 = """
         SELECT * FROM parcels
             WHERE user_id='{}'
             ORDER BY date_created DESC
@@ -177,7 +177,7 @@ class Database():
         returns:n/a
         """
         sql_command = """
-        INSERT INTO users (username,email,contact,password,date_created,admin) 
+        INSERT INTO users (username,email,contact,password,date_created,admin)
         values ('{username}','{email}','{contact}','{password}',now(),'false');
         """.format(
             username=user['username'],
@@ -188,7 +188,8 @@ class Database():
 
         self.cursor.execute(sql_command)
 
-        user_added = self.check_availability_of_userdetails('username',user['username'])
+        user_added = self.check_availability_of_userdetails('username',
+                                                            user['username'])
 
         return user_added[0]['exists']
 
@@ -202,8 +203,8 @@ class Database():
         sql_command = """
         UPDATE parcels
             SET {column} = '{value}'
-            WHERE 
-            parcel_id={parcel_id} 
+            WHERE
+            parcel_id={parcel_id}
             RETURNING parcel_id,parcel_description,{column};
         """.format(column=column, value=value, parcel_id=parcel_id)
         rows = self.execute_query(sql_command)
@@ -216,7 +217,7 @@ class Database():
         params: column name, value
         returns: n/a
         """
-        sql_command="""
+        sql_command = """
         SELECT EXISTS(SELECT 1 FROM users where {column}='{value}');
         """.format(value=value, column=column)
         exists = self.execute_query(sql_command)
@@ -229,7 +230,7 @@ class Database():
         params:column name, username
         returns:password
         """
-        sql_command="""
+        sql_command = """
         SELECT {column} FROM users where username='{username}';
         """.format(username=username, column=column)
         db_value = self.execute_query(sql_command)
@@ -244,7 +245,7 @@ class Database():
         params:column name, username
         returns:password
         """
-        sql_command="""
+        sql_command = """
         SELECT EXISTS(SELECT TRUE FROM parcels WHERE parcel_id={})
         """.format(parcel_id)
         db_value = self.execute_query(sql_command)
@@ -253,11 +254,11 @@ class Database():
 
 
 
-    def validate_password(self,username,password):
+    def validate_password(self, username, password):
         """
         Check if password password is equal to password in database
         """
-        db_password = self.get_from_users('password',username)
+        db_password = self.get_from_users('password', username)
         if password != db_password:
             return jsonify({'message':'invalid username or password'}), 400
 
@@ -270,7 +271,7 @@ class Database():
         params: username
         returns: n/a
         """
-        sql_command="""
+        sql_command = """
         SELECT EXISTS(SELECT TRUE FROM users where user_id=2)
         """
         exists = self.execute_query(sql_command)
@@ -282,7 +283,7 @@ class Database():
         params: username
         returns: n/a
         """
-        sql_command="""
+        sql_command = """
         SELECT EXISTS(SELECT TRUE FROM parcels)
         """
         exists = self.execute_query(sql_command)
@@ -300,7 +301,7 @@ class Database():
 
         return rows_returned
 
-    
+
     def drop_all_tables(self):
         """Drop tables from database"""
         self.cursor.execute("Drop table users,parcels,weight_categories")
