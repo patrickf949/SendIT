@@ -16,6 +16,8 @@ class Database():
         """
         initialise database connection
         """
+        # user='senditdb'
+        # password='senditbaby'
         credentials = """
         user='mqqwsehaxujqpe'
         dbname='{dbname}'

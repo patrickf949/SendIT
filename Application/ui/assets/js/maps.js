@@ -5,14 +5,17 @@ function activatePlacesSearch(){
                 document.getElementById("current"),
                 document.getElementById("pickup")
                 ];
-    
+
     arrayLength = inputs.length
-    
+
     for (var i=0;i<arrayLength;i++){
         input = inputs[i];
-        let autocomplete = new google.maps.places.Autocomplete(input);
+        if(input!==null){
+            let autocomplete = new google.maps.places.Autocomplete(input);
+        }
+
     }
-    
+
 }
 function getUserName(){
     let username = sessionStorage.getItem("s3nd21username");

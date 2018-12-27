@@ -13,7 +13,7 @@ function signUp(event){
         "password":password
     }
     if ((/[\w-]+@([\w-]+\.)+[\w-]+/.test(email))===true){
-        fetch('https://i-sendit.herokuapp.com//api/v2/auth/signup',{
+        fetch('https://i-sendit.herokuapp.com/api/v2/auth/signup',{ 
         method: 'POST',
         headers:{
             "Content-Type":"application/json",
@@ -40,7 +40,7 @@ function signUp(event){
     else{
         document.getElementById("api_reply").innerHTML = "Please enter a valid email address";
     }
-    
+
 }
 
 function loginUser(event){
@@ -213,7 +213,7 @@ function viewParcelsUser(event){
 function viewParcelsAdmin(event){
     event.preventDefault();
     viewParcels("viewParcelAdmin")
-    
+
 }
 
 function viewParcels(action){
@@ -275,7 +275,7 @@ function viewParcels(action){
 function viewParcelUser(event,parcel_id){
     event.preventDefault();
     prepareParcelUpdate(parcel_id,"editParcelUser");
-    
+
     document.getElementById("btns").innerHTML = `
                     <button type="submit" onclick="editParcelUser(event,${parcel_id})">Edit Order</button>
 					<button type="button" onclick="backToTable(event)">Back</button>
@@ -300,7 +300,7 @@ function viewParcelAdmin(event,parcel_id){
 					<button type="button" onclick="backToTable(event)">Back</button>
 					<button type="reset" id="resetbtn">r</button>
     `;
-    
+
 }
 
 
@@ -356,7 +356,7 @@ function editParcelAdmin(event, parcel_id){
         let location1 = document.getElementById("current").value;
         let location2 = document.getElementById("pickup").value;
         if (location1===location2){
-            updateParcel(event,parcel_id,"weight",weight);    
+            updateParcel(event,parcel_id,"weight",weight);
         }
         updateParcel(event,parcel_id,"weight",weight);
         updateParcel(event,parcel_id,"presentLocation",String(document.getElementById("current").value));

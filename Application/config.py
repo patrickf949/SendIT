@@ -5,12 +5,14 @@ Congigure different environments
 import os
 class Config():
     DEBUG = False
+    # dbname = 'senditdb'
     dbname = 'dd63hj5clrnj1s'
     hostname = 'ec2-54-225-196-122.compute-1.amazonaws.com'
+    # hostname = 'localhost'
 
 class DevelopmentConfig(Config):
-    DEBUG =  True
-    
+    DEBUG = True
+
 
 class TestingConfig(Config):
     TESTING = True
@@ -30,4 +32,3 @@ app_config = {
     'testing':TestingConfig,
     'production':ProductionConfig
 }
-
