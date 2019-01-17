@@ -12,10 +12,10 @@ class Validation():
     """
     All validation
     """
-    dbname=''
-    hostname=''
+    dbname = ''
+    hostname = ''
     def __init__(self):
-        self.database = Database(Validation.hostname,Validation.dbname)
+        self.database = Database(Validation.hostname, Validation.dbname)
 
 
     def validate_signup(self, data, admin=False):
@@ -27,18 +27,18 @@ class Validation():
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        contact =data.get('contact')
-        
+        contact = data.get('contact')
+
         temp_user = dict(
             username=username,
             email=email,
             password=password,
             contact=contact,
         )
-        
-        valid_data =self.validate_userdata(temp_user.copy())
 
-        if valid_data!=True:
+        valid_data = self.validate_userdata(temp_user.copy())
+
+        if valid_data != True:
             return valid_data
 
         user = temp_user
@@ -57,26 +57,26 @@ class Validation():
         params: user information
         returns: bool or informative message
         """
-        i=0
-    
-        for key,value in temp_dict.items():
+        i = 0
 
-            if type(value)!=str:
+        for key, value in temp_dict.items():
+
+            if type(value) != str:
                 return jsonify({
-                'message':'sorry! '+key+' field must be sequence of characters'
-            }), 400
-            
+                    'message':'sorry! '+key+' field must be sequence of characters'
+                }), 400
+
             if not value or value.isspace():
 
                 return jsonify({
-                'message':'sorry! your '+key+' is required and can not be an empty string'
-            }), 400
-            
+                    'message':'sorry! your '+key+' is required and can not be an empty string'
+                }), 400
+
             if i < 2:
-                user_dont_exist = self.check_user_dont_exist(key,value)
+                user_dont_exist = self.check_user_dont_exist(key, value)
                 if user_dont_exist != True:
                     return user_dont_exist
-            i+=1
+            i += 1
         return True
 
 
@@ -91,8 +91,8 @@ class Validation():
 
         userdont_exist = self.check_user_dont_exist('username', username)
 
-        if userdont_exist!=True:
-            check_password = self.database.validate_password(username,password)
+        if userdont_exist != True:
+            check_password = self.database.validate_password(username, password)
             return check_password
         return jsonify({'message':'Non existent user, please sign up'}), 400
 
@@ -102,8 +102,8 @@ class Validation():
         """
         Check database for user existance
         """
-        user_exists = self.database.check_availability_of_userdetails(key,value)
-        
+        user_exists = self.database.check_availability_of_userdetails(key, value)
+
         if user_exists[0]['exists'] == True:
             return jsonify({
                 'message':key+' is already taken'
@@ -119,18 +119,18 @@ class Validation():
         """
         user_id1 = self.get_user_id(username)
         user_admin = self.is_admin(username)
-        if not user_admin:            
-            if not user_id1 or user_id1!=user_id:
+        if not user_admin:
+            if not user_id1 or user_id1 != user_id:
                 return jsonify({
                     'Message' : '@'+username+' You have no authorization.'
                 }), 403
         return self.get_parcels_by_user_id(user_id)
-    
-    def get_parcels_by_user_id(self,user_id):
+
+    def get_parcels_by_user_id(self, user_id):
         """
         Get parcels by user id
         """
-        sql_command="""
+        sql_command = """
         SELECT * FROM parcels where user_id={user_id};
         """.format(user_id=user_id)
         rows = self.database.execute_query(sql_command)
@@ -145,7 +145,7 @@ class Validation():
             'parcels' : rows
         }), 200
 
-    
+
     def validate_parcel_addition(self, username, data):
         """
         Validate parcel addition
@@ -155,7 +155,7 @@ class Validation():
         recipient = data.get('recipient')
         contact = data.get('contact')
         pickup_location = data.get('pickup_location')
-        destination =data.get('destination')
+        destination = data.get('destination')
         temp_parcel = dict(
             parcel_description=parcel_description,
             recipient=recipient,
@@ -164,14 +164,14 @@ class Validation():
             destination=destination
         )
 
-        invalid_user = self.check_user_dont_exist('username',username)
+        invalid_user = self.check_user_dont_exist('username', username)
         if invalid_user == True:
             return jsonify({
                 'Message':'@'+username+' Lets make things official. Please signup'
             }), 401
 
-        for key,value in temp_parcel.items():
-            if type(value)!=str:
+        for key, value in temp_parcel.items():
+            if type(value) != str:
                 return jsonify({
                     'message':'Your '+key+' should be a sequence of characters'
                 }), 400
@@ -180,24 +180,24 @@ class Validation():
                 return jsonify({
                     'message':'Please add your parcel'+key+'. It cannot be a space',
                 }), 400
-        
+
         temp_parcel['username'] = username
         added_parcel = dict(self.database.add_parcel(temp_parcel))
 
-        
-        if type(added_parcel)==dict:
+
+        if type(added_parcel) == dict:
             return jsonify({
                 'message' : 'hello! '+username+' Your Parcel Delivery order has been placed',
                 'Parcel': added_parcel
             }), 201
-        
+
         return jsonify({
             'message' : '@'+username+' your parcel has not been added'
         }), 400
-    
 
 
-    def validate_get_parcel_by_id(self, username,parcel_id):
+
+    def validate_get_parcel_by_id(self, username, parcel_id):
         """
         Get parcels by id
         params: username, parcel id
@@ -207,38 +207,38 @@ class Validation():
         print(user_is_admin)
         if not user_is_admin:
             exists = self.check_if_parcel_id_exists(parcel_id)
-            if exists!=True:
+            if exists != True:
                 return exists
             user_id = self.get_user_id(username)
-            if self.check_user_created_parcel(user_id, parcel_id)!=True:
+            if self.check_user_created_parcel(user_id, parcel_id) != True:
                 return jsonify({
                     'Message': ' you do not have authorization'
                 }), 400
 
         exists = self.check_if_parcel_id_exists(parcel_id)
-        if exists!=True:
+        if exists != True:
             return exists
         sql_command = """
         SELECT * FROM parcels where parcel_id={};
         """.format(parcel_id)
         rows = self.database.execute_query(sql_command)
-        
+
         rows = self.tostring_for_date_time(rows)
 
         return jsonify({
             'message':'@'+username+' here is the specified parcel.',
             'Parcel' : rows
         }), 200
-    
+
 
     def validate_get_all_parcels(self, username):
         """
         get all parcels
         """
-        return self.get_all(username,'parcels')
+        return self.get_all(username, 'parcels')
 
-    
-    def get_user_id(self,username):
+
+    def get_user_id(self, username):
         """
         Get user id
         """
@@ -249,11 +249,11 @@ class Validation():
             }), 401
         return user_id
 
-    def validate_get_all_users(self,username):
+    def validate_get_all_users(self, username):
         """
         Get all users
         """
-        return self.get_all(username,'users')
+        return self.get_all(username, 'users')
 
     def get_all(self, username, table):
         is_user_admin = self.is_admin(username)
@@ -261,7 +261,7 @@ class Validation():
             return jsonify({
                 'Message': '@'+username+', you are not authorized to view this.'
             }), 403
-        sql_command="""
+        sql_command = """
         SELECT * FROM {};
         """.format(table)
         all_elements = self.database.execute_query(sql_command)
@@ -282,13 +282,13 @@ class Validation():
         Convert datetime to string for easy jsonification
         """
         for element in parcels:
-            for key,value in element.items():
+            for key, value in element.items():
                 if key == 'date_created' or key == 'date_to_be_delivered' or key == 'weight_kgs':
                     value == str(value)
         return parcels
 
 
-    def check_if_parcel_id_exists(self,parcel_id):
+    def check_if_parcel_id_exists(self, parcel_id):
         id_exists = self.database.parcel_exists(parcel_id)
         if id_exists == False:
             return jsonify({
@@ -298,7 +298,7 @@ class Validation():
         return True
 
 
-    def weight_categories(self,username):
+    def weight_categories(self, username):
         """
         get available weight categories
         params:username
@@ -314,32 +314,32 @@ class Validation():
         }), 200
 
 
-    def validate_change_present_location(self, username, parcel_id ,data):
+    def validate_change_present_location(self, username, parcel_id, data):
         """
         Change the present location location of parcel
         """
         return self.update_parcel_by_admin(username, parcel_id, data, 'current_location')
 
 
-    def validate_change_weight(self,username, parcel_id,data):
+    def validate_change_weight(self, username, parcel_id, data):
         """
         Change the parcel weight
         """
-        if self.is_admin(username)!=True:
+        if self.is_admin(username) != True:
             return jsonify({
                 'message':'@'+username+' You are not authorized to do this'
             }), 403
         weight = data.get("weight")
-        if not weight and not(isinstance(type(weight),float)):
+        if not weight and not isinstance(type(weight), float):
             return jsonify({
                 'message': 'weight of a parcel should be a number and should be between 0 and 2000'
             }), 400
-        
+
         exists = self.check_if_parcel_id_exists(parcel_id)
         if exists != True:
             return exists
-        
-        weight = format(weight,'.4f')
+
+        weight = format(weight, '.4f')
         sql_command = """UPDATE parcels
              set 
              weight_kgs = {weight},
@@ -348,26 +348,25 @@ class Validation():
              from weight_categories) as b where thing=true) 
              where parcel_id={parcel_id} 
              returning parcel_id,parcel_description,weight_kgs,price;
-            """.format(weight=weight,parcel_id=parcel_id)
+            """.format(weight=weight, parcel_id=parcel_id)
         updated_fields = self.database.execute_query(sql_command)
         updated_fields = self.tostring_for_date_time(updated_fields)
         if not updated_fields:
             return jsonify({
                 'Message' : 'Update weight failed'
             }), 400
-        
+
         return jsonify({
             'Message' : 'Update successful',
             'Updated fields' : updated_fields[0]
         }), 200
-        
-        
+
 
     def update_parcel_by_admin(self, username, parcel_id, data, column):
         """
         Update parcel by admin only
         """
-        if self.is_admin(username)!=True:
+        if self.is_admin(username) != True:
             return jsonify({
                 'message':'@'+username+' You are not authorized to do this'
             }), 403
@@ -376,17 +375,17 @@ class Validation():
             return jsonify({
                 'Message': column+' should be a sequence of characters'
             }), 400
-        
+
         exists = self.check_if_parcel_id_exists(parcel_id)
         if exists != True:
             return exists
-        
+
         updated_fields = self.database.change_status(column, column_data, parcel_id)
         if not updated_fields:
             return jsonify({
                 'Message' : 'Update '+column+' failed'
             }), 400
-        
+
         return jsonify({
             'Message' : 'Update successful',
             'Updated fields' : updated_fields
@@ -398,36 +397,38 @@ class Validation():
         Change the status of the parcel delivery order
         """
         status = data.get('status')
-        if status == 'pending' or status == 'in transit' or status == 'canceled' or status == 'delivered':
+        if status == 'pending' or status == 'in transit' or status == 'canceled' \
+            or status == 'delivered':
             return self.update_parcel_by_admin(username, parcel_id, data, 'status')
         return jsonify({
             'Message' : 'Status has to be pending, or in transit, or canceled, or delivered'
         }), 400
 
 
-    def validate_change_destination(self,username,parcel_id, data):
+    def validate_change_destination(self, username, parcel_id, data):
         """
         Change the destination of the parcel delivery order
         """
         destination = data.get('destination')
         if not destination or destination.isspace():
             return jsonify({
-                'Messsage' : 'Destination has to be a sequence of characters and cannot be a blank space'
-        }), 400
+                'Messsage' : 'Destination has to be a sequence of characters and cannot \
+                be a blank space'
+            }), 400
         user_id = self.get_user_id(username)
-        if type(user_id)==tuple:
+        if type(user_id) == tuple:
             return user_id
-        if self.check_user_created_parcel(user_id, parcel_id)!=True:
+        if self.check_user_created_parcel(user_id, parcel_id) != True:
             return jsonify({
                 'message' : 'You did not create the parcel'
             }), 403
-            
+
         updated_fields = self.database.change_status('destination', destination, parcel_id)
         if not updated_fields:
             return jsonify({
-            'Message' : 'Update destination failed'
+                'Message' : 'Update destination failed'
             }), 400
-    
+
         return jsonify({
             'message' : 'Updated destination',
             'updated fields' : updated_fields
@@ -436,7 +437,7 @@ class Validation():
 
 
 
-    def is_admin(self,username):
+    def is_admin(self, username):
         """
         Check if user is admin
         params: n/a
@@ -452,6 +453,6 @@ class Validation():
         """
         sql_command = """
         SELECT EXISTS(SELECT * FROM parcels where parcel_id={parcel_id} and user_id={user_id})
-        """.format(parcel_id=parcel_id,user_id=user_id)
+        """.format(parcel_id=parcel_id, user_id=user_id)
         rows = self.database.execute_query(sql_command)
         return rows[0]['exists']

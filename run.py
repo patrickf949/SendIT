@@ -2,9 +2,9 @@
 Initiate application
 """
 from Application import create_app
-from Application.config import app_config
+from Application.config import APP_CONFIG
 
-Config = app_config['development']
+Config = APP_CONFIG['development']
 APP = create_app(Config)
 
 if __name__ == '__main__':

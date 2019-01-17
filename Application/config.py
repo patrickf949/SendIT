@@ -4,6 +4,9 @@ Congigure different environments
 
 import os
 class Config():
+    """
+    Base configuration for environments
+    """
     DEBUG = False
     # dbname = 'senditdb'
     dbname = 'dd63hj5clrnj1s'
@@ -11,10 +14,16 @@ class Config():
     # hostname = 'localhost'
 
 class DevelopmentConfig(Config):
+    """
+    Configuration for development environment
+    """
     DEBUG = True
 
 
 class TestingConfig(Config):
+    """
+    Configuration for Testing environment
+    """
     TESTING = True
     DEBUG = True
     dbname = 'test_senditdb'
@@ -22,12 +31,15 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    """
+    Configuration for Production environment
+    """
     TESTING = False
     DEBUG = False
 
 
 
-app_config = {
+APP_CONFIG = {
     'development':DevelopmentConfig,
     'testing':TestingConfig,
     'production':ProductionConfig

@@ -5,7 +5,7 @@ import pytest
 from Application import create_app
 from Application.views import *
 from .testdata import TestData
-from Application.config import app_config
+from Application.config import APP_CONFIG
 from Application.controllers.database import Database
 
 class TestSendIT(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestSendIT(unittest.TestCase):
     This class tests our api endpoints
     """
     def setUp(self):
-        self.env = app_config['testing']
+        self.env = APP_CONFIG['testing']
         self.app = create_app(self.env)
         self.test_client = self.app.test_client()
   
