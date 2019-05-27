@@ -47,7 +47,7 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 ## Front End
 
-[Github pages link](https://patrickf949.github.io/SendIT/Application/ui/)
+[Github pages link](https://patrickf949.github.io/Sendit-frontend/UI/)
 
 ### Technologies used
 
