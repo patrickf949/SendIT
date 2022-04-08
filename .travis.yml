@@ -1,0 +1,19 @@
+language: python
+python: 
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
+service:
+  - postgres
+before_script:
+  - psql -c "CREATE DATABASE test_senditdb;" -U postgres
+  - psql -c "CREATE USER mqqwsehaxujqpe WITH PASSWORD '60047dace9902c69d34dbc380525f9551a34d17442f648a37ccc253d760cb5e2';" -U postgres
+  - psql --version
+script:
+  - pytest -v
+  - pytest --cov
+  - python3 -m pytest --cov Application.views --cov-report term-missing
+
+after_success:
+  - coveralls
